@@ -7,6 +7,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  employeeId: {
+    type: String,
+    trim: true,
+    sparse: true,
+    index: true
+  },
   email: {
     type: String,
     required: true,
@@ -16,7 +22,10 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
+    required: function() {
+      // HRMS employees authenticate directly against HRMS; no local password required
+      return !this.employeeId;
+    }
   },
   role: {
     type: String,
@@ -61,7 +70,12 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
+  if (!this.password || !this.isModified('password')) return next();
+
+  // If password is already a bcrypt hash (e.g. copied directly from HRMS), do not re-hash it
+  if (/^\$2[abxy]\$\d{2}\$[./0-9A-Za-z]{53}$/.test(this.password)) {
+    return next();
+  }
 
   try {
     const salt = await bcrypt.genSalt(10);
@@ -74,6 +88,7 @@ userSchema.pre('save', async function(next) {
 
 // Compare password method
 userSchema.methods.comparePassword = async function(candidatePassword) {
+  if (!this.password) return false;
   return bcrypt.compare(candidatePassword, this.password);
 };
 

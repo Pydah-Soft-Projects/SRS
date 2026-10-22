@@ -595,7 +595,7 @@ const HomeIcon = ({ className }) => (
 // Main Component
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
+    identifier: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -620,16 +620,27 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
+    const idToSubmit = (formData.identifier || '').trim();
+    if (!idToSubmit) {
+      setError('Please enter your Employee ID or Email');
+      return;
+    }
+    if (!formData.password) {
+      setError('Please enter your password');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const result = await login(formData.email, formData.password);
+      const result = await login(idToSubmit, formData.password);
 
       if (result.success) {
         // Navigate immediately to show skeleton loading on destination page
         navigate('/');
       } else {
-        setError(result.message);
+        setError(result.message || 'Invalid Employee ID or password.');
         setLoading(false);
       }
     } catch (err) {
@@ -655,7 +666,7 @@ const Login = () => {
             <UserIcon />
           </Logo>
           <Title>Staff Recruitment System</Title>
-          <Subtitle>Please sign in to continue</Subtitle>
+          <Subtitle>Sign in with your Employee ID & HRMS password</Subtitle>
         </Header>
 
         <Body>
@@ -670,19 +681,20 @@ const Login = () => {
             )}
 
             <InputGroup>
-              <Label htmlFor="email">
+              <Label htmlFor="identifier">
                 <InputIcon>
                   <UserIcon />
                 </InputIcon>
-                Email Address
+                Employee ID
               </Label>
               <Input
-                id="email"
-                type="email"
-                name="email"
-                value={formData.email}
+                id="identifier"
+                type="text"
+                name="identifier"
+                autoComplete="username"
+                value={formData.identifier}
                 onChange={handleChange}
-                placeholder="Enter your email address"
+                placeholder="Enter Employee ID (e.g. 2145)"
                 required
                 disabled={loading}
               />
@@ -700,9 +712,10 @@ const Login = () => {
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   name="password"
+                  autoComplete="current-password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Enter your password"
+                  placeholder="Enter HRMS password"
                   required
                   disabled={loading}
                 />

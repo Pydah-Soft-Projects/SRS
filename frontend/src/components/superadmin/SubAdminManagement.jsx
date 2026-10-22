@@ -576,8 +576,11 @@ const SubAdminManagement = () => {
   const [toast, setToast] = useState({ type: '', message: '' });
   const [campuses, setCampuses] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [showSubAdminPassword, setShowSubAdminPassword] = useState(true);
+  const [fetchingHrmsId, setFetchingHrmsId] = useState(false);
   const [formState, setFormState] = useState({
     name: '',
+    employeeId: '',
     email: '',
     password: '',
     campus: '',
@@ -585,6 +588,14 @@ const SubAdminManagement = () => {
     permissions: {}, // Object: { 'forms.manage': 'read_only' | 'full_access', ... }
     hasPanelMemberAccess: false
   });
+
+  // HRMS employee search state
+  const [showHrmsModal, setShowHrmsModal] = useState(false);
+  const [hrmsQuery, setHrmsQuery] = useState('');
+  const [hrmsResults, setHrmsResults] = useState([]);
+  const [hrmsSearching, setHrmsSearching] = useState(false);
+  const [hrmsError, setHrmsError] = useState('');
+  const hrmsSearchTimer = React.useRef(null);
 
   const permissionDetails = useMemo(() => {
     return availablePermissions.reduce((acc, permission) => {
@@ -640,6 +651,7 @@ const SubAdminManagement = () => {
   const resetForm = () => {
     setFormState({
       name: '',
+      employeeId: '',
       email: '',
       password: '',
       campus: '',
@@ -649,6 +661,87 @@ const SubAdminManagement = () => {
     });
     setEditingSubAdmin(null);
     setCourses([]);
+    setShowSubAdminPassword(false);
+  };
+
+  // ─── HRMS Search Handlers ───────────────────────────────────────────────────
+  const openHrmsModal = () => {
+    setHrmsQuery('');
+    setHrmsResults([]);
+    setHrmsError('');
+    setShowHrmsModal(true);
+  };
+
+  const closeHrmsModal = () => {
+    setShowHrmsModal(false);
+    setHrmsQuery('');
+    setHrmsResults([]);
+    setHrmsError('');
+    if (hrmsSearchTimer.current) clearTimeout(hrmsSearchTimer.current);
+  };
+
+  const handleHrmsQueryChange = (e) => {
+    const value = e.target.value;
+    setHrmsQuery(value);
+    setHrmsError('');
+
+    if (hrmsSearchTimer.current) clearTimeout(hrmsSearchTimer.current);
+
+    if (value.trim().length < 2) {
+      setHrmsResults([]);
+      return;
+    }
+
+    hrmsSearchTimer.current = setTimeout(async () => {
+      try {
+        setHrmsSearching(true);
+        const { data } = await api.get(`/auth/hrms/search-employees?q=${encodeURIComponent(value.trim())}`);
+        setHrmsResults(data.employees || []);
+        if ((data.employees || []).length === 0) {
+          setHrmsError('No employees found matching your search.');
+        }
+      } catch (err) {
+        setHrmsError(err.response?.data?.message || 'Failed to search HRMS employees.');
+        setHrmsResults([]);
+      } finally {
+        setHrmsSearching(false);
+      }
+    }, 400);
+  };
+
+  const fetchByEmployeeId = async (empNo) => {
+    if (!empNo || !empNo.trim()) return;
+    try {
+      setFetchingHrmsId(true);
+      const { data } = await api.get(`/auth/hrms/search-employees?q=${encodeURIComponent(empNo.trim())}`);
+      const matches = data.employees || [];
+      const exact = matches.find(e => String(e.emp_no).trim() === String(empNo).trim()) || matches[0];
+      if (exact) {
+        selectHrmsEmployee(exact);
+      } else {
+        setToast({ type: 'danger', message: `No HRMS employee found with ID "${empNo}"` });
+      }
+    } catch (err) {
+      setToast({ type: 'danger', message: 'Failed to search HRMS for employee ID' });
+    } finally {
+      setFetchingHrmsId(false);
+    }
+  };
+
+  const selectHrmsEmployee = (employee) => {
+    const fallbackEmail = employee.email || (employee.emp_no ? `${employee.emp_no}@pydah.edu.in` : '');
+    setFormState((prev) => ({
+      ...prev,
+      name: employee.employee_name || prev.name,
+      employeeId: employee.emp_no || prev.employeeId,
+      email: fallbackEmail || prev.email,
+      password: '', // Authenticated securely via employee's HRMS credentials
+    }));
+    closeHrmsModal();
+    setToast({ 
+      type: 'success', 
+      message: `✓ Linked ${employee.employee_name} (${employee.emp_no}) from HRMS` 
+    });
   };
 
   const openCreateModal = async () => {
@@ -683,6 +776,7 @@ const SubAdminManagement = () => {
     
     setFormState({
       name: subAdmin.name,
+      employeeId: subAdmin.employeeId || '',
       email: subAdmin.email,
       password: '',
       campus: subAdmin.campus || '',
@@ -765,6 +859,7 @@ const SubAdminManagement = () => {
       setSaving(true);
       const payload = {
         name: formState.name,
+        employeeId: formState.employeeId ? formState.employeeId.trim() : undefined,
         email: formState.email,
         campus: formState.campus || null,
         courses: formState.courses && formState.courses.length > 0 ? formState.courses : undefined,
@@ -773,7 +868,9 @@ const SubAdminManagement = () => {
       };
 
       if (!editingSubAdmin) {
-        payload.password = formState.password;
+        if (formState.password && formState.password.trim()) {
+          payload.password = formState.password.trim();
+        }
         await api.post('/auth/sub-admins', payload);
       } else {
         if (formState.password) {
@@ -854,7 +951,21 @@ const SubAdminManagement = () => {
           {subAdmins.map((subAdmin) => (
             <tr key={subAdmin._id}>
               <Td>
-                <div style={{ fontWeight: 600, color: '#0f172a' }}>{subAdmin.name}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontWeight: 600, color: '#0f172a' }}>{subAdmin.name}</span>
+                  {subAdmin.employeeId && (
+                    <span style={{
+                      padding: '0.12rem 0.5rem',
+                      borderRadius: '4px',
+                      backgroundColor: '#ede9fe',
+                      color: '#6d28d9',
+                      fontSize: '0.75rem',
+                      fontWeight: 700
+                    }}>
+                      ID: {subAdmin.employeeId}
+                    </span>
+                  )}
+                </div>
                 <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
                   User Management
                   {subAdmin.hasPanelMemberAccess && (
@@ -980,7 +1091,35 @@ const SubAdminManagement = () => {
               <SectionsContainer>
                 {/* Section 1: User Details */}
                 <SectionWrapper>
-                  <SectionTitle>User Details</SectionTitle>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', paddingBottom: '0.75rem', borderBottom: '2px solid #e2e8f0' }}>
+                    <SectionTitle style={{ margin: 0, paddingBottom: 0, borderBottom: 'none' }}>User Details</SectionTitle>
+                    <button
+                      type="button"
+                      onClick={openHrmsModal}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                        color: 'white',
+                        border: 'none',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '8px',
+                        fontWeight: 600,
+                        fontSize: '0.82rem',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        boxShadow: '0 2px 8px rgba(124, 58, 237, 0.35)',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(124, 58, 237, 0.45)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(124, 58, 237, 0.35)'; }}
+                    >
+                      <span style={{ fontSize: '1rem' }}>🏢</span>
+                      From HRMS
+                    </button>
+                  </div>
                   <SectionContent>
                     <FormGroup>
                       <Label htmlFor="name">Name</Label>
@@ -996,6 +1135,49 @@ const SubAdminManagement = () => {
                     </FormGroup>
 
                     <FormGroup>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                        <Label htmlFor="employeeId" style={{ margin: 0 }}>Employee ID (HRMS)</Label>
+                        {formState.employeeId && (
+                          <span style={{ fontSize: '0.72rem', background: '#ede9fe', color: '#6d28d9', fontWeight: 700, padding: '2px 8px', borderRadius: '4px' }}>
+                            Sign-In ID
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <Input
+                          id="employeeId"
+                          name="employeeId"
+                          type="text"
+                          value={formState.employeeId}
+                          onChange={handleInputChange}
+                          placeholder="e.g. 2145"
+                          style={{ flex: 1 }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => fetchByEmployeeId(formState.employeeId)}
+                          disabled={!formState.employeeId || fetchingHrmsId}
+                          style={{
+                            padding: '0 0.875rem',
+                            background: '#f1f5f9',
+                            border: '1.5px solid #cbd5e1',
+                            borderRadius: '8px',
+                            fontWeight: 600,
+                            fontSize: '0.8rem',
+                            color: '#334155',
+                            cursor: formState.employeeId ? 'pointer' : 'not-allowed',
+                            whiteSpace: 'nowrap',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.35rem'
+                          }}
+                        >
+                          {fetchingHrmsId ? 'Fetching...' : '🔍 Fetch HRMS'}
+                        </button>
+                      </div>
+                    </FormGroup>
+
+                    <FormGroup>
                       <Label htmlFor="email">Email</Label>
                       <Input
                         id="email"
@@ -1008,20 +1190,60 @@ const SubAdminManagement = () => {
                       />
                     </FormGroup>
 
-                    <FormGroup>
-                      <Label htmlFor="password">
-                        {editingSubAdmin ? 'New Password (optional)' : 'Password'}
-                      </Label>
-                      <Input
-                        id="password"
-                        name="password"
-                        type="password"
-                        value={formState.password}
-                        onChange={handleInputChange}
-                        placeholder={editingSubAdmin ? 'Leave blank to keep existing password' : 'Enter password'}
-                        required={!editingSubAdmin}
-                      />
-                    </FormGroup>
+                    {formState.employeeId ? (
+                      <div style={{
+                        background: '#f0fdf4',
+                        border: '1.5px solid #bbf7d0',
+                        borderRadius: '10px',
+                        padding: '0.85rem 1rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.35rem'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#166534', fontWeight: 700, fontSize: '0.875rem' }}>
+                          <span>🔒</span>
+                          <span>HRMS Authentication</span>
+                        </div>
+                        <p style={{ margin: 0, fontSize: '0.78rem', color: '#15803d', lineHeight: '1.4' }}>
+                          User will sign in with their <strong>Employee ID ({formState.employeeId})</strong> and their confidential <strong>HRMS portal password</strong>.
+                        </p>
+                      </div>
+                    ) : (
+                      <FormGroup>
+                        <Label htmlFor="password">Temporary Password</Label>
+                        <div style={{ position: 'relative' }}>
+                          <Input
+                            id="password"
+                            name="password"
+                            type={showSubAdminPassword ? 'text' : 'password'}
+                            value={formState.password}
+                            onChange={handleInputChange}
+                            placeholder={editingSubAdmin ? 'Leave blank to keep existing password' : 'Enter temporary password'}
+                            required={!editingSubAdmin}
+                            style={{ paddingRight: '2.5rem' }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowSubAdminPassword(!showSubAdminPassword)}
+                            style={{
+                              position: 'absolute',
+                              right: '0.75rem',
+                              top: '50%',
+                              transform: 'translateY(-50%)',
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              fontSize: '1rem',
+                              padding: '2px 4px',
+                              color: '#64748b'
+                            }}
+                            title={showSubAdminPassword ? 'Hide password' : 'Show password'}
+                          >
+                            {showSubAdminPassword ? '🙈' : '👁️'}
+                          </button>
+                        </div>
+                      </FormGroup>
+                    )}
 
                     <FormGroup>
                       <Label htmlFor="campus">Campus (Optional)</Label>
@@ -1257,6 +1479,205 @@ const SubAdminManagement = () => {
           </ModalContent>
         </Modal>
       )}
+
+      {/* ─── HRMS Employee Search Modal ─────────────────────────────────────── */}
+      {showHrmsModal && (
+        <Modal onClick={(e) => { if (e.target === e.currentTarget) closeHrmsModal(); }}>
+          <div style={{
+            background: 'white',
+            borderRadius: '20px',
+            width: '100%',
+            maxWidth: '560px',
+            padding: '1.75rem',
+            boxShadow: '0 25px 60px rgba(15, 23, 42, 0.3)',
+            border: '1px solid rgba(255,255,255,0.2)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.25rem',
+            margin: 'auto',
+            maxHeight: '90vh',
+            overflow: 'hidden'
+          }}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div style={{
+                  width: '40px', height: '40px',
+                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                  borderRadius: '10px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.25rem'
+                }}>🏢</div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700, color: '#0f172a' }}>Search HRMS Employee</h3>
+                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>Search by Employee ID or Name</p>
+                </div>
+              </div>
+              <button
+                onClick={closeHrmsModal}
+                style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#94a3b8', lineHeight: 1 }}
+              >&times;</button>
+            </div>
+
+            {/* Search Input */}
+            <div style={{ position: 'relative' }}>
+              <div style={{
+                position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)',
+                fontSize: '1rem', color: '#94a3b8', pointerEvents: 'none', zIndex: 1
+              }}>🔍</div>
+              <input
+                autoFocus
+                type="text"
+                placeholder="Type employee ID or name..."
+                value={hrmsQuery}
+                onChange={handleHrmsQueryChange}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 0.875rem 0.75rem 2.5rem',
+                  border: '2px solid #e2e8f0',
+                  borderRadius: '10px',
+                  fontSize: '0.95rem',
+                  outline: 'none',
+                  transition: 'border-color 0.2s',
+                  boxSizing: 'border-box',
+                  background: '#f8fafc'
+                }}
+                onFocus={e => { e.target.style.borderColor = '#7c3aed'; e.target.style.background = '#fff'; }}
+                onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc'; }}
+              />
+              {hrmsSearching && (
+                <div style={{
+                  position: 'absolute', right: '0.875rem', top: '50%', transform: 'translateY(-50%)',
+                  width: '18px', height: '18px',
+                  border: '2px solid #e2e8f0',
+                  borderTop: '2px solid #7c3aed',
+                  borderRadius: '50%',
+                  animation: 'spin 0.8s linear infinite'
+                }} />
+              )}
+            </div>
+
+            <style>{`@keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }`}</style>
+
+            {/* Hint */}
+            {hrmsQuery.trim().length === 0 && (
+              <div style={{
+                textAlign: 'center', padding: '2rem 1rem',
+                color: '#94a3b8', fontSize: '0.875rem'
+              }}>
+                <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>👥</div>
+                Start typing to search employees from HRMS database
+              </div>
+            )}
+
+            {/* Error */}
+            {hrmsError && !hrmsSearching && (
+              <div style={{
+                padding: '0.875rem 1rem',
+                background: '#fef2f2',
+                border: '1px solid #fecaca',
+                borderRadius: '8px',
+                color: '#dc2626',
+                fontSize: '0.875rem',
+                textAlign: 'center'
+              }}>{hrmsError}</div>
+            )}
+
+            {/* Results List */}
+            {hrmsResults.length > 0 && (
+              <div style={
+                {
+                  overflowY: 'auto',
+                  maxHeight: '340px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.5rem',
+                  paddingRight: '0.25rem'
+                }
+              }>
+                <p style={{ margin: '0 0 0.25rem 0', fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
+                  {hrmsResults.length} result{hrmsResults.length !== 1 ? 's' : ''} found
+                </p>
+                {hrmsResults.map((emp) => (
+                  <div
+                    key={emp._id}
+                    onClick={() => selectHrmsEmployee(emp)}
+                    style={{
+                      padding: '0.875rem 1rem',
+                      border: '2px solid #e2e8f0',
+                      borderRadius: '10px',
+                      cursor: 'pointer',
+                      transition: 'all 0.18s ease',
+                      background: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.875rem'
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = '#7c3aed';
+                      e.currentTarget.style.background = '#faf5ff';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(124,58,237,0.12)';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = '#e2e8f0';
+                      e.currentTarget.style.background = 'white';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  >
+                    {/* Avatar */}
+                    <div style={{
+                      width: '42px', height: '42px', flexShrink: 0,
+                      background: 'linear-gradient(135deg, #7c3aed22, #6d28d933)',
+                      borderRadius: '10px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '1.1rem', fontWeight: 700,
+                      color: '#7c3aed'
+                    }}>
+                      {emp.employee_name ? emp.employee_name.charAt(0).toUpperCase() : '?'}
+                    </div>
+
+                    {/* Info */}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.9rem', marginBottom: '0.2rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {emp.employee_name}
+                      </div>
+                      <div style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', flexWrap: 'wrap', gap: '0.35rem 0.75rem', alignItems: 'center' }}>
+                        <span>🆔 {emp.emp_no}</span>
+                        {emp.email && <span>📧 {emp.email}</span>}
+                        {emp.designation && <span>💼 {emp.designation}</span>}
+                        {emp.division && <span>🏛️ {emp.division}</span>}
+                        <span style={{ background: '#ecfdf5', color: '#047857', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                          🔒 HRMS Account
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Select arrow */}
+                    <div style={{ color: '#7c3aed', fontSize: '1.1rem', flexShrink: 0 }}>→</div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Footer */}
+            <div style={{ paddingTop: '0.75rem', borderTop: '1px solid #e2e8f0' }}>
+              <button
+                type="button"
+                onClick={closeHrmsModal}
+                style={{
+                  width: '100%', padding: '0.65rem',
+                  border: '2px solid #e2e8f0', borderRadius: '8px',
+                  background: 'white', color: '#475569',
+                  fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer'
+                }}
+              >Cancel</button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
       {/* Permissions View Modal */}
       {showPermissionsModal && viewingPermissions && (
         <Modal>

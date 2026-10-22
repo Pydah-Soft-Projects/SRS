@@ -1,11 +1,31 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const { MongoClient, ObjectId } = require('mongodb');
 const User = require('../models/User');
 const Course = require('../models/Course');
 const { authenticateToken, requireSuperAdmin, requireSuperAdminOrPermission, hasPermission } = require('../middleware/auth');
 const { sendEmail } = require('../config/email');
 
 const router = express.Router();
+
+const HRMS_URI = process.env.MONGODB_URI1 || 'mongodb+srv://teampydah:TeamPydah@teampydah.y4zj6wh.mongodb.net/hrms';
+const HRMS_DB  = 'hrms';
+
+// Cached connection helper for HRMS
+const getHrmsDb = async () => {
+  const clientOk = global._hrmsClient &&
+    global._hrmsClient.topology &&
+    global._hrmsClient.topology.isConnected();
+  if (!clientOk) {
+    const dns = require('dns');
+    try { dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']); } catch (_) {}
+    global._hrmsClient = new MongoClient(HRMS_URI, { serverSelectionTimeoutMS: 10000 });
+    await global._hrmsClient.connect();
+    console.log('✅ [HRMS] MongoClient connected');
+  }
+  return global._hrmsClient.db(HRMS_DB);
+};
 
 const AVAILABLE_PERMISSIONS = [
   {
@@ -267,76 +287,128 @@ router.get('/permissions', authenticateToken, requireSuperAdmin, (req, res) => {
 });
 
 // Login
+// Login (supports Employee ID or Email, validated against SRS and HRMS)
 router.post('/login', async (req, res) => {
   try {
     console.log('\n🔐 [LOGIN] Login attempt received');
-    console.log('🔐 [LOGIN] Request body:', { email: req.body.email ? req.body.email : 'missing', hasPassword: !!req.body.password });
-
-    const { email, password } = req.body;
+    const rawIdentifier = (req.body.employeeId || req.body.identifier || req.body.email || req.body.username || '').toString().trim();
+    const { password } = req.body;
+    console.log('🔐 [LOGIN] Request body:', { identifier: rawIdentifier ? rawIdentifier : 'missing', hasPassword: !!password });
 
     // Validate input
-    if (!email || !password) {
-      console.error('❌ [LOGIN] Missing email or password');
-      return res.status(400).json({ message: 'Email and password are required' });
+    if (!rawIdentifier || !password) {
+      console.error('❌ [LOGIN] Missing Employee ID/email or password');
+      return res.status(400).json({ message: 'Employee ID and password are required' });
     }
 
-    // Normalize email (lowercase, trim)
-    const normalizedEmail = email.toLowerCase().trim();
-    console.log('🔐 [LOGIN] Normalized email:', normalizedEmail);
+    const normalizedEmail = rawIdentifier.toLowerCase();
+    console.log('🔐 [LOGIN] Searching for user by employeeId:', rawIdentifier, 'or email:', normalizedEmail);
 
-    // Find user by email (case-insensitive)
-    const user = await User.findOne({ email: normalizedEmail });
+    // Find user by employeeId (case-insensitive/exact) OR email (case-insensitive)
+    let user = await User.findOne({
+      $or: [
+        { employeeId: rawIdentifier },
+        { email: normalizedEmail }
+      ]
+    });
     
+    // If not found in SRS directly, check if this employee exists in HRMS
     if (!user) {
-      console.error('❌ [LOGIN] User not found:', normalizedEmail);
-      return res.status(401).json({ message: 'Invalid credentials' });
+      try {
+        const db = await getHrmsDb();
+        const hrmsEmp = await db.collection('employees').findOne({
+          is_active: true,
+          $or: [
+            { emp_no: rawIdentifier },
+            { email: normalizedEmail }
+          ]
+        });
+        if (hrmsEmp && hrmsEmp.email) {
+          user = await User.findOne({ email: hrmsEmp.email.toLowerCase() });
+          if (user && !user.employeeId) {
+            user.employeeId = hrmsEmp.emp_no;
+            await user.save();
+          }
+        }
+      } catch (err) {
+        console.warn('⚠️ [LOGIN] HRMS employee lookup error:', err.message);
+      }
+    }
+
+    if (!user) {
+      console.error('❌ [LOGIN] User not found for identifier:', rawIdentifier);
+      return res.status(401).json({ message: 'Invalid credentials. Please check your Employee ID / Email or password.' });
     }
 
     console.log('✅ [LOGIN] User found:', {
       id: user._id,
+      name: user.name,
+      employeeId: user.employeeId,
       email: user.email,
       role: user.role,
       isActive: user.isActive
     });
 
     if (!user.isActive) {
-      console.error('❌ [LOGIN] User is inactive:', normalizedEmail);
+      console.error('❌ [LOGIN] User is inactive:', user.email);
       return res.status(401).json({ message: 'Account is inactive. Please contact administrator.' });
     }
 
     // Check password
-    console.log('🔐 [LOGIN] Verifying password...');
-    let isPasswordValid = await user.comparePassword(password);
-    
-    // If password is invalid and user is a candidate, check if they entered email as password
-    // This helps when candidates were created with random passwords but should use email
+    console.log('🔐 [LOGIN] Verifying credentials...');
+    let isPasswordValid = false;
+
+    // 1. If user is linked to HRMS (or identifier matches HRMS), authenticate directly against HRMS
+    if (user.employeeId || /^\d+$/.test(rawIdentifier)) {
+      try {
+        const db = await getHrmsDb();
+        const empQuery = {
+          is_active: true,
+          $or: [
+            ...(user.employeeId ? [{ emp_no: user.employeeId }] : []),
+            { emp_no: rawIdentifier },
+            ...(user.email ? [{ email: user.email.toLowerCase() }] : [])
+          ]
+        };
+        const hrmsUser = await db.collection('employees').findOne(empQuery);
+        if (hrmsUser && hrmsUser.password) {
+          let hashMatches = false;
+          try {
+            hashMatches = await bcrypt.compare(password, hrmsUser.password);
+          } catch (_) {}
+
+          if (hashMatches) {
+            console.log(`✅ [LOGIN] Credentials validated directly against HRMS for ${hrmsUser.employee_name} (${hrmsUser.emp_no})`);
+            // Link employeeId if not present, but NEVER store credentials in our database
+            if (!user.employeeId && hrmsUser.emp_no) {
+              user.employeeId = hrmsUser.emp_no;
+              await user.save();
+            }
+            isPasswordValid = true;
+          }
+        }
+      } catch (hrmsCheckErr) {
+        console.warn('⚠️ [LOGIN] Error checking HRMS credentials:', hrmsCheckErr.message);
+      }
+    }
+
+    // 2. Fallback to local password for non-HRMS users (e.g. super admin or local candidates)
+    if (!isPasswordValid && user.password) {
+      isPasswordValid = await user.comparePassword(password);
+    }
+
+    // If password is still invalid and user is a candidate, check if they entered email as password
     if (!isPasswordValid && user.role === 'candidate') {
-      console.log('🔐 [LOGIN] Password does not match, checking if user entered email as password...');
-      
-      // Check if user entered their email as the password
       if (password.toLowerCase().trim() === normalizedEmail) {
-        // User entered email as password, but stored password doesn't match
-        // This means the stored password was set to a random value
-        // Reset password to email for this candidate
-        console.log(`⚠️ [LOGIN] Candidate entered email as password, but stored password doesn't match. Resetting password to email.`);
         user.password = normalizedEmail;
         await user.save();
-        console.log(`✅ [LOGIN] Password reset to email for candidate: ${normalizedEmail}`);
         isPasswordValid = true;
-      } else {
-        // Check if stored password is actually the email (for existing users who already have email as password)
-        const storedPasswordIsEmail = await user.comparePassword(normalizedEmail);
-        if (storedPasswordIsEmail && password.toLowerCase().trim() !== normalizedEmail) {
-          console.log('⚠️ [LOGIN] Stored password is email, but user entered different password');
-          // User's stored password is their email, but they entered something else
-          // This is still an invalid login attempt
-        }
       }
     }
     
     if (!isPasswordValid) {
-      console.error('❌ [LOGIN] Invalid password for user:', normalizedEmail);
-      return res.status(401).json({ message: 'Invalid credentials' });
+      console.error('❌ [LOGIN] Invalid password for user:', rawIdentifier);
+      return res.status(401).json({ message: 'Invalid credentials. Please verify your password.' });
     }
 
     console.log('✅ [LOGIN] Password verified successfully');
@@ -348,10 +420,8 @@ router.post('/login', async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    console.log('✅ [LOGIN] Token generated successfully');
-    console.log('✅ [LOGIN] Login successful for:', normalizedEmail);
+    console.log('✅ [LOGIN] Token generated successfully for:', user.name);
     console.log('✅ [LOGIN] User role:', user.role);
-    console.log('✅ [LOGIN] Request completed\n');
 
     res.json({
       message: 'Login successful',
@@ -359,6 +429,7 @@ router.post('/login', async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
+        employeeId: user.employeeId || '',
         email: user.email,
         role: user.role,
         campus: user.campus,
@@ -655,15 +726,55 @@ router.get('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res)
 
 router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res) => {
   try {
-    const { name, email, password, profile, permissions, campus, courses } = req.body;
+    const { name, email, employeeId, password, profile, permissions, campus, courses } = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Name, email, and password are required' });
+    const trimmedEmail = email ? email.toLowerCase().trim() : '';
+    let trimmedEmpId = employeeId ? String(employeeId).trim() : null;
+
+    let finalPassword = password ? String(password).trim() : undefined;
+
+    // For non-HRMS sub-admins, password is required
+    if (!trimmedEmpId && !finalPassword) {
+      return res.status(400).json({ message: 'Password is required for non-HRMS sub-admins' });
     }
 
-    const existingUser = await User.findOne({ email });
+    if (!name || !trimmedEmail) {
+      return res.status(400).json({ message: 'Name and email are required' });
+    }
+
+    const existingUser = await User.findOne({
+      $or: [
+        { email: trimmedEmail },
+        ...(trimmedEmpId ? [{ employeeId: trimmedEmpId }] : [])
+      ]
+    });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists with this email' });
+      if (existingUser.role !== 'sub_admin') {
+        existingUser.role = 'sub_admin';
+        existingUser.name = name || existingUser.name;
+        if (trimmedEmpId) {
+          existingUser.employeeId = trimmedEmpId;
+          existingUser.password = undefined; // Never store HRMS credentials in SRS DB
+        } else if (finalPassword) {
+          existingUser.password = finalPassword;
+        }
+        existingUser.permissions = normalizedPermissions;
+        existingUser.campus = campus || undefined;
+        existingUser.courses = courseIds.length > 0 ? courseIds : undefined;
+        existingUser.hasPanelMemberAccess = req.body.hasPanelMemberAccess === true;
+        if (Object.keys(cleanedProfile).length > 0) existingUser.profile = cleanedProfile;
+        await existingUser.save();
+        const userResponse = existingUser.toObject();
+        delete userResponse.password;
+        return res.status(200).json({
+          message: 'Sub admin access granted successfully with HRMS credentials',
+          subAdmin: userResponse
+        });
+      }
+      if (trimmedEmpId && existingUser.employeeId === trimmedEmpId) {
+        return res.status(400).json({ message: `Sub-admin already exists with Employee ID: ${trimmedEmpId}` });
+      }
+      return res.status(400).json({ message: 'Sub-admin already exists with this email' });
     }
 
     const cleanedProfile = profile ? Object.fromEntries(
@@ -696,8 +807,9 @@ router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res
 
     const subAdmin = new User({
       name,
-      email,
-      password,
+      email: trimmedEmail,
+      employeeId: trimmedEmpId || undefined,
+      password: trimmedEmpId ? undefined : finalPassword,
       role: 'sub_admin',
       campus: campus || undefined,
       courses: courseIds.length > 0 ? courseIds : undefined,
@@ -709,7 +821,7 @@ router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res
     await subAdmin.save();
 
     // Send email notification to sub-admin with credentials and permissions
-    if (password) {
+    if (trimmedEmpId || password) {
       try {
         const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
         const loginUrl = `${frontendUrl}/login`;
@@ -732,8 +844,9 @@ router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res
             
             <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ea580c;">
               <h3 style="margin: 0 0 15px 0; color: #1e293b;">Your Login Credentials</h3>
-              <p style="margin: 8px 0;"><strong>Email:</strong> ${email}</p>
-              <p style="margin: 8px 0;"><strong>Password:</strong> ${password}</p>
+              ${trimmedEmpId ? `<p style="margin: 8px 0;"><strong>Employee ID:</strong> ${trimmedEmpId}</p>` : ''}
+              <p style="margin: 8px 0;"><strong>Email:</strong> ${trimmedEmail}</p>
+              <p style="margin: 8px 0;"><strong>Password:</strong> ${trimmedEmpId ? '<span style="color: #16a34a; font-weight: 600;">Use your existing HRMS portal password</span>' : password}</p>
               <p style="margin: 8px 0;"><strong>Role:</strong> Sub Admin</p>
             </div>
 
@@ -750,7 +863,7 @@ router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res
             </div>
             `}
 
-            <p><strong>Important:</strong> Please change your password after your first login for security purposes.</p>
+            ${trimmedEmpId ? `<p><strong>Note:</strong> Your login authentication is securely linked to your HRMS credentials. Sign in with your Employee ID and your existing HRMS password.</p>` : `<p><strong>Important:</strong> Please change your password after your first login for security purposes.</p>`}
             <div style="text-align: center; margin: 30px 0;">
               <a href="${loginUrl}" style="background: #ea580c; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Login to Portal</a>
             </div>
@@ -782,13 +895,13 @@ router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res
           Your sub-admin account has been created successfully. Below are your account details:
 
           Login Credentials:
-          Email: ${email}
-          Password: ${password}
+          ${trimmedEmpId ? `Employee ID: ${trimmedEmpId}\n          ` : ''}Email: ${trimmedEmail}
+          Password: ${trimmedEmpId ? 'Use your existing HRMS portal password' : password}
           Role: Sub Admin
 
           ${Object.keys(normalizedPermissions).length > 0 ? `Your Permissions & Access Levels:\n${permissionsText}` : 'Note: No specific permissions have been assigned yet. Please contact the super admin to configure your access.'}
 
-          Important: Please change your password after your first login for security purposes.
+          ${trimmedEmpId ? 'Note: Your login authentication is securely linked to your HRMS credentials. Sign in with your Employee ID and your existing HRMS password.' : 'Important: Please change your password after your first login for security purposes.'}
 
           Login URL: ${loginUrl}
 
@@ -818,7 +931,7 @@ router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res
 
 router.put('/sub-admins/:userId', authenticateToken, requireSuperAdmin, async (req, res) => {
   try {
-    const { name, email, password, profile, permissions, isActive, campus, courses, hasPanelMemberAccess } = req.body;
+    const { name, email, employeeId, password, profile, permissions, isActive, campus, courses, hasPanelMemberAccess } = req.body;
     const subAdmin = await User.findById(req.params.userId);
 
     if (!subAdmin) {
@@ -830,7 +943,8 @@ router.put('/sub-admins/:userId', authenticateToken, requireSuperAdmin, async (r
     }
 
     if (name !== undefined) subAdmin.name = name;
-    if (email !== undefined) subAdmin.email = email;
+    if (email !== undefined) subAdmin.email = email.toLowerCase().trim();
+    if (employeeId !== undefined) subAdmin.employeeId = employeeId ? String(employeeId).trim() : undefined;
     if (typeof isActive === 'boolean') subAdmin.isActive = isActive;
     if (campus !== undefined) subAdmin.campus = campus || undefined;
     if (typeof hasPanelMemberAccess === 'boolean') subAdmin.hasPanelMemberAccess = hasPanelMemberAccess;
@@ -843,7 +957,10 @@ router.put('/sub-admins/:userId', authenticateToken, requireSuperAdmin, async (r
     }
 
     if (password && password.trim() !== '') {
-      subAdmin.password = password;
+      subAdmin.password = password.trim();
+    } else if (subAdmin.employeeId) {
+      // HRMS employee credentials remain managed exclusively in HRMS; do not store in SRS
+      subAdmin.password = undefined;
     }
 
     if (permissions !== undefined) {
@@ -909,6 +1026,75 @@ router.delete('/sub-admins/:userId', authenticateToken, requireSuperAdmin, async
   } catch (error) {
     console.error('Sub admin delete error:', error);
     res.status(500).json({ message: 'Server error deleting sub admin' });
+  }
+});
+
+// ─── HRMS Employee Search ───────────────────────────────────────────────────
+// Uses native MongoClient for a reliable secondary DB connection to HRMS
+router.get('/hrms/search-employees', authenticateToken, requireSuperAdmin, async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q || q.trim().length < 2) {
+      return res.status(400).json({ message: 'Search query must be at least 2 characters' });
+    }
+
+    const searchTerm = q.trim();
+    const db = await getHrmsDb();
+
+    // Match emp_no exactly (numeric) OR employee_name case-insensitive
+    const isNumeric = /^\d+$/.test(searchTerm);
+    const searchQuery = {
+      is_active: true,
+      $or: [
+        ...(isNumeric ? [{ emp_no: searchTerm }] : []),
+        { employee_name: { $regex: searchTerm, $options: 'i' } }
+      ]
+    };
+
+    const rawEmployees = await db.collection('employees').find(searchQuery).limit(20).toArray();
+
+    if (rawEmployees.length === 0) {
+      return res.json({ employees: [] });
+    }
+
+    // Batch-lookup referenced division / department / designation names
+    const toObjId = (id) => { try { return new ObjectId(String(id)); } catch (_) { return null; } };
+    const divIds   = [...new Set(rawEmployees.map(e => e.division_id).filter(Boolean))].map(toObjId).filter(Boolean);
+    const deptIds  = [...new Set(rawEmployees.map(e => e.department_id).filter(Boolean))].map(toObjId).filter(Boolean);
+    const desigIds = [...new Set(rawEmployees.map(e => e.designation_id).filter(Boolean))].map(toObjId).filter(Boolean);
+
+    const [divisions, departments, designations] = await Promise.all([
+      divIds.length   ? db.collection('divisions').find({ _id: { $in: divIds } }).toArray()    : [],
+      deptIds.length  ? db.collection('departments').find({ _id: { $in: deptIds } }).toArray() : [],
+      desigIds.length ? db.collection('designations').find({ _id: { $in: desigIds } }).toArray() : []
+    ]);
+
+    const divMap   = Object.fromEntries(divisions.map(d  => [d._id.toString(), d.name]));
+    const deptMap  = Object.fromEntries(departments.map(d => [d._id.toString(), d.name]));
+    const desigMap = Object.fromEntries(designations.map(d => [d._id.toString(), d.name]));
+
+    const employees = rawEmployees.map(e => ({
+      _id:            e._id.toString(),
+      emp_no:         e.emp_no        || '',
+      employee_name:  e.employee_name || '',
+      email:          e.email         || '',
+      phone_number:   e.phone_number  || '',
+      division:       e.division_id   ? (divMap[String(e.division_id)]   || '') : '',
+      department:     e.department_id ? (deptMap[String(e.department_id)]  || '') : '',
+      designation:    e.designation_id ? (desigMap[String(e.designation_id)] || '') : '',
+      hasHrmsAuth:    Boolean(e.password || e.plain_password),
+      is_active:      e.is_active
+    }));
+
+    res.json({ employees });
+
+  } catch (error) {
+    console.error('❌ [HRMS] Employee search error:', error.message);
+    if (global._hrmsClient) {
+      try { await global._hrmsClient.close(); } catch (_) {}
+      global._hrmsClient = null;
+    }
+    res.status(500).json({ message: 'Failed to search HRMS employees: ' + error.message });
   }
 });
 
