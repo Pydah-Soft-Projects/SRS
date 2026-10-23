@@ -11,144 +11,46 @@ const Container = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 0.5rem 0 2rem 0;
-`;
-
-// Top Header
-const HeaderCard = styled.div`
-  background: white;
-  border-radius: 16px;
-  padding: 1.25rem 2rem;
-  border: 1px solid #e0f2fe;
-  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.06);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #0ea5e9, #38bdf8);
-  }
-`;
-
-const HeaderLeft = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-`;
-
-const HeaderIconBox = styled.div`
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #0284c7, #0ea5e9);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 1.5rem;
-  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.25);
-  flex-shrink: 0;
-`;
-
-const HeaderTitleGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-`;
-
-const Title = styled.h2`
-  color: #0284c7;
-  margin: 0;
-  font-size: 1.75rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 60%, #38bdf8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-`;
-
-const Subtitle = styled.p`
-  color: #64748b;
-  margin: 0;
-  font-size: 0.88rem;
-  font-weight: 500;
-`;
-
-const HeaderStats = styled.div`
-  display: flex;
-  align-items: center;
   gap: 0.75rem;
-`;
-
-const StatBadge = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
-  background: ${({ $variant }) => ($variant === 'active' ? '#ecfdf5' : '#f0f9ff')};
-  border: 1px solid ${({ $variant }) => ($variant === 'active' ? '#a7f3d0' : '#bae6fd')};
-  min-width: 75px;
-
-  .stat-value {
-    font-size: 1.35rem;
-    font-weight: 800;
-    line-height: 1.1;
-    color: ${({ $variant }) => ($variant === 'active' ? '#059669' : '#0284c7')};
-  }
-
-  .stat-label {
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    color: ${({ $variant }) => ($variant === 'active' ? '#047857' : '#0369a1')};
-    text-transform: uppercase;
-  }
+  padding: 0;
+  box-sizing: border-box;
 `;
 
 // Navigation Tabs
 const TabNav = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.75rem;
+  flex-wrap: wrap;
+`;
+
+const TabGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   flex-wrap: wrap;
 `;
 
 const TabButton = styled.button`
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.65rem 1.25rem;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: 700;
+  gap: 0.45rem;
+  padding: 0.42rem 0.95rem;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1.5px solid ${({ $active }) => ($active ? '#0284c7' : '#e0f2fe')};
-  background: ${({ $active, $color }) =>
-    $active
-      ? $color || 'linear-gradient(135deg, #0284c7, #0ea5e9)'
-      : 'white'};
-  color: ${({ $active }) => ($active ? 'white' : '#475569')};
-  box-shadow: ${({ $active }) => ($active ? '0 4px 14px rgba(14, 165, 233, 0.25)' : 'none')};
+  transition: all 0.2s ease;
+  border: 1px solid ${({ $active }) => ($active ? '#0ea5e9' : '#cbd5e1')};
+  background: ${({ $active }) => ($active ? '#0ea5e9' : '#ffffff')};
+  color: ${({ $active }) => ($active ? '#ffffff' : '#475569')};
+  box-shadow: ${({ $active }) => ($active ? '0 3px 10px rgba(14, 165, 233, 0.25)' : 'none')};
 
   &:hover {
-    transform: translateY(-1px);
-    border-color: #0ea5e9;
-    color: ${({ $active }) => ($active ? 'white' : '#0284c7')};
-    background: ${({ $active }) => ($active ? 'linear-gradient(135deg, #0284c7, #0ea5e9)' : '#f0f9ff')};
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+    background: ${({ $active }) => ($active ? '#0284c7' : '#f8fafc')};
+    border-color: ${({ $active }) => ($active ? '#0284c7' : '#94a3b8')};
+    color: ${({ $active }) => ($active ? '#ffffff' : '#0f172a')};
   }
 
   &:active {
@@ -156,79 +58,23 @@ const TabButton = styled.button`
   }
 `;
 
-// 3-Step Progress Bar
-const StepBar = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const StepItem = styled.div`
-  background: white;
-  border-radius: 14px;
-  padding: 1rem 1.25rem;
-  border: 1.5px solid ${({ $active, $color }) => ($active ? $color || '#0284c7' : '#e0f2fe')};
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.04);
-  transition: all 0.2s ease;
-`;
-
-const StepCircle = styled.div`
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: ${({ $color }) => $color || 'linear-gradient(135deg, #0284c7, #0ea5e9)'};
-  color: white;
-  font-weight: 800;
-  font-size: 0.95rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(14, 165, 233, 0.2);
-`;
-
-const StepText = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-
-  .step-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #0f172a;
-  }
-
-  .step-subtitle {
-    font-size: 0.78rem;
-    color: #64748b;
-    font-weight: 500;
-  }
-`;
-
 // 3-Column Layout
 const ThreeColumnLayout = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1.2fr;
-  gap: 1.5rem;
-  align-items: start;
+  grid-template-columns: 1fr 1fr 1.15fr;
+  gap: 0.875rem;
+  align-items: stretch;
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1024px) {
     grid-template-columns: 1fr;
   }
 `;
 
 const ColumnCard = styled.div`
   background: white;
-  border-radius: 18px;
+  border-radius: 12px;
   border: 1px solid #e0f2fe;
-  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.06);
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.05);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -237,35 +83,35 @@ const ColumnCard = styled.div`
 const ColumnHeader = styled.div`
   background: ${({ $gradient }) => $gradient || 'linear-gradient(135deg, #0284c7, #0ea5e9)'};
   color: white;
-  padding: 1rem 1.25rem;
+  padding: 0.55rem 0.875rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.5rem;
 
   .col-title {
-    font-size: 1rem;
+    font-size: 0.92rem;
     font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.45rem;
     margin: 0;
   }
 `;
 
 const ColumnBody = styled.div`
-  padding: 1.25rem;
+  padding: 0.75rem 0.875rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-height: 650px;
+  gap: 0.65rem;
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
 
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
   }
   &::-webkit-scrollbar-thumb {
-    background: #bae6fd;
+    background: #cbd5e1;
     border-radius: 3px;
   }
 `;
@@ -274,11 +120,11 @@ const ColumnBody = styled.div`
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.22rem;
 `;
 
 const Label = styled.label`
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: #334155;
   display: flex;
@@ -293,10 +139,10 @@ const Label = styled.label`
 
 const Input = styled.input`
   width: 100%;
-  padding: 0.65rem 0.875rem;
+  padding: 0.42rem 0.75rem;
   border: 1.5px solid #e0f2fe;
-  border-radius: 10px;
-  font-size: 0.88rem;
+  border-radius: 8px;
+  font-size: 0.84rem;
   color: #0f172a;
   outline: none;
   transition: all 0.2s ease;
@@ -316,10 +162,10 @@ const Input = styled.input`
 
 const Select = styled.select`
   width: 100%;
-  padding: 0.65rem 0.875rem;
+  padding: 0.42rem 0.75rem;
   border: 1.5px solid #e0f2fe;
-  border-radius: 10px;
-  font-size: 0.88rem;
+  border-radius: 8px;
+  font-size: 0.84rem;
   color: #0f172a;
   outline: none;
   transition: all 0.2s ease;
@@ -337,39 +183,39 @@ const Select = styled.select`
 const RoleCardsList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
 `;
 
 const RoleOptionCard = styled.div`
-  border: 1.5px solid ${({ $selected, $color }) => ($selected ? $color || '#0284c7' : '#e0f2fe')};
+  border: 1.5px solid ${({ $selected, $color }) => ($selected ? $color || '#0ea5e9' : '#e0f2fe')};
   background: ${({ $selected, $bgColor }) => ($selected ? $bgColor || '#f0f9ff' : 'white')};
-  border-radius: 12px;
-  padding: 0.875rem 1rem;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.18s ease;
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: 0.65rem;
 
   &:hover {
     border-color: ${({ $color }) => $color || '#0ea5e9'};
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.08);
+    box-shadow: 0 3px 10px rgba(14, 165, 233, 0.08);
   }
 `;
 
 const RoleIconSquircle = styled.div`
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: ${({ $color }) => $color || '#0284c7'};
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: ${({ $color }) => $color || '#0ea5e9'};
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 6px rgba(14, 165, 233, 0.2);
 `;
 
 const RoleInfo = styled.div`
@@ -377,70 +223,89 @@ const RoleInfo = styled.div`
   min-width: 0;
 
   .role-title {
-    font-size: 0.9rem;
+    font-size: 0.84rem;
     font-weight: 700;
     color: #0f172a;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.15rem;
   }
 
   .role-desc {
-    font-size: 0.76rem;
+    font-size: 0.72rem;
     color: #64748b;
-    line-height: 1.35;
+    line-height: 1.3;
     margin: 0;
   }
 `;
 
 // Access Scope Permissions (Column 3)
 const PermissionRowCard = styled.div`
-  border: 1.5px solid ${({ $enabled }) => ($enabled ? '#0284c7' : '#e0f2fe')};
-  background: ${({ $enabled }) => ($enabled ? '#f0f9ff' : 'white')};
-  border-radius: 12px;
-  padding: 0.75rem 0.875rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  transition: all 0.18s ease;
-`;
-
-const PermissionRowHeader = styled.div`
+  border: 1px solid ${({ $enabled }) => ($enabled ? '#bae6fd' : '#e2e8f0')};
+  background: ${({ $enabled }) => ($enabled ? '#f0f9ff' : '#ffffff')};
+  border-radius: 8px;
+  padding: 0.35rem 0.65rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  transition: all 0.15s ease;
+`;
+
+const PermissionRowHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+  flex: 1;
 
   .perm-label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .perm-desc {
+    font-size: 0.68rem;
+    color: #64748b;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
 const AccessSegmentedGroup = styled.div`
   display: flex;
-  background: #f0f9ff;
-  border: 1px solid #e0f2fe;
-  border-radius: 8px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
   padding: 2px;
   gap: 2px;
+  flex-shrink: 0;
 `;
 
 const SegmentButton = styled.button`
-  flex: 1;
   border: none;
   background: ${({ $active, $type }) => {
     if (!$active) return 'transparent';
-    if ($type === 'full') return '#0284c7';
-    if ($type === 'view') return '#0ea5e9';
-    return '#94a3b8';
+    if ($type === 'full') return '#0ea5e9';
+    if ($type === 'view') return '#e0f2fe';
+    return '#cbd5e1';
   }};
-  color: ${({ $active }) => ($active ? 'white' : '#64748b')};
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  font-size: 0.74rem;
+  color: ${({ $active, $type }) => {
+    if (!$active) return '#64748b';
+    if ($type === 'full') return '#ffffff';
+    if ($type === 'view') return '#0284c7';
+    return '#334155';
+  }};
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -453,57 +318,58 @@ const SegmentButton = styled.button`
 // Bottom Sticky Action Bar
 const BottomActionBar = styled.div`
   background: white;
-  border-radius: 16px;
+  border-radius: 12px;
   border: 1px solid #e0f2fe;
-  padding: 1rem 1.5rem;
+  padding: 0.45rem 1rem;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 1rem;
-  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.06);
+  gap: 0.75rem;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.05);
 `;
 
 const PrimaryBtn = styled.button`
-  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  background: #0ea5e9;
   color: white;
   border: none;
-  border-radius: 10px;
-  padding: 0.75rem 1.5rem;
-  font-weight: 700;
-  font-size: 0.92rem;
+  border-radius: 8px;
+  padding: 0.45rem 1.15rem;
+  font-weight: 600;
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.25);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 
-  &:hover:not(:disabled) {
+  &:hover:enabled {
+    background: #0284c7;
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
   }
 
   &:disabled {
-    opacity: 0.6;
+    background: #94a3b8;
     cursor: not-allowed;
+    box-shadow: none;
   }
 `;
 
 const SecondaryBtn = styled.button`
-  background: #f0f9ff;
-  border: 1.5px solid #bae6fd;
-  border-radius: 10px;
-  padding: 0.75rem 1.25rem;
+  background: white;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.45rem 1rem;
   font-weight: 600;
-  font-size: 0.92rem;
-  color: #0284c7;
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: #e0f2fe;
-    border-color: #7dd3fc;
-    color: #0369a1;
+    background: #f8fafc;
+    border-color: #94a3b8;
+    color: #0f172a;
   }
 `;
 
@@ -667,121 +533,6 @@ const PriorityModalOverlay = styled.div`
   z-index: 3000 !important;
 `;
 
-// ─── ROLE PRESETS ─────────────────────────────────────────────────────────────
-const ROLE_PRESETS = [
-  {
-    id: 'recruitment_head',
-    name: 'Recruitment Administrator',
-    badge: 'Full Access',
-    icon: '🛡️',
-    color: '#0284c7',
-    bgColor: '#f0f9ff',
-    description: 'Full administrative access across recruitment forms, candidate evaluations, assessments, and interview panels.',
-    permissionCount: 6,
-    defaultPermissions: {
-      'forms.manage': 'full_access',
-      'candidates.manage': 'full_access',
-      'tests.manage': 'full_access',
-      'interviews.manage': 'full_access',
-      'users.manage': 'full_access',
-      'panel_members.manage': 'full_access'
-    },
-    hasPanelMemberAccess: true
-  },
-  {
-    id: 'candidate_evaluator',
-    name: 'Candidate Evaluation Lead',
-    badge: 'Hiring Lead',
-    icon: '👥',
-    color: '#0ea5e9',
-    bgColor: '#e0f2fe',
-    description: 'Evaluates applicant profiles, reviews credentials, manages candidate shortlisting and hiring decisions.',
-    permissionCount: 4,
-    defaultPermissions: {
-      'candidates.manage': 'full_access',
-      'forms.manage': 'view_only',
-      'interviews.manage': 'view_only',
-      'tests.manage': 'view_only'
-    },
-    hasPanelMemberAccess: false
-  },
-  {
-    id: 'assessment_manager',
-    name: 'Assessment & Test Manager',
-    badge: 'Assessments',
-    icon: '📝',
-    color: '#059669',
-    bgColor: '#f0fdf4',
-    description: 'Manages assessment tests, question banks, typing tests, candidate assignments, and publishes scores.',
-    permissionCount: 2,
-    defaultPermissions: {
-      'tests.manage': 'full_access',
-      'candidates.manage': 'view_only'
-    },
-    hasPanelMemberAccess: false
-  },
-  {
-    id: 'interview_coordinator',
-    name: 'Interview Panel Coordinator',
-    badge: 'Interviews',
-    icon: '🎯',
-    color: '#d97706',
-    bgColor: '#fffbeb',
-    description: 'Schedules interview rounds, assigns panel members, collects score sheets, and manages candidate feedback.',
-    permissionCount: 3,
-    defaultPermissions: {
-      'interviews.manage': 'full_access',
-      'panel_members.manage': 'full_access',
-      'candidates.manage': 'view_only'
-    },
-    hasPanelMemberAccess: true
-  },
-  {
-    id: 'form_workflow_admin',
-    name: 'Forms & Workflow Specialist',
-    badge: 'Workflows',
-    icon: '📋',
-    color: '#0284c7',
-    bgColor: '#f0f9ff',
-    description: 'Designs dynamic recruitment application forms, configures form schemas, and monitors incoming submissions.',
-    permissionCount: 2,
-    defaultPermissions: {
-      'forms.manage': 'full_access',
-      'candidates.manage': 'view_only'
-    },
-    hasPanelMemberAccess: false
-  },
-  {
-    id: 'department_reviewer',
-    name: 'Department Reviewer / Auditor',
-    badge: 'View Only',
-    icon: '👁️',
-    color: '#475569',
-    bgColor: '#f8fafc',
-    description: 'Read-only administrative visibility across all candidates, tests, and interview processes for auditing.',
-    permissionCount: 5,
-    defaultPermissions: {
-      'forms.manage': 'view_only',
-      'candidates.manage': 'view_only',
-      'tests.manage': 'view_only',
-      'interviews.manage': 'view_only',
-      'panel_members.manage': 'view_only'
-    },
-    hasPanelMemberAccess: false
-  },
-  {
-    id: 'custom_role',
-    name: 'Custom Role',
-    badge: 'Custom',
-    icon: '⚙️',
-    color: '#0891b2',
-    bgColor: '#ecfeff',
-    description: 'Customized permission scope configured directly using the granular module toggles in Access Scope.',
-    permissionCount: 0,
-    defaultPermissions: {},
-    hasPanelMemberAccess: false
-  }
-];
 
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 const SubAdminManagement = () => {
@@ -798,7 +549,7 @@ const SubAdminManagement = () => {
 
   // Active view tab: 'create' | 'users' | 'roles'
   const [activeTab, setActiveTab] = useState('create');
-  const [selectedRoleId, setSelectedRoleId] = useState('recruitment_head');
+  const [selectedRoleId, setSelectedRoleId] = useState('');
   const [searchFilter, setSearchFilter] = useState('');
 
   // Form state
@@ -810,8 +561,8 @@ const SubAdminManagement = () => {
     password: '',
     campus: '',
     courses: [],
-    permissions: ROLE_PRESETS[0].defaultPermissions,
-    hasPanelMemberAccess: ROLE_PRESETS[0].hasPanelMemberAccess
+    permissions: {},
+    hasPanelMemberAccess: false
   });
 
   // HRMS Search Modal
@@ -825,22 +576,35 @@ const SubAdminManagement = () => {
   // Permissions View Modal
   const [viewingPermissions, setViewingPermissions] = useState(null);
 
-  // Role Presets State (Editable & Deletable with local persistence)
+  // Role Presets State (Editable & Deletable with local persistence, starting empty for custom roles)
   const [rolePresets, setRolePresets] = useState(() => {
     try {
-      const saved = localStorage.getItem('srs_role_presets');
+      const saved = localStorage.getItem('srs_custom_roles') || localStorage.getItem('srs_role_presets');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) {
+          // Filter out legacy hardcoded role presets if any exist
+          const defaultIds = new Set([
+            'recruitment_head',
+            'candidate_evaluator',
+            'assessment_manager',
+            'interview_coordinator',
+            'form_workflow_admin',
+            'department_reviewer',
+            'custom_role'
+          ]);
+          return parsed.filter((r) => !defaultIds.has(r.id));
+        }
       }
     } catch (e) {
       // ignore
     }
-    return ROLE_PRESETS;
+    return [];
   });
 
   useEffect(() => {
     try {
+      localStorage.setItem('srs_custom_roles', JSON.stringify(rolePresets));
       localStorage.setItem('srs_role_presets', JSON.stringify(rolePresets));
     } catch (e) {
       // ignore
@@ -898,14 +662,13 @@ const SubAdminManagement = () => {
   };
 
   const handleDeleteRole = (preset) => {
-    if (rolePresets.length <= 1) {
-      setToast({ type: 'danger', message: 'You must maintain at least one role profile.' });
-      return;
-    }
     if (!window.confirm(`Are you sure you want to delete the "${preset.name}" role profile?`)) {
       return;
     }
     setRolePresets((prev) => prev.filter((r) => r.id !== preset.id));
+    if (selectedRoleId === preset.id) {
+      setSelectedRoleId('');
+    }
     setToast({ type: 'success', message: `✓ Role "${preset.name}" deleted successfully.` });
   };
 
@@ -940,7 +703,7 @@ const SubAdminManagement = () => {
 
   // Role Configuration Create User Modal
   const [showRoleUserModal, setShowRoleUserModal] = useState(false);
-  const [roleModalPreset, setRoleModalPreset] = useState(ROLE_PRESETS[0]);
+  const [roleModalPreset, setRoleModalPreset] = useState(null);
   const [roleModalSaving, setRoleModalSaving] = useState(false);
   const [hrmsTargetForm, setHrmsTargetForm] = useState('main'); // 'main' | 'roleModal'
   const [roleModalCourses, setRoleModalCourses] = useState([]);
@@ -952,12 +715,16 @@ const SubAdminManagement = () => {
     password: '',
     campus: '',
     courses: [],
-    permissions: ROLE_PRESETS[0].defaultPermissions,
-    hasPanelMemberAccess: ROLE_PRESETS[0].hasPanelMemberAccess
+    permissions: {},
+    hasPanelMemberAccess: false
   });
 
   const openRoleCreateModal = (preset) => {
-    const selected = preset || rolePresets[0] || ROLE_PRESETS[0];
+    const selected = preset || rolePresets[0];
+    if (!selected) {
+      setToast({ type: 'danger', message: 'Please create a role first in Role Configuration.' });
+      return;
+    }
     setRoleModalPreset(selected);
     setRoleModalCourses([]);
     setRoleModalForm({
@@ -968,7 +735,7 @@ const SubAdminManagement = () => {
       password: '',
       campus: '',
       courses: [],
-      permissions: { ...selected.defaultPermissions },
+      permissions: { ...(selected.defaultPermissions || {}) },
       hasPanelMemberAccess: Boolean(selected.hasPanelMemberAccess)
     });
     setShowRoleUserModal(true);
@@ -1076,23 +843,21 @@ const SubAdminManagement = () => {
       password: '',
       campus: '',
       courses: [],
-      permissions: ROLE_PRESETS[0].defaultPermissions,
-      hasPanelMemberAccess: ROLE_PRESETS[0].hasPanelMemberAccess
+      permissions: {},
+      hasPanelMemberAccess: false
     });
     setEditingSubAdmin(null);
-    setSelectedRoleId('recruitment_head');
+    setSelectedRoleId('');
     setCourses([]);
   };
 
   const handleSelectRolePreset = (preset) => {
     setSelectedRoleId(preset.id);
-    if (preset.id !== 'custom_role') {
-      setFormState((prev) => ({
-        ...prev,
-        permissions: { ...preset.defaultPermissions },
-        hasPanelMemberAccess: preset.hasPanelMemberAccess
-      }));
-    }
+    setFormState((prev) => ({
+      ...prev,
+      permissions: { ...(preset.defaultPermissions || {}) },
+      hasPanelMemberAccess: Boolean(preset.hasPanelMemberAccess)
+    }));
   };
 
   const handlePermissionAccessChange = (permKey, level) => {
@@ -1302,91 +1067,80 @@ const SubAdminManagement = () => {
     <Container>
       <ToastNotificationContainer toast={toast} onClose={() => setToast({ type: '', message: '' })} />
 
-      {/* ─── HEADER ──────────────────────────────────────────────────────── */}
-      <HeaderCard>
-        <HeaderLeft>
-          <HeaderIconBox>🛡️</HeaderIconBox>
-          <HeaderTitleGroup>
-            <Title>User Management</Title>
-            <Subtitle>Create and manage users with role-based access</Subtitle>
-          </HeaderTitleGroup>
-        </HeaderLeft>
-
-        <HeaderStats>
-          <StatBadge>
-            <span className="stat-value">{subAdmins.length}</span>
-            <span className="stat-label">Total</span>
-          </StatBadge>
-          <StatBadge $variant="active">
-            <span className="stat-value">{activeCount}</span>
-            <span className="stat-label">Active</span>
-          </StatBadge>
-        </HeaderStats>
-      </HeaderCard>
-
-      {/* ─── TAB NAVIGATION ──────────────────────────────────────────────── */}
+      {/* ─── TAB NAVIGATION & TOP ACTIONS ──────────────────────────────── */}
       <TabNav>
-        <TabButton
-          $active={activeTab === 'create'}
-          onClick={() => {
-            if (activeTab !== 'create') {
-              resetForm();
-            }
-            setActiveTab('create');
-          }}
-        >
-          <span>{editingSubAdmin ? '✏️ Edit User' : '👤 + Create User'}</span>
-        </TabButton>
+        <TabGroup>
+          <TabButton
+            type="button"
+            $active={activeTab === 'create'}
+            onClick={() => {
+              if (activeTab !== 'create') {
+                resetForm();
+              }
+              setActiveTab('create');
+            }}
+          >
+            <span>{editingSubAdmin ? '✏️ Edit User' : '👤 + Create User'}</span>
+          </TabButton>
 
-        <TabButton $active={activeTab === 'users'} onClick={() => setActiveTab('users')}>
-          <span>👥 All Users ({subAdmins.length})</span>
-        </TabButton>
+          <TabButton type="button" $active={activeTab === 'users'} onClick={() => setActiveTab('users')}>
+            <span>👥 All Users ({subAdmins.length}) • {activeCount} Active</span>
+          </TabButton>
 
-        <TabButton
-          $active={activeTab === 'roles'}
-          onClick={() => setActiveTab('roles')}
-        >
-          <span>⚙️ Role Configuration</span>
-        </TabButton>
+          <TabButton
+            type="button"
+            $active={activeTab === 'roles'}
+            onClick={() => setActiveTab('roles')}
+          >
+            <span>⚙️ Role Configuration</span>
+          </TabButton>
+        </TabGroup>
+
+        {activeTab === 'create' && (
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <SecondaryBtn
+              type="button"
+              onClick={() => {
+                resetForm();
+                setActiveTab('users');
+              }}
+              style={{ padding: '0.42rem 0.95rem', fontSize: '0.82rem' }}
+            >
+              Cancel
+            </SecondaryBtn>
+
+            <PrimaryBtn
+              type="submit"
+              form="subadmin-create-form"
+              disabled={saving}
+              style={{ padding: '0.42rem 1.1rem', fontSize: '0.82rem' }}
+            >
+              <span>{saving ? 'Saving...' : editingSubAdmin ? 'Update User' : 'Create User'}</span>
+            </PrimaryBtn>
+          </div>
+        )}
       </TabNav>
 
       {/* ─── TAB 1: CREATE / EDIT USER (3-COLUMN WORKSPACE) ─────────────── */}
       {activeTab === 'create' && (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {/* Step Indicator */}
-          <StepBar>
-            <StepItem $active={true} $color="#0284c7">
-              <StepCircle $color="#0284c7">1</StepCircle>
-              <StepText>
-                <span className="step-title">User Information</span>
-                <span className="step-subtitle">Details & credentials</span>
-              </StepText>
-            </StepItem>
-
-            <StepItem $active={true} $color="#0ea5e9">
-              <StepCircle $color="#0ea5e9">2</StepCircle>
-              <StepText>
-                <span className="step-title">Role Selection</span>
-                <span className="step-subtitle">Choose role template</span>
-              </StepText>
-            </StepItem>
-
-            <StepItem $active={true} $color="#059669">
-              <StepCircle $color="#059669">3</StepCircle>
-              <StepText>
-                <span className="step-title">Access Scope</span>
-                <span className="step-subtitle">Set campus & permissions</span>
-              </StepText>
-            </StepItem>
-          </StepBar>
-
+        <form id="subadmin-create-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {/* 3 Columns */}
           <ThreeColumnLayout>
             {/* ─── COLUMN 1: User Information ─── */}
             <ColumnCard>
               <ColumnHeader $gradient="linear-gradient(135deg, #0284c7, #0ea5e9)">
                 <h3 className="col-title">
-                  <span>👤</span>
+                  <span style={{
+                    background: 'rgba(255,255,255,0.25)',
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '50%',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.75rem',
+                    fontWeight: 800
+                  }}>1</span>
                   <span>User Information</span>
                 </h3>
                 <button
@@ -1402,15 +1156,15 @@ const SubAdminManagement = () => {
                     background: 'white',
                     color: '#0284c7',
                     border: 'none',
-                    padding: '0.4rem 0.85rem',
-                    borderRadius: '8px',
+                    padding: '0.35rem 0.75rem',
+                    borderRadius: '6px',
                     fontWeight: 700,
-                    fontSize: '0.8rem',
+                    fontSize: '0.76rem',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.35rem',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.1)'
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.08)'
                   }}
                 >
                   <span>🔍</span>
@@ -1449,7 +1203,7 @@ const SubAdminManagement = () => {
                   />
                 </FormGroup>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                   <FormGroup>
                     <Label htmlFor="col1_username">
                       <span>Employee ID (HRMS)</span>
@@ -1470,11 +1224,11 @@ const SubAdminManagement = () => {
                         onClick={() => fetchByEmployeeId(formState.employeeId)}
                         disabled={!formState.employeeId || fetchingHrmsId}
                         style={{
-                          padding: '0 0.6rem',
+                          padding: '0 0.55rem',
                           background: '#f1f5f9',
                           border: '1.5px solid #cbd5e1',
                           borderRadius: '8px',
-                          fontSize: '0.78rem',
+                          fontSize: '0.76rem',
                           fontWeight: 700,
                           cursor: formState.employeeId ? 'pointer' : 'not-allowed',
                           whiteSpace: 'nowrap'
@@ -1505,19 +1259,19 @@ const SubAdminManagement = () => {
                     style={{
                       background: '#f0fdf4',
                       border: '1.5px solid #a7f3d0',
-                      borderRadius: '12px',
-                      padding: '0.85rem 1rem',
+                      borderRadius: '10px',
+                      padding: '0.65rem 0.85rem',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '0.35rem'
+                      gap: '0.25rem'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#047857', fontWeight: 700, fontSize: '0.86rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#047857', fontWeight: 700, fontSize: '0.82rem' }}>
                       <span>🔒</span>
                       <span>HRMS Authentication Active</span>
                     </div>
-                    <p style={{ margin: 0, fontSize: '0.78rem', color: '#065f46', lineHeight: '1.4' }}>
-                      This employee signs in with Employee ID <strong>({formState.employeeId})</strong> and their confidential <strong>HRMS portal password</strong>. No password is typed or stored in SRS.
+                    <p style={{ margin: 0, fontSize: '0.74rem', color: '#065f46', lineHeight: '1.35' }}>
+                      Sign in with Employee ID <strong>({formState.employeeId})</strong> and confidential HRMS password.
                     </p>
                   </div>
                 ) : (
@@ -1547,7 +1301,7 @@ const SubAdminManagement = () => {
                           background: 'none',
                           border: 'none',
                           cursor: 'pointer',
-                          fontSize: '1rem',
+                          fontSize: '0.95rem',
                           color: '#64748b'
                         }}
                       >
@@ -1561,53 +1315,135 @@ const SubAdminManagement = () => {
 
             {/* ─── COLUMN 2: Role Selection ─── */}
             <ColumnCard>
-              <ColumnHeader $gradient="linear-gradient(135deg, #0284c7, #0369a1)">
+              <ColumnHeader $gradient="linear-gradient(135deg, #0284c7, #0ea5e9)">
                 <h3 className="col-title">
-                  <span>🛡️</span>
+                  <span style={{
+                    background: 'rgba(255,255,255,0.25)',
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '50%',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.75rem',
+                    fontWeight: 800
+                  }}>2</span>
                   <span>Role Selection</span>
                 </h3>
-                <span style={{ fontSize: '0.78rem', background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '6px' }}>
-                  {rolePresets.find((r) => r.id === selectedRoleId)?.badge || 'Custom'}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <button
+                    type="button"
+                    onClick={handleOpenNewRole}
+                    style={{
+                      background: 'rgba(255,255,255,0.22)',
+                      color: 'white',
+                      border: '1px solid rgba(255,255,255,0.35)',
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    + Add Role
+                  </button>
+                  <span style={{ fontSize: '0.74rem', background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '6px' }}>
+                    {rolePresets.find((r) => r.id === selectedRoleId)?.name || (selectedRoleId ? 'Selected' : 'Custom')}
+                  </span>
+                </div>
               </ColumnHeader>
 
               <ColumnBody>
-                <RoleCardsList>
-                  {rolePresets.map((preset) => {
-                    const isSelected = selectedRoleId === preset.id;
-                    return (
-                      <RoleOptionCard
-                        key={preset.id}
-                        $selected={isSelected}
-                        $color={preset.color}
-                        $bgColor={preset.bgColor}
-                        onClick={() => handleSelectRolePreset(preset)}
-                      >
-                        <RoleIconSquircle $color={preset.color}>{preset.icon}</RoleIconSquircle>
-                        <RoleInfo>
-                          <div className="role-title">
-                            <span>{preset.name}</span>
-                            {isSelected && (
-                              <span style={{ color: preset.color, fontSize: '0.8rem', fontWeight: 800 }}>✓</span>
-                            )}
-                          </div>
-                          <p className="role-desc">{preset.description}</p>
-                        </RoleInfo>
-                      </RoleOptionCard>
-                    );
-                  })}
-                </RoleCardsList>
+                {rolePresets.length === 0 ? (
+                  <div
+                    style={{
+                      padding: '2rem 1.25rem',
+                      textAlign: 'center',
+                      background: '#f8fafc',
+                      borderRadius: '12px',
+                      border: '1.5px dashed #cbd5e1',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      margin: 'auto 0'
+                    }}
+                  >
+                    <div style={{ fontSize: '2rem' }}>🛡️</div>
+                    <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.95rem' }}>
+                      No Roles Created Yet
+                    </div>
+                    <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748b', lineHeight: 1.4 }}>
+                      Create customized roles in Role Configuration, or configure permissions directly in Access Scope.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleOpenNewRole}
+                      style={{
+                        background: '#0ea5e9',
+                        color: 'white',
+                        border: 'none',
+                        padding: '0.45rem 1rem',
+                        borderRadius: '8px',
+                        fontWeight: 600,
+                        fontSize: '0.82rem',
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 8px rgba(14, 165, 233, 0.25)'
+                      }}
+                    >
+                      + Create Role
+                    </button>
+                  </div>
+                ) : (
+                  <RoleCardsList>
+                    {rolePresets.map((preset) => {
+                      const isSelected = selectedRoleId === preset.id;
+                      return (
+                        <RoleOptionCard
+                          key={preset.id}
+                          $selected={isSelected}
+                          $color={preset.color || '#0ea5e9'}
+                          $bgColor={preset.bgColor || '#f0f9ff'}
+                          onClick={() => handleSelectRolePreset(preset)}
+                        >
+                          <RoleIconSquircle $color={preset.color || '#0ea5e9'}>
+                            {preset.icon || '🛡️'}
+                          </RoleIconSquircle>
+                          <RoleInfo>
+                            <div className="role-title">
+                              <span>{preset.name}</span>
+                              {isSelected && (
+                                <span style={{ color: preset.color || '#0ea5e9', fontSize: '0.8rem', fontWeight: 800 }}>✓</span>
+                              )}
+                            </div>
+                            {preset.description && <p className="role-desc">{preset.description}</p>}
+                          </RoleInfo>
+                        </RoleOptionCard>
+                      );
+                    })}
+                  </RoleCardsList>
+                )}
               </ColumnBody>
             </ColumnCard>
 
             {/* ─── COLUMN 3: Access Scope ─── */}
             <ColumnCard>
-              <ColumnHeader $gradient="linear-gradient(135deg, #059669, #047857)">
+              <ColumnHeader $gradient="linear-gradient(135deg, #0284c7, #0ea5e9)">
                 <h3 className="col-title">
-                  <span>🌐</span>
+                  <span style={{
+                    background: 'rgba(255,255,255,0.25)',
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '50%',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.75rem',
+                    fontWeight: 800
+                  }}>3</span>
                   <span>Access Scope</span>
                 </h3>
-                <span style={{ fontSize: '0.78rem', background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '6px' }}>
+                <span style={{ fontSize: '0.74rem', background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '6px' }}>
                   {Object.keys(formState.permissions || {}).length} module(s) enabled
                 </span>
               </ColumnHeader>
@@ -1617,7 +1453,7 @@ const SubAdminManagement = () => {
                 <FormGroup>
                   <Label htmlFor="col3_campus">
                     <span>Campus Scope</span>
-                    <span style={{ fontSize: '0.72rem', color: '#64748b' }}>Optional (Global if unselected)</span>
+                    <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Optional (Global if unselected)</span>
                   </Label>
                   <Select
                     id="col3_campus"
@@ -1648,9 +1484,9 @@ const SubAdminManagement = () => {
                         display: 'flex',
                         flexWrap: 'wrap',
                         gap: '0.35rem',
-                        maxHeight: '120px',
+                        maxHeight: '90px',
                         overflowY: 'auto',
-                        padding: '0.5rem',
+                        padding: '0.4rem',
                         background: '#f8fafc',
                         borderRadius: '8px',
                         border: '1px solid #e2e8f0'
@@ -1665,10 +1501,10 @@ const SubAdminManagement = () => {
                               display: 'inline-flex',
                               alignItems: 'center',
                               gap: '0.35rem',
-                              fontSize: '0.78rem',
+                              fontSize: '0.75rem',
                               background: isChecked ? '#e0f2fe' : 'white',
-                              border: `1px solid ${isChecked ? '#0284c7' : '#cbd5e1'}`,
-                              padding: '2px 8px',
+                              border: `1px solid ${isChecked ? '#0ea5e9' : '#cbd5e1'}`,
+                              padding: '2px 6px',
                               borderRadius: '6px',
                               cursor: 'pointer'
                             }}
@@ -1697,21 +1533,21 @@ const SubAdminManagement = () => {
                 {/* Panel Member Access Card */}
                 <div
                   style={{
-                    padding: '0.75rem',
-                    borderRadius: '10px',
-                    border: `1.5px solid ${formState.hasPanelMemberAccess ? '#f97316' : '#e2e8f0'}`,
-                    background: formState.hasPanelMemberAccess ? '#fff7ed' : '#f8fafc',
+                    padding: '0.45rem 0.65rem',
+                    borderRadius: '8px',
+                    border: `1.5px solid ${formState.hasPanelMemberAccess ? '#0ea5e9' : '#e2e8f0'}`,
+                    background: formState.hasPanelMemberAccess ? '#f0f9ff' : '#f8fafc',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    gap: '0.75rem'
+                    gap: '0.5rem'
                   }}
                 >
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1e293b' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.8rem', color: '#0f172a' }}>
                       Grant Interview Panel Access
                     </div>
-                    <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#64748b' }}>
                       Allows user to evaluate candidates in interview rounds
                     </div>
                   </div>
@@ -1719,15 +1555,15 @@ const SubAdminManagement = () => {
                     type="checkbox"
                     checked={!!formState.hasPanelMemberAccess}
                     onChange={(e) => setFormState({ ...formState, hasPanelMemberAccess: e.target.checked })}
-                    style={{ width: '18px', height: '18px', accentColor: '#f97316', cursor: 'pointer' }}
+                    style={{ width: '16px', height: '16px', accentColor: '#0ea5e9', cursor: 'pointer' }}
                   />
                 </div>
 
                 {/* Granular Module Permissions */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginTop: '0.2rem' }}>
                   <Label>
                     <span>Role Module Permissions</span>
-                    <span style={{ fontSize: '0.72rem', color: '#64748b' }}>Fine-tune access</span>
+                    <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Fine-tune access</span>
                   </Label>
 
                   {availablePermissions.map((perm) => {
@@ -1736,38 +1572,38 @@ const SubAdminManagement = () => {
                       <PermissionRowCard key={perm.key} $enabled={Boolean(currentLevel)}>
                         <PermissionRowHeader>
                           <span className="perm-label">{perm.label}</span>
-                          <AccessSegmentedGroup>
-                            <SegmentButton
-                              type="button"
-                              $type="off"
-                              $active={!currentLevel}
-                              onClick={() => handlePermissionAccessChange(perm.key, null)}
-                            >
-                              Off
-                            </SegmentButton>
-                            <SegmentButton
-                              type="button"
-                              $type="view"
-                              $active={currentLevel === 'view_only'}
-                              onClick={() => handlePermissionAccessChange(perm.key, 'view_only')}
-                            >
-                              View
-                            </SegmentButton>
-                            <SegmentButton
-                              type="button"
-                              $type="full"
-                              $active={currentLevel === 'full_access'}
-                              onClick={() => handlePermissionAccessChange(perm.key, 'full_access')}
-                            >
-                              Full
-                            </SegmentButton>
-                          </AccessSegmentedGroup>
+                          {perm.description && (
+                            <span className="perm-desc" title={perm.description}>
+                              {perm.description}
+                            </span>
+                          )}
                         </PermissionRowHeader>
-                        {perm.description && (
-                          <div style={{ fontSize: '0.72rem', color: '#64748b', lineHeight: 1.3 }}>
-                            {perm.description}
-                          </div>
-                        )}
+                        <AccessSegmentedGroup>
+                          <SegmentButton
+                            type="button"
+                            $type="off"
+                            $active={!currentLevel}
+                            onClick={() => handlePermissionAccessChange(perm.key, null)}
+                          >
+                            Off
+                          </SegmentButton>
+                          <SegmentButton
+                            type="button"
+                            $type="view"
+                            $active={currentLevel === 'view_only'}
+                            onClick={() => handlePermissionAccessChange(perm.key, 'view_only')}
+                          >
+                            View
+                          </SegmentButton>
+                          <SegmentButton
+                            type="button"
+                            $type="full"
+                            $active={currentLevel === 'full_access'}
+                            onClick={() => handlePermissionAccessChange(perm.key, 'full_access')}
+                          >
+                            Full
+                          </SegmentButton>
+                        </AccessSegmentedGroup>
                       </PermissionRowCard>
                     );
                   })}
@@ -2000,7 +1836,13 @@ const SubAdminManagement = () => {
 
               <button
                 type="button"
-                onClick={() => openRoleCreateModal(rolePresets[0])}
+                onClick={() => {
+                  if (rolePresets.length > 0) {
+                    openRoleCreateModal(rolePresets[0]);
+                  } else {
+                    handleOpenNewRole();
+                  }
+                }}
                 style={{
                   background: 'rgba(255, 255, 255, 0.2)',
                   color: 'white',
@@ -2022,7 +1864,49 @@ const SubAdminManagement = () => {
           </div>
 
           {/* Grid of Role Cards */}
-          <RolesGrid>
+          {rolePresets.length === 0 ? (
+            <div
+              style={{
+                padding: '3rem 2rem',
+                textAlign: 'center',
+                background: 'white',
+                borderRadius: '16px',
+                border: '1px solid #e0f2fe',
+                boxShadow: '0 4px 16px rgba(14, 165, 233, 0.05)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '0.75rem'
+              }}
+            >
+              <div style={{ fontSize: '2.5rem' }}>⚙️</div>
+              <div style={{ fontWeight: 800, color: '#0f172a', fontSize: '1.1rem' }}>
+                No Custom Roles Created Yet
+              </div>
+              <p style={{ margin: 0, fontSize: '0.88rem', color: '#64748b', maxWidth: '420px', lineHeight: 1.5 }}>
+                You have not created any roles yet. Click &quot;Add new role&quot; to configure role templates with pre-defined module permissions.
+              </p>
+              <button
+                type="button"
+                onClick={handleOpenNewRole}
+                style={{
+                  marginTop: '0.5rem',
+                  background: '#0ea5e9',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '0.6rem 1.25rem',
+                  fontWeight: 700,
+                  fontSize: '0.88rem',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(14, 165, 233, 0.25)'
+                }}
+              >
+                + Add new role
+              </button>
+            </div>
+          ) : (
+            <RolesGrid>
             {rolePresets.map((preset) => {
               const permCount = Object.keys(preset.defaultPermissions || {}).filter(
                 (k) => preset.defaultPermissions[k]
@@ -2159,6 +2043,7 @@ const SubAdminManagement = () => {
               );
             })}
           </RolesGrid>
+          )}
         </div>
       )}
 

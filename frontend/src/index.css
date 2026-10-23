@@ -90,23 +90,9 @@ body {
   position: relative;
 }
 
+/* Watermark removed per user preference */
 body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('./pydah-bg-watermark.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: var(--watermark-size);
-  mix-blend-mode: multiply;
-  opacity: var(--watermark-opacity);
-  pointer-events: none;
-  z-index: 0;
+  display: none !important;
 }
 
 code {
