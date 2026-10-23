@@ -6,22 +6,20 @@ This guide explains how to connect your GitHub repo to your AWS Lightsail instan
 
 ## Where the workflow lives
 
-- **Workflow file:** `.github/workflows/backend-deploy.yml` (at the **repository root**, not inside `backend/`).
-- **Trigger:** Pushes to `main` that touch `backend/**`, or the "Run workflow" button in the Actions tab.
+- **Workflow file:** `.github/workflows/deploy.yml` (at the **repository root**).
+- **Trigger:** Pushes to `main` or manual trigger ("Run workflow" in GitHub Actions tab).
 
 ---
 
-## Required GitHub secrets (env variables for the connection)
+## Required GitHub secrets
 
 Add these in your repo: **Settings → Secrets and variables → Actions → New repository secret.**
 
 | Secret name | Required | Description |
 |-------------|----------|-------------|
-| `LIGHTSAIL_HOST` | **Yes** | Public IP or hostname of your Lightsail instance (e.g. `3.12.34.56` or `my-instance.us-east-1.cs.amazonlightsail.com`). |
-| `LIGHTSAIL_USER` | **Yes** | SSH user on the instance. Usually `ubuntu` (Ubuntu) or `ec2-user` (Amazon Linux). |
-| `LIGHTSAIL_SSH_KEY` | **Yes** | **Full private key** (PEM) that you use to SSH into the instance. Include `-----BEGIN ... KEY-----` and `-----END ... KEY-----`. |
-| `LIGHTSAIL_APP_PATH` | **Yes** | Absolute path on the instance where the repo is cloned (e.g. `/home/ubuntu/Pydah-Recruitment`). |
-| `LIGHTSAIL_SSH_PORT` | No | SSH port if not 22. Omit for default 22. |
+| `SERVER_IP` | **Yes** | Public IP address of your AWS Lightsail instance (e.g. `13.127.x.x`). |
+| `SSH_KEY`   | **Yes** | **Full private key** (PEM) used to SSH as `ec2-user`. Include `-----BEGIN ... KEY-----` and `-----END ... KEY-----`. |
+
 
 ---
 
@@ -54,14 +52,12 @@ npm ci --only=production
 
 Set **`LIGHTSAIL_APP_PATH`** to the folder that contains both repo and `backend`, e.g. `/home/ubuntu/Pydah-Recruitment`.
 
-### 3. Run the backend on the instance (PM2 or systemd)
-
-**Option A – PM2 (simple):**
+### 3. Run the backend on the instance (PM2)
 
 ```bash
 sudo npm install -g pm2
-cd /home/ubuntu/Pydah-Recruitment/backend
-pm2 start server.js --name pydah-backend
+cd /home/ec2-user/SRS/backend
+pm2 start ecosystem.config.js
 pm2 save
 pm2 startup   # run the command it prints so PM2 starts on reboot
 ```
@@ -103,32 +99,26 @@ sudo systemctl start pydah-backend
 
 ### 5. Add GitHub Actions secrets
 
-In the repo: **Settings → Secrets and variables → Actions → New repository secret** for each:
+In the repo: **Settings → Secrets and variables → Actions → New repository secret**:
 
-- `LIGHTSAIL_HOST` = instance IP or hostname  
-- `LIGHTSAIL_USER` = e.g. `ubuntu`  
-- `LIGHTSAIL_SSH_KEY` = full private key (PEM)  
-- `LIGHTSAIL_APP_PATH` = e.g. `/home/ubuntu/Pydah-Recruitment`  
-- `LIGHTSAIL_SSH_PORT` = only if SSH is not on 22  
+- `SERVER_IP` = Public IP of the Lightsail instance  
+- `SSH_KEY` = Full private SSH key (PEM) for `ec2-user`  
 
 ### 6. Run a deploy
 
-- Push to `main` with changes under `backend/`, or  
-- Go to **Actions → "Backend Deploy to Lightsail" → Run workflow**.
+- Push to `main`, or  
+- Go to **Actions → "Deploy to Production" → Run workflow**.
 
 ---
 
-## Summary: env variables to connect repo to instance
+## Summary: GitHub Secrets Needed
 
-| Purpose | Where to set | Name | Example |
-|--------|----------------|------|--------|
-| Instance address | GitHub Secrets | `LIGHTSAIL_HOST` | `3.12.34.56` |
-| SSH user | GitHub Secrets | `LIGHTSAIL_USER` | `ubuntu` |
-| SSH auth | GitHub Secrets | `LIGHTSAIL_SSH_KEY` | `-----BEGIN RSA PRIVATE KEY-----...` |
-| Repo path on server | GitHub Secrets | `LIGHTSAIL_APP_PATH` | `/home/ubuntu/Pydah-Recruitment` |
-| SSH port (optional) | GitHub Secrets | `LIGHTSAIL_SSH_PORT` | `22` |
+| Purpose | Where to set | Secret Name | Example |
+|---------|--------------|-------------|---------|
+| Instance IP | GitHub Secrets | `SERVER_IP` | `13.127.x.x` |
+| SSH Key | GitHub Secrets | `SSH_KEY` | `-----BEGIN RSA PRIVATE KEY-----...` |
 
-Your app’s own env (e.g. `MONGODB_URI`, `JWT_SECRET`) stays in `.env` on the Lightsail instance; the workflow only needs the five entries above (four required + one optional port) to connect the repo to the instance.
+Your app’s environment variables (e.g. `MONGODB_URI`, `JWT_SECRET`) stay safely inside `.env` on the Lightsail server. The GitHub Action only needs these two secrets to connect and deploy.
 
 ---
 
