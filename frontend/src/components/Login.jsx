@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 
 // Modern Color Palette
 const colors = {
@@ -594,16 +594,60 @@ const HomeIcon = ({ className }) => (
 
 // Main Component
 const Login = () => {
+  const [searchParams] = useSearchParams();
   const [formData, setFormData] = useState({
     identifier: '',
     password: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [ssoLoading, setSsoLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login } = useAuth();
+  const { login, ssoLogin } = useAuth();
   const navigate = useNavigate();
+
+  // Intercept Central CRM SSO token if present in URL query (?token=...)
+  useEffect(() => {
+    const ssoToken = searchParams.get('token');
+    if (ssoToken) {
+      setSsoLoading(true);
+      setError('');
+
+      ssoLogin(ssoToken)
+        .then((result) => {
+          if (result.success) {
+            if (window.PydahSwitcher?.hideTransition) {
+              window.PydahSwitcher.hideTransition();
+            }
+
+            const role = result.user?.role;
+            let targetPath = '/';
+            if (role === 'super_admin') targetPath = '/super-admin';
+            else if (role === 'sub_admin') targetPath = '/sub-admin';
+            else if (role === 'panel_member') targetPath = '/panel-member';
+            else if (role === 'candidate') targetPath = '/candidate';
+
+            navigate(targetPath, { replace: true });
+          } else {
+            setError(result.message || 'SSO authentication failed. Please enter your credentials.');
+            if (window.PydahSwitcher?.hideTransition) {
+              window.PydahSwitcher.hideTransition();
+            }
+          }
+        })
+        .catch((err) => {
+          console.error('[SSO] Login failed:', err);
+          setError('Failed to authenticate via SSO. Please try regular login.');
+          if (window.PydahSwitcher?.hideTransition) {
+            window.PydahSwitcher.hideTransition();
+          }
+        })
+        .finally(() => {
+          setSsoLoading(false);
+        });
+    }
+  }, [searchParams, ssoLogin, navigate]);
 
   const handleChange = (e) => {
     setFormData({
@@ -648,6 +692,30 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  if (ssoLoading) {
+    return (
+      <Container>
+        <BackgroundElements>
+          <FloatingElement className="element-1" />
+          <FloatingElement className="element-2" />
+          <FloatingElement className="element-3" />
+        </BackgroundElements>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', zIndex: 10 }}>
+          <pydah-sso-loader 
+            portal="staff-recruitment" 
+            heading="Authenticating Staff Recruitment session..." 
+          />
+          <div style={{ marginTop: '24px', textAlign: 'center' }}>
+            <Spinner style={{ width: '40px', height: '40px', margin: '0 auto', borderTopColor: colors.primary, borderColor: 'rgba(185, 28, 28, 0.2)' }} />
+            <p style={{ marginTop: '16px', color: colors.textSecondary, fontWeight: 600, fontSize: '1rem' }}>
+              Signing into Staff Recruitment...
+            </p>
+          </div>
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container>

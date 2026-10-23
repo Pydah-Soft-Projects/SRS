@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { MongoClient, ObjectId } = require('mongodb');
@@ -448,6 +449,153 @@ router.post('/login', async (req, res) => {
     }
     
     res.status(500).json({ message: 'Server error during login' });
+  }
+});
+
+/**
+ * Handle SSO Login from Central CRM Gateway
+ * POST /api/auth/sso-login
+ */
+router.post('/sso-login', async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: 'SSO token is required'
+      });
+    }
+
+    const CRM_AUTH_URL = process.env.CRM_AUTH_URL || 'https://crm.pydah.edu.in';
+    const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+
+    // 1. Verify token with CRM Central Gateway
+    let verifyRes;
+    try {
+      verifyRes = await axios.post(
+        `${CRM_AUTH_URL}/api/auth/verify-token`,
+        { encryptedToken: token },
+        { timeout: 8000 }
+      );
+    } catch (apiErr) {
+      console.error('[SRS-SSO] CRM verify-token failed:', apiErr.response?.data || apiErr.message);
+      return res.status(apiErr.response?.status || 401).json({
+        success: false,
+        message: apiErr.response?.data?.message || 'Invalid or expired SSO token'
+      });
+    }
+
+    if (!verifyRes.data || !verifyRes.data.valid || !verifyRes.data.data) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized SSO identity'
+      });
+    }
+
+    const ssoUser = verifyRes.data.data;
+    const targetEmail = (ssoUser.email || '').trim().toLowerCase();
+    const targetEmpId = ssoUser.employeeId || ssoUser.empNo || null;
+
+    console.log(`[SRS-SSO] Verification successful for: ${ssoUser.name} (${targetEmail || targetEmpId})`);
+
+    // 2. Query SRS User database by email or employeeId
+    const queryConditions = [];
+    if (targetEmail) queryConditions.push({ email: targetEmail });
+    if (targetEmpId) queryConditions.push({ employeeId: targetEmpId });
+    if (ssoUser.name) queryConditions.push({ name: ssoUser.name });
+
+    let localUser = null;
+    if (queryConditions.length > 0) {
+      localUser = await User.findOne({
+        $or: queryConditions
+      });
+    }
+
+    // 3. Auto-provision if user does not exist yet (Staff/HRMS auto-onboarding)
+    if (!localUser) {
+      if (!targetEmail) {
+        return res.status(400).json({
+          success: false,
+          message: 'Cannot provision user without email'
+        });
+      }
+
+      console.log(`[SRS-SSO] Auto-provisioning new user: ${targetEmail} (${ssoUser.name})`);
+
+      localUser = new User({
+        name: ssoUser.name || ssoUser.username || targetEmail.split('@')[0],
+        email: targetEmail,
+        employeeId: targetEmpId || undefined,
+        role: ssoUser.role && ['super_admin', 'sub_admin', 'panel_member'].includes(ssoUser.role) 
+          ? ssoUser.role 
+          : 'sub_admin',
+        campus: ssoUser.campus || undefined,
+        permissions: ssoUser.permissions || {},
+        hasPanelMemberAccess: Boolean(ssoUser.hasPanelMemberAccess),
+        isActive: true,
+        profile: {
+          phone: ssoUser.profile?.phone || ssoUser.phone || undefined
+        }
+      });
+
+      await localUser.save();
+    } else {
+      // If user exists but employeeId was missing, link it
+      if (targetEmpId && !localUser.employeeId) {
+        localUser.employeeId = targetEmpId;
+        await localUser.save();
+      }
+    }
+
+    // 4. Verify user is active
+    if (!localUser.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: 'Your account is deactivated. Contact the recruitment administrator.'
+      });
+    }
+
+    // 5. Generate local SRS JWT session token (include userId for authenticateToken middleware)
+    const localToken = jwt.sign(
+      {
+        userId: localUser._id,
+        id: localUser._id,
+        email: localUser.email,
+        name: localUser.name,
+        role: localUser.role,
+        campus: localUser.campus,
+        employeeId: localUser.employeeId
+      },
+      JWT_SECRET,
+      { expiresIn: '8h' }
+    );
+
+    console.log(`✅ [SRS-SSO] Session established for ${localUser.name} (${localUser.role})`);
+
+    // 6. Return response
+    return res.status(200).json({
+      success: true,
+      token: localToken,
+      user: {
+        id: localUser._id,
+        name: localUser.name,
+        email: localUser.email,
+        role: localUser.role,
+        campus: localUser.campus,
+        employeeId: localUser.employeeId || '',
+        permissions: localUser.permissions || {},
+        hasPanelMemberAccess: Boolean(localUser.hasPanelMemberAccess),
+        profile: localUser.profile
+      }
+    });
+
+  } catch (error) {
+    console.error('[SRS-SSO] Error during ssoLogin:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error during SSO authentication'
+    });
   }
 });
 

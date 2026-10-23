@@ -36,13 +36,18 @@ const isTokenExpired = (token) => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isSsoUser, setIsSsoUser] = useState(() => localStorage.getItem('is_sso_session') === 'true');
 
   useEffect(() => {
     const handleAuthLogout = () => {
       localStorage.removeItem('token');
+      localStorage.removeItem('srs_token');
       localStorage.removeItem('user');
+      localStorage.removeItem('srs_user');
+      localStorage.removeItem('is_sso_session');
       sessionStorage.removeItem('dashboard_cache_data');
       setUser(null);
+      setIsSsoUser(false);
     };
 
     window.addEventListener('auth:logout', handleAuthLogout);
@@ -50,6 +55,7 @@ export const AuthProvider = ({ children }) => {
     // Check if user is logged in on app start
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
+    const isSsoStored = localStorage.getItem('is_sso_session') === 'true';
 
     // Set loading to false immediately to show skeleton, then verify auth in background
     setLoading(false);
@@ -65,11 +71,14 @@ export const AuthProvider = ({ children }) => {
             ...parsedUser,
             permissions: parsedUser.permissions || []
           });
+          setIsSsoUser(isSsoStored);
         } catch (error) {
           console.error('Failed to parse saved user from storage', error);
           handleAuthLogout();
         }
       }
+    } else {
+      setIsSsoUser(false);
     }
 
     return () => {
@@ -93,7 +102,11 @@ export const AuthProvider = ({ children }) => {
       };
 
       localStorage.setItem('token', token);
+      localStorage.setItem('srs_token', token);
       localStorage.setItem('user', JSON.stringify(normalizedUser));
+      localStorage.setItem('srs_user', JSON.stringify(normalizedUser));
+      localStorage.removeItem('is_sso_session');
+      setIsSsoUser(false);
       setUser(normalizedUser);
 
       return { success: true };
@@ -105,9 +118,40 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const ssoLogin = async (token) => {
+    try {
+      const response = await api.post('/auth/sso-login', { token });
+      const { token: localToken, user: userData } = response.data;
+      const normalizedUser = {
+        ...userData,
+        permissions: userData.permissions || {},
+        hasPanelMemberAccess: userData.hasPanelMemberAccess || false
+      };
+
+      localStorage.setItem('token', localToken);
+      localStorage.setItem('srs_token', localToken);
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
+      localStorage.setItem('srs_user', JSON.stringify(normalizedUser));
+      localStorage.setItem('is_sso_session', 'true');
+      setIsSsoUser(true);
+      setUser(normalizedUser);
+
+      return { success: true, user: normalizedUser };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || 'SSO authentication failed'
+      };
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('srs_token');
     localStorage.removeItem('user');
+    localStorage.removeItem('srs_user');
+    localStorage.removeItem('is_sso_session');
+    setIsSsoUser(false);
     setUser(null);
   };
 
@@ -194,10 +238,12 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     login,
+    ssoLogin,
     logout,
     register,
     updateProfile,
     isAuthenticated: !!user,
+    isSsoUser: Boolean(isSsoUser),
     isSuperAdmin: user?.role === 'super_admin',
     isSubAdmin: user?.role === 'sub_admin',
     isPanelMember: user?.role === 'panel_member',

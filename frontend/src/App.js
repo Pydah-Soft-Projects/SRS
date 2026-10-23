@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Sidebar from './components/Sidebar';
 import SkeletonLoader from './components/SkeletonLoader';
 import ErrorBoundary from './components/ErrorBoundary';
+import PortalSwitcher from './components/PortalSwitcher';
 import lazyWithRetry from './utils/lazyWithRetry';
 
 // Resilient Lazy Loaded Components for Code-Splitting and Smooth Mobile/Desktop Navigation
@@ -189,6 +190,7 @@ const getRedirectPathForRole = (role) => {
 function App() {
   return (
     <AuthProvider>
+      <PortalSwitcher />
       <Router>
         <ErrorBoundary>
           <Suspense fallback={<SkeletonLoader loading={true} variant="dashboard" />}>
