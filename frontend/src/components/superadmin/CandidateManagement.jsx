@@ -2080,15 +2080,27 @@ const CandidateManagement = () => {
                       disabled={currentPage === 1}
                       onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     />
-                    {Array.from({ length: totalPages }).map((_, index) => (
-                      <Pagination.Item
-                        key={index + 1}
-                        active={currentPage === index + 1}
-                        onClick={() => setCurrentPage(index + 1)}
-                      >
-                        {index + 1}
-                      </Pagination.Item>
-                    ))}
+                    {(() => {
+                      const getPaginationItems = (current, total) => {
+                        if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+                        if (current <= 4) return [1, 2, 3, 4, 5, '...', total];
+                        if (current >= total - 3) return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+                        return [1, '...', current - 1, current, current + 1, '...', total];
+                      };
+                      return getPaginationItems(currentPage, totalPages).map((item, idx) =>
+                        item === '...' ? (
+                          <Pagination.Ellipsis key={`ellipsis-${idx}`} disabled />
+                        ) : (
+                          <Pagination.Item
+                            key={item}
+                            active={currentPage === item}
+                            onClick={() => setCurrentPage(item)}
+                          >
+                            {item}
+                          </Pagination.Item>
+                        )
+                      );
+                    })()}
                     <Pagination.Next
                       disabled={currentPage === totalPages}
                       onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}

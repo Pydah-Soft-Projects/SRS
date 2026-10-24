@@ -67,7 +67,7 @@ const OverviewContainer = styled.div`
   flex-direction: column;
   gap: 1.25rem;
   animation: ${fadeInUp} 0.5s ease-out;
-  background: #f8fafc;
+  background: #ffffff;
 `;
 
 const OverviewWrapper = styled.div`

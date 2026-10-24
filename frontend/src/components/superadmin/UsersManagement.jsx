@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import api from '../../services/api';
-import { FaEdit, FaUserSlash, FaUserCheck, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaUserSlash, FaUserCheck, FaTrashAlt, FaPlus, FaTimes } from 'react-icons/fa';
 import SkeletonLoader from '../SkeletonLoader';
 import ToastNotificationContainer from '../ToastNotificationContainer';
 
@@ -9,7 +9,7 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.5rem, 2vw, 2.5rem);
+  gap: clamp(1.25rem, 2vw, 2rem);
 `;
 
 const Header = styled.div`
@@ -21,7 +21,7 @@ const Header = styled.div`
   @media (min-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
   }
 `;
 
@@ -34,23 +34,32 @@ const HeaderContent = styled.div`
 
 const Title = styled.h2`
   color: #1e293b;
+  font-weight: 800;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
   margin: 0;
 `;
 
 const Subtitle = styled.p`
   margin: 0;
-  color: #6b7280;
+  color: #64748b;
+  font-size: 0.95rem;
 `;
 
 const AddButton = styled.button`
-  background: linear-gradient(135deg, #b91c1c 0%, #f97316 100%);
+  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
+  padding: 0.65rem 1.35rem;
   border-radius: 8px;
   font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(185, 28, 28, 0.25);
   align-self: flex-start;
 
   @media (min-width: 768px) {
@@ -58,16 +67,18 @@ const AddButton = styled.button`
   }
 
   &:hover {
-    background: linear-gradient(135deg, #991b1b 0%, #ea580c 100%);
-    box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
+    background: linear-gradient(135deg, #991b1b 0%, #c2410c 100%);
+    box-shadow: 0 6px 18px rgba(185, 28, 28, 0.35);
+    transform: translateY(-1px);
   }
 `;
 
 const TableWrapper = styled.div`
   width: 100%;
   border-radius: 12px;
-  background: white;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+  border: 1px solid #fed7aa;
+  box-shadow: 0 4px 20px rgba(185, 28, 28, 0.05);
   overflow: hidden;
 `;
 
@@ -79,64 +90,66 @@ const TableScrollArea = styled.div`
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  min-width: 720px;
-  background: white;
+  min-width: 760px;
+  background: #ffffff;
 `;
 
 const Th = styled.th`
-  background: #f8fafc;
-  padding: 0.65rem 0.85rem;
+  background: #fff7ed;
+  padding: 0.8rem 1rem;
   text-align: left;
-  font-weight: 600;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
-  font-size: 0.85rem;
+  font-weight: 700;
+  color: #991b1b;
+  border-bottom: 2px solid #fed7aa;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+`;
+
+const Tr = styled.tr`
+  border-bottom: 1px solid #fed7aa;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #fff7ed;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
 const Td = styled.td`
-  padding: 0.65rem 0.85rem;
-  border-bottom: 1px solid #e5e7eb;
-  color: #374151;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #fed7aa;
+  color: #1f2937;
   font-size: 0.875rem;
-`;
-
-const ActionButton = styled.button`
-  background: ${props => props.$danger ? '#ef4444' : '#10b981'};
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  transition: background 0.3s ease;
-
-  &:hover {
-    background: ${props => props.$danger ? '#dc2626' : '#059669'};
-  }
+  vertical-align: middle;
 `;
 
 const Modal = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(127, 29, 29, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 1050;
+  padding: 1rem;
 `;
 
 const ModalContent = styled.div`
-  background: white;
+  background: #ffffff;
   padding: 2rem;
-  border-radius: 8px;
+  border-radius: 14px;
   width: 100%;
-  max-width: 500px;
+  max-width: 520px;
   max-height: 90vh;
   overflow-y: auto;
+  border: 1px solid #fed7aa;
+  box-shadow: 0 12px 36px rgba(185, 28, 28, 0.16);
 `;
 
 const ModalHeader = styled.div`
@@ -144,25 +157,39 @@ const ModalHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #fed7aa;
 `;
 
 const ModalTitle = styled.h3`
   margin: 0;
-  color: #1e293b;
+  color: #991b1b;
+  font-weight: 700;
+  font-size: 1.35rem;
 `;
 
 const CloseButton = styled.button`
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   cursor: pointer;
-  color: #6b7280;
+  color: #9a3412;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #fff7ed;
+  }
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.1rem;
 `;
 
 const FormGroup = styled.div`
@@ -172,72 +199,72 @@ const FormGroup = styled.div`
 
 const Label = styled.label`
   font-weight: 600;
-  color: #374151;
-  margin-bottom: 0.5rem;
+  color: #1f2937;
+  margin-bottom: 0.45rem;
+  font-size: 0.88rem;
 `;
 
 const Input = styled.input`
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 1rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.2s ease;
 
   &:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #f97316;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
   }
 `;
 
-// const Select = styled.select`
-//   padding: 0.75rem;
-//   border: 1px solid #d1d5db;
-//   border-radius: 4px;
-//   font-size: 1rem;
-
-//   &:focus {
-//     outline: none;
-//     border-color: #3b82f6;
-//     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-//   }
-// `;
-
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-top: 1rem;
 `;
 
 const CancelButton = styled.button`
-  background: #6b7280;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
   flex: 1;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: #4b5563;
+    background: #f8fafc;
+    color: #1e293b;
   }
 `;
 
 const SubmitButton = styled.button`
-  background: #3b82f6;
+  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
   flex: 1;
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
+  transition: all 0.2s ease;
 
   &:hover {
-    background: #2563eb;
+    background: linear-gradient(135deg, #991b1b 0%, #c2410c 100%);
+    box-shadow: 0 6px 16px rgba(185, 28, 28, 0.35);
   }
 
   &:disabled {
     background: #9ca3af;
     cursor: not-allowed;
+    box-shadow: none;
   }
 `;
 
@@ -443,7 +470,9 @@ const UsersManagement = () => {
           <Title>Panel Members Database</Title>
           <Subtitle>Step 3: Manage interview panel members for candidate evaluation.</Subtitle>
         </HeaderContent>
-        <AddButton onClick={openAddModal}>Add Panel Member</AddButton>
+        <AddButton onClick={openAddModal}>
+          <FaPlus size={12} /> Add Panel Member
+        </AddButton>
       </Header>
 
       <TableWrapper>
@@ -453,155 +482,179 @@ const UsersManagement = () => {
           </div>
         ) : (
           <TableScrollArea>
-          <Table>
-            <thead>
-              <tr>
-                <Th>Name</Th>
-                <Th>Email</Th>
-                <Th>Campus</Th>
-                <Th>Courses</Th>
-                <Th>Designation</Th>
-                <Th>Phone</Th>
-                <Th>Status</Th>
-                <Th>Actions</Th>
-              </tr>
-            </thead>
-            <tbody>
-              {panelMembers.map(member => (
-                <tr key={member._id}>
-                  <Td>
-                    {member.name}
-                    {member.role === 'sub_admin' && (
-                      <span style={{ 
-                        marginLeft: '0.5rem',
-                        padding: '0.15rem 0.5rem',
-                        borderRadius: '4px',
-                        backgroundColor: '#dbeafe',
-                        color: '#1e40af',
-                        fontSize: '0.75rem',
-                        fontWeight: 600
-                      }}>
-                        (Sub Admin)
-                      </span>
-                    )}
-                  </Td>
-                  <Td>{member.email}</Td>
-                  <Td>{member.campus || 'N/A'}</Td>
-                  <Td>
-                    {member.courses && member.courses.length > 0 ? (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
-                        {member.courses.map((course, idx) => (
-                          <span
-                            key={typeof course === 'object' ? course._id : course}
+            <Table>
+              <thead>
+                <tr>
+                  <Th>Name</Th>
+                  <Th>Email</Th>
+                  <Th>Campus</Th>
+                  <Th>Courses</Th>
+                  <Th>Designation</Th>
+                  <Th>Phone</Th>
+                  <Th style={{ textAlign: 'center' }}>Status</Th>
+                  <Th style={{ textAlign: 'center' }}>Actions</Th>
+                </tr>
+              </thead>
+              <tbody>
+                {panelMembers.length === 0 ? (
+                  <tr>
+                    <Td colSpan={8} style={{ textAlign: 'center', padding: '2.5rem', color: '#64748b' }}>
+                      No panel members found. Click "Add Panel Member" to add one.
+                    </Td>
+                  </tr>
+                ) : (
+                  panelMembers.map(member => (
+                    <Tr key={member._id}>
+                      <Td>
+                        <span style={{ fontWeight: 600, color: '#1e293b' }}>{member.name}</span>
+                        {member.role === 'sub_admin' && (
+                          <span style={{ 
+                            marginLeft: '0.5rem',
+                            padding: '0.18rem 0.5rem',
+                            borderRadius: '6px',
+                            backgroundColor: '#ffedd5',
+                            border: '1px solid #fed7aa',
+                            color: '#9a3412',
+                            fontSize: '0.72rem',
+                            fontWeight: 700
+                          }}>
+                            (Sub Admin)
+                          </span>
+                        )}
+                      </Td>
+                      <Td>{member.email}</Td>
+                      <Td>{member.campus || 'N/A'}</Td>
+                      <Td>
+                        {member.courses && member.courses.length > 0 ? (
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                            {member.courses.map((course) => (
+                              <span
+                                key={typeof course === 'object' ? course._id : course}
+                                style={{
+                                  background: '#ffedd5',
+                                  color: '#9a3412',
+                                  border: '1px solid #fed7aa',
+                                  padding: '0.2rem 0.55rem',
+                                  borderRadius: '6px',
+                                  fontSize: '0.78rem',
+                                  fontWeight: 600
+                                }}
+                              >
+                                {typeof course === 'object' ? course.department : 'N/A'}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '0.85rem' }}>No courses assigned</span>
+                        )}
+                      </Td>
+                      <Td>{member.profile?.designation || 'N/A'}</Td>
+                      <Td>{member.profile?.phone || 'N/A'}</Td>
+                      <Td style={{ textAlign: 'center' }}>
+                        <span
+                          style={{
+                            background: member.isActive ? '#d1fae5' : '#fee2e2',
+                            color: member.isActive ? '#065f46' : '#991b1b',
+                            border: `1px solid ${member.isActive ? '#a7f3d0' : '#fecaca'}`,
+                            padding: '0.25rem 0.65rem',
+                            borderRadius: '9999px',
+                            fontSize: '0.75rem',
+                            fontWeight: 700,
+                            display: 'inline-block'
+                          }}
+                        >
+                          {member.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                      </Td>
+                      <Td style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', justifyContent: 'center' }}>
+                          <button
+                            type="button"
+                            title="Edit Panel Member"
+                            onClick={() => handleEdit(member)}
                             style={{
-                              background: '#e0e7ff',
-                              color: '#3730a3',
-                              padding: '0.25rem 0.5rem',
-                              borderRadius: '4px',
-                              fontSize: '0.875rem',
-                              fontWeight: '500'
+                              background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                              color: 'white',
+                              border: 'none',
+                              width: '28px',
+                              height: '28px',
+                              borderRadius: '6px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              cursor: 'pointer',
+                              padding: 0,
+                              boxShadow: '0 2px 5px rgba(16, 185, 129, 0.25)',
+                              transition: 'all 0.15s ease'
                             }}
                           >
-                            {typeof course === 'object' ? course.department : 'N/A'}
-                          </span>
-                        ))}
-                      </div>
-                    ) : (
-                      'No courses assigned'
-                    )}
-                  </Td>
-                  <Td>{member.profile?.designation || 'N/A'}</Td>
-                  <Td>{member.profile?.phone || 'N/A'}</Td>
-                  <Td>
-                    <span
-                      style={{
-                        color: member.isActive ? '#10b981' : '#ef4444',
-                        fontWeight: '600'
-                      }}
-                    >
-                      {member.isActive ? 'Active' : 'Inactive'}
-                    </span>
-                  </Td>
-                  <Td>
-                    <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
-                      <button
-                        type="button"
-                        title="Edit Panel Member"
-                        onClick={() => handleEdit(member)}
-                        style={{
-                          background: '#10b981',
-                          color: 'white',
-                          border: 'none',
-                          width: '28px',
-                          height: '28px',
-                          borderRadius: '6px',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                          padding: 0
-                        }}
-                      >
-                        <FaEdit size={13} />
-                      </button>
-                      <button
-                        type="button"
-                        title={member.isActive ? 'Deactivate Panel Member' : 'Activate Panel Member'}
-                        onClick={() => handleStatusToggle(member._id, member.isActive)}
-                        style={{
-                          background: member.isActive ? '#f59e0b' : '#10b981',
-                          color: 'white',
-                          border: 'none',
-                          width: '28px',
-                          height: '28px',
-                          borderRadius: '6px',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                          padding: 0
-                        }}
-                      >
-                        {member.isActive ? <FaUserSlash size={13} /> : <FaUserCheck size={13} />}
-                      </button>
-                      <button
-                        type="button"
-                        title="Delete Panel Member"
-                        onClick={() => handleDelete(member._id)}
-                        style={{
-                          background: '#ef4444',
-                          color: 'white',
-                          border: 'none',
-                          width: '28px',
-                          height: '28px',
-                          borderRadius: '6px',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                          padding: 0
-                        }}
-                      >
-                        <FaTrashAlt size={13} />
-                      </button>
-                    </div>
-                  </Td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </TableScrollArea>
+                            <FaEdit size={13} />
+                          </button>
+                          <button
+                            type="button"
+                            title={member.isActive ? 'Deactivate Panel Member' : 'Activate Panel Member'}
+                            onClick={() => handleStatusToggle(member._id, member.isActive)}
+                            style={{
+                              background: member.isActive ? 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)' : 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                              color: 'white',
+                              border: 'none',
+                              width: '28px',
+                              height: '28px',
+                              borderRadius: '6px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              cursor: 'pointer',
+                              padding: 0,
+                              boxShadow: '0 2px 5px rgba(245, 158, 11, 0.25)',
+                              transition: 'all 0.15s ease'
+                            }}
+                          >
+                            {member.isActive ? <FaUserSlash size={13} /> : <FaUserCheck size={13} />}
+                          </button>
+                          <button
+                            type="button"
+                            title="Delete Panel Member"
+                            onClick={() => handleDelete(member._id)}
+                            style={{
+                              background: 'linear-gradient(135deg, #b91c1c 0%, #dc2626 100%)',
+                              color: 'white',
+                              border: 'none',
+                              width: '28px',
+                              height: '28px',
+                              borderRadius: '6px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              cursor: 'pointer',
+                              padding: 0,
+                              boxShadow: '0 2px 5px rgba(185, 28, 28, 0.25)',
+                              transition: 'all 0.15s ease'
+                            }}
+                          >
+                            <FaTrashAlt size={13} />
+                          </button>
+                        </div>
+                      </Td>
+                    </Tr>
+                  ))
+                )}
+              </tbody>
+            </Table>
+          </TableScrollArea>
         )}
       </TableWrapper>
 
       {showModal && (
-        <Modal>
+        <Modal onClick={(e) => e.target === e.currentTarget && setShowModal(false)}>
           <ModalContent>
             <ModalHeader>
               <ModalTitle>
                 {editingMember ? 'Edit Panel Member' : 'Add Panel Member'}
               </ModalTitle>
-              <CloseButton onClick={() => setShowModal(false)}>×</CloseButton>
+              <CloseButton onClick={() => setShowModal(false)} title="Close">
+                <FaTimes size={16} />
+              </CloseButton>
             </ModalHeader>
 
             <Form onSubmit={handleSubmit}>
@@ -615,10 +668,14 @@ const UsersManagement = () => {
                   required
                   style={{
                     width: '100%',
-                    padding: '0.75rem',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '4px',
-                    fontSize: '1rem'
+                    padding: '0.7rem 0.85rem',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '8px',
+                    fontSize: '0.92rem',
+                    color: '#0f172a',
+                    outline: 'none',
+                    background: '#ffffff',
+                    transition: 'border-color 0.2s'
                   }}
                 >
                   <option value="">Select Campus</option>
@@ -640,11 +697,15 @@ const UsersManagement = () => {
                     required
                     style={{
                       width: '100%',
-                      padding: '0.75rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '4px',
-                      fontSize: '1rem',
-                      minHeight: '120px'
+                      padding: '0.7rem 0.85rem',
+                      border: '1px solid #cbd5e1',
+                      borderRadius: '8px',
+                      fontSize: '0.92rem',
+                      color: '#0f172a',
+                      minHeight: '120px',
+                      outline: 'none',
+                      background: '#ffffff',
+                      transition: 'border-color 0.2s'
                     }}
                   >
                     {courses.map(course => (
@@ -653,7 +714,7 @@ const UsersManagement = () => {
                       </option>
                     ))}
                   </select>
-                  <small style={{ color: '#6b7280', fontSize: '0.875rem', marginTop: '0.25rem', display: 'block' }}>
+                  <small style={{ color: '#9a3412', fontSize: '0.8rem', marginTop: '0.35rem', display: 'block', fontWeight: 500 }}>
                     Hold Ctrl (Windows) or Cmd (Mac) to select multiple courses
                   </small>
                 </FormGroup>

@@ -26,12 +26,12 @@ const SidebarContainer = styled.div`
   left: 0;
   height: 100vh;
   width: ${props => props.$isOpen ? '264px' : '64px'};
-  background: linear-gradient(180deg, #fff7ed 0%, #ffedd5 60%, #fff7ed 100%);
+  background: #ffffff;
   color: #1f2937;
   border-right: 1px solid #fed7aa;
   transition: width 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1);
   z-index: 1000;
-  box-shadow: 4px 0 24px rgba(185, 28, 28, 0.08);
+  box-shadow: 4px 0 24px rgba(185, 28, 28, 0.06);
   overflow: hidden;
   overflow-x: hidden;
   overflow-y: auto;
@@ -43,18 +43,18 @@ const SidebarContainer = styled.div`
   }
 
   &::-webkit-scrollbar { width: 4px; }
-  &::-webkit-scrollbar-track { background: #ffedd5; }
-  &::-webkit-scrollbar-thumb { background: #f97316; border-radius: 4px; }
-  &::-webkit-scrollbar-thumb:hover { background: #ea580c; }
+  &::-webkit-scrollbar-track { background: #ffffff; }
+  &::-webkit-scrollbar-thumb { background: #fed7aa; border-radius: 4px; }
+  &::-webkit-scrollbar-thumb:hover { background: #f97316; }
 `;
 
 const SidebarHeader = styled.div`
-  padding: ${props => props.$isOpen ? '1.1rem 1.25rem' : '0.875rem 0'};
+  padding: ${props => props.$isOpen ? '0.75rem 1.15rem' : '0.65rem 0'};
   border-bottom: 1px solid #fed7aa;
   display: flex;
   align-items: center;
   justify-content: ${props => props.$isOpen ? 'space-between' : 'center'};
-  background: linear-gradient(135deg, #ffedd5 0%, #fecaca 100%);
+  background: #ffffff;
   transition: padding 0.3s ease;
   position: relative;
   width: 100%;
@@ -93,16 +93,17 @@ const Logo = styled.div`
 `;
 
 const LogoImg = styled.img`
-  width: 36px;
-  height: 36px;
+  height: ${props => props.$isOpen ? '44px' : '34px'};
+  width: auto;
+  max-width: ${props => props.$isOpen ? '88px' : '48px'};
   object-fit: contain;
   flex-shrink: 0;
-  border-radius: 6px;
-  filter: drop-shadow(0 2px 5px rgba(185, 28, 28, 0.25));
-  transition: transform 0.25s ease;
+  border-radius: 8px;
+  filter: none;
+  transition: all 0.25s ease;
 
   &:hover {
-    transform: scale(1.08);
+    transform: scale(1.05);
   }
 `;
 
@@ -241,9 +242,9 @@ const NavLink = styled(Link)`
   font-size: 0.875rem;
 
   &:hover {
-    background: #ffffff;
+    background: #fff7ed;
     color: #b91c1c;
-    box-shadow: 0 2px 8px rgba(185, 28, 28, 0.12);
+    box-shadow: 0 2px 8px rgba(185, 28, 28, 0.08);
   }
 
   &.active {
@@ -316,7 +317,7 @@ const Tooltip = styled.div`
 const UserSection = styled.div`
   border-top: 1px solid #fed7aa;
   padding: ${props => props.$isOpen ? '0.75rem' : '0.5rem 0.25rem'};
-  background: linear-gradient(180deg, #ffedd5 0%, #fff7ed 100%);
+  background: #ffffff;
   transition: padding 0.3s ease;
   width: 100%;
   box-sizing: border-box;
@@ -335,7 +336,7 @@ const UserInfo = styled.div`
   margin-bottom: 0;
   padding: ${props => props.$isOpen ? '0.6rem 0.7rem' : '0'};
   border-radius: 10px;
-  background: ${props => props.$isOpen ? '#ffffff' : 'transparent'};
+  background: ${props => props.$isOpen ? '#fff7ed' : 'transparent'};
   border: ${props => props.$isOpen ? '1px solid #fed7aa' : 'none'};
   box-shadow: ${props => props.$isOpen ? '0 2px 8px rgba(185, 28, 28, 0.06)' : 'none'};
   transition: all 0.3s ease;
@@ -345,7 +346,7 @@ const UserInfo = styled.div`
   opacity: ${props => props.$isOpen ? 1 : 0};
 
   &:hover {
-    background: ${props => props.$isOpen ? '#ffffff' : 'transparent'};
+    background: ${props => props.$isOpen ? '#ffedd5' : 'transparent'};
     box-shadow: ${props => props.$isOpen ? '0 4px 12px rgba(185, 28, 28, 0.12)' : 'none'};
   }
 `;
@@ -621,6 +622,7 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
         <SidebarHeader $isOpen={isOpen}>
           <Logo $isOpen={isOpen} onClick={!isOpen ? toggleSidebar : undefined} title={!isOpen ? "Expand sidebar" : "Pydah Staff Recruitment"}>
             <LogoImg 
+              $isOpen={isOpen}
               src={pydahLogoIcon || (process.env.PUBLIC_URL + '/Pydah_logo_whitebg.avif')} 
               alt="Pydah Logo" 
               onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/Pydah_logo_whitebg.avif'; }}
