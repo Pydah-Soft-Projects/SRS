@@ -3,8 +3,10 @@ const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { MongoClient, ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 const User = require('../models/User');
 const Course = require('../models/Course');
+const Role = require('../models/Role');
 const { authenticateToken, requireSuperAdmin, requireSuperAdminOrPermission, hasPermission } = require('../middleware/auth');
 const { sendEmail } = require('../config/email');
 
@@ -854,9 +856,14 @@ router.get('/panel-members', authenticateToken, requireSuperAdminOrPermission('p
   }
 });
 
-// Sub Admin Management (Super Admin only)
-router.get('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res) => {
+// Sub Admin Management
+router.get('/sub-admins', authenticateToken, requireSuperAdminOrPermission('users.manage'), async (req, res) => {
   try {
+    res.set({
+      'Cache-Control': 'no-store, no-cache, must-revalidate, private',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
     const subAdmins = await User.find({ role: 'sub_admin' })
       .select('-password')
       .populate('courses', 'campus department')
@@ -874,7 +881,7 @@ router.get('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res)
 
 router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res) => {
   try {
-    const { name, email, employeeId, password, profile, permissions, campus, courses } = req.body;
+    const { name, email, employeeId, password, profile, permissions, campus, courses, assignedRoleId, assignedRoleName } = req.body;
 
     const trimmedEmail = email ? email.toLowerCase().trim() : '';
     let trimmedEmpId = employeeId ? String(employeeId).trim() : null;
@@ -888,41 +895,6 @@ router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res
 
     if (!name || !trimmedEmail) {
       return res.status(400).json({ message: 'Name and email are required' });
-    }
-
-    const existingUser = await User.findOne({
-      $or: [
-        { email: trimmedEmail },
-        ...(trimmedEmpId ? [{ employeeId: trimmedEmpId }] : [])
-      ]
-    });
-    if (existingUser) {
-      if (existingUser.role !== 'sub_admin') {
-        existingUser.role = 'sub_admin';
-        existingUser.name = name || existingUser.name;
-        if (trimmedEmpId) {
-          existingUser.employeeId = trimmedEmpId;
-          existingUser.password = undefined; // Never store HRMS credentials in SRS DB
-        } else if (finalPassword) {
-          existingUser.password = finalPassword;
-        }
-        existingUser.permissions = normalizedPermissions;
-        existingUser.campus = campus || undefined;
-        existingUser.courses = courseIds.length > 0 ? courseIds : undefined;
-        existingUser.hasPanelMemberAccess = req.body.hasPanelMemberAccess === true;
-        if (Object.keys(cleanedProfile).length > 0) existingUser.profile = cleanedProfile;
-        await existingUser.save();
-        const userResponse = existingUser.toObject();
-        delete userResponse.password;
-        return res.status(200).json({
-          message: 'Sub admin access granted successfully with HRMS credentials',
-          subAdmin: userResponse
-        });
-      }
-      if (trimmedEmpId && existingUser.employeeId === trimmedEmpId) {
-        return res.status(400).json({ message: `Sub-admin already exists with Employee ID: ${trimmedEmpId}` });
-      }
-      return res.status(400).json({ message: 'Sub-admin already exists with this email' });
     }
 
     const cleanedProfile = profile ? Object.fromEntries(
@@ -953,6 +925,50 @@ router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res
       console.log('👤 [SUB ADMIN CREATION] Assigning courses to sub-admin:', courseIds);
     }
 
+    let finalAssignedRoleId = assignedRoleId || null;
+    let finalAssignedRoleName = assignedRoleName || null;
+    if (assignedRoleId) {
+      const rQuery = mongoose.isValidObjectId(assignedRoleId)
+        ? { $or: [{ id: assignedRoleId }, { _id: assignedRoleId }] }
+        : { id: assignedRoleId };
+      const rDoc = await Role.findOne(rQuery);
+      if (rDoc) {
+        finalAssignedRoleId = rDoc.id;
+        finalAssignedRoleName = rDoc.name;
+      }
+    }
+
+    const existingUser = await User.findOne({
+      $or: [
+        { email: trimmedEmail },
+        ...(trimmedEmpId ? [{ employeeId: trimmedEmpId }] : [])
+      ]
+    });
+    if (existingUser) {
+      existingUser.role = 'sub_admin';
+      existingUser.name = name || existingUser.name;
+      if (trimmedEmpId) {
+        existingUser.employeeId = trimmedEmpId;
+        existingUser.password = undefined; // Never store HRMS credentials in SRS DB
+      } else if (finalPassword) {
+        existingUser.password = finalPassword;
+      }
+      existingUser.permissions = normalizedPermissions;
+      existingUser.campus = campus || undefined;
+      existingUser.courses = courseIds.length > 0 ? courseIds : undefined;
+      existingUser.hasPanelMemberAccess = req.body.hasPanelMemberAccess === true;
+      if (assignedRoleId !== undefined) existingUser.assignedRoleId = finalAssignedRoleId;
+      if (assignedRoleName !== undefined) existingUser.assignedRoleName = finalAssignedRoleName;
+      if (Object.keys(cleanedProfile).length > 0) existingUser.profile = cleanedProfile;
+      await existingUser.save();
+      const userResponse = existingUser.toObject();
+      delete userResponse.password;
+      return res.status(200).json({
+        message: 'Sub admin access configured and role assigned successfully',
+        subAdmin: userResponse
+      });
+    }
+
     const subAdmin = new User({
       name,
       email: trimmedEmail,
@@ -963,7 +979,9 @@ router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res
       courses: courseIds.length > 0 ? courseIds : undefined,
       profile: Object.keys(cleanedProfile).length > 0 ? cleanedProfile : undefined,
       permissions: normalizedPermissions,
-      hasPanelMemberAccess: req.body.hasPanelMemberAccess === true
+      hasPanelMemberAccess: req.body.hasPanelMemberAccess === true,
+      assignedRoleId: finalAssignedRoleId,
+      assignedRoleName: finalAssignedRoleName
     });
 
     await subAdmin.save();
@@ -1079,7 +1097,7 @@ router.post('/sub-admins', authenticateToken, requireSuperAdmin, async (req, res
 
 router.put('/sub-admins/:userId', authenticateToken, requireSuperAdmin, async (req, res) => {
   try {
-    const { name, email, employeeId, password, profile, permissions, isActive, campus, courses, hasPanelMemberAccess } = req.body;
+    const { name, email, employeeId, password, profile, permissions, isActive, campus, courses, hasPanelMemberAccess, assignedRoleId, assignedRoleName } = req.body;
     const subAdmin = await User.findById(req.params.userId);
 
     if (!subAdmin) {
@@ -1096,6 +1114,34 @@ router.put('/sub-admins/:userId', authenticateToken, requireSuperAdmin, async (r
     if (typeof isActive === 'boolean') subAdmin.isActive = isActive;
     if (campus !== undefined) subAdmin.campus = campus || undefined;
     if (typeof hasPanelMemberAccess === 'boolean') subAdmin.hasPanelMemberAccess = hasPanelMemberAccess;
+    if (assignedRoleId !== undefined) {
+      if (assignedRoleId) {
+        const roleQuery = mongoose.isValidObjectId(assignedRoleId)
+          ? { $or: [{ id: assignedRoleId }, { _id: assignedRoleId }] }
+          : { id: assignedRoleId };
+        const roleDoc = await Role.findOne(roleQuery);
+        if (roleDoc) {
+          subAdmin.assignedRoleId = roleDoc.id;
+          subAdmin.assignedRoleName = roleDoc.name;
+          if (permissions === undefined) {
+            subAdmin.permissions = roleDoc.defaultPermissions;
+          }
+          if (hasPanelMemberAccess === undefined) {
+            subAdmin.hasPanelMemberAccess = Boolean(roleDoc.hasPanelMemberAccess);
+          }
+        } else {
+          subAdmin.assignedRoleId = assignedRoleId;
+          if (assignedRoleName !== undefined) {
+            subAdmin.assignedRoleName = assignedRoleName || null;
+          }
+        }
+      } else {
+        subAdmin.assignedRoleId = null;
+        subAdmin.assignedRoleName = null;
+      }
+    } else if (assignedRoleName !== undefined) {
+      subAdmin.assignedRoleName = assignedRoleName || null;
+    }
 
     if (profile !== undefined) {
       const cleanedProfile = profile ? Object.fromEntries(
@@ -1174,6 +1220,281 @@ router.delete('/sub-admins/:userId', authenticateToken, requireSuperAdmin, async
   } catch (error) {
     console.error('Sub admin delete error:', error);
     res.status(500).json({ message: 'Server error deleting sub admin' });
+  }
+});
+
+// ─── ROLE CONFIGURATION ENDPOINTS (Super Admin only) ─────────────────────────
+router.get('/roles', authenticateToken, requireSuperAdminOrPermission('users.manage'), async (req, res) => {
+  try {
+    res.set({
+      'Cache-Control': 'no-store, no-cache, must-revalidate, private',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+
+    const roles = await Role.find().sort({ createdAt: 1 });
+    const subAdmins = await User.find({ role: 'sub_admin' }, 'assignedRoleId assignedRoleName');
+
+    const rolesWithCounts = roles.map(r => {
+      const obj = r.toObject();
+      const rId = r.id;
+      const rDbId = r._id ? String(r._id) : null;
+      const rName = r.name ? r.name.toLowerCase() : '';
+
+      const count = subAdmins.filter(u =>
+        u.assignedRoleId === rId ||
+        (rDbId && u.assignedRoleId === rDbId) ||
+        (u.assignedRoleName && u.assignedRoleName.toLowerCase() === rName)
+      ).length;
+
+      obj.assignedUsersCount = count;
+      return obj;
+    });
+
+    res.json({ roles: rolesWithCounts });
+  } catch (error) {
+    console.error('Fetch roles error:', error);
+    res.status(500).json({ message: 'Server error fetching roles' });
+  }
+});
+
+router.post('/roles', authenticateToken, requireSuperAdmin, async (req, res) => {
+  try {
+    const { id, name, badge, icon, color, bgColor, description, defaultPermissions, hasPanelMemberAccess, userIds } = req.body;
+    if (!name || !name.trim()) {
+      return res.status(400).json({ message: 'Role name is required' });
+    }
+
+    const roleId = id || `role_${Date.now()}`;
+    const normalizedPermissions = normalizePermissions(defaultPermissions || {});
+    const permissionCount = Object.keys(normalizedPermissions).length;
+
+    let role = await Role.findOne({ id: roleId });
+    if (role) {
+      role.name = name.trim();
+      role.badge = badge || role.badge;
+      role.icon = icon || role.icon;
+      role.color = color || role.color;
+      role.bgColor = bgColor || role.bgColor;
+      role.description = description !== undefined ? description : role.description;
+      role.defaultPermissions = normalizedPermissions;
+      role.hasPanelMemberAccess = Boolean(hasPanelMemberAccess);
+      role.permissionCount = permissionCount;
+      await role.save();
+    } else {
+      role = new Role({
+        id: roleId,
+        name: name.trim(),
+        badge: badge || 'Custom',
+        icon: icon || '🛡️',
+        color: color || '#0284c7',
+        bgColor: bgColor || '#f0f9ff',
+        description: description || '',
+        defaultPermissions: normalizedPermissions,
+        hasPanelMemberAccess: Boolean(hasPanelMemberAccess),
+        permissionCount
+      });
+      await role.save();
+    }
+
+    if (Array.isArray(userIds) && userIds.length > 0) {
+      await User.updateMany(
+        { _id: { $in: userIds }, role: 'sub_admin' },
+        {
+          $set: {
+            permissions: normalizedPermissions,
+            hasPanelMemberAccess: Boolean(hasPanelMemberAccess),
+            assignedRoleId: roleId,
+            assignedRoleName: role.name
+          }
+        }
+      );
+    }
+
+    const roleObj = role.toObject();
+    roleObj.assignedUsersCount = Array.isArray(userIds) ? userIds.length : 0;
+
+    res.status(201).json({ role: roleObj, message: 'Role created successfully' });
+  } catch (error) {
+    console.error('Save role error:', error);
+    res.status(500).json({ message: 'Server error saving role' });
+  }
+});
+
+router.put('/roles/:roleId', authenticateToken, requireSuperAdmin, async (req, res) => {
+  try {
+    const { roleId } = req.params;
+    const { name, badge, icon, color, bgColor, description, defaultPermissions, hasPanelMemberAccess, userIds } = req.body;
+
+    const normalizedPermissions = normalizePermissions(defaultPermissions || {});
+    const permissionCount = Object.keys(normalizedPermissions).length;
+
+    const query = mongoose.isValidObjectId(roleId)
+      ? { $or: [{ id: roleId }, { _id: roleId }] }
+      : { id: roleId };
+
+    let role = await Role.findOne(query);
+    if (!role) {
+      role = new Role({
+        id: roleId,
+        name: name ? name.trim() : 'Custom Role',
+        badge: badge || 'Custom',
+        icon: icon || '🛡️',
+        color: color || '#0284c7',
+        bgColor: bgColor || '#f0f9ff',
+        description: description || '',
+        defaultPermissions: normalizedPermissions,
+        hasPanelMemberAccess: Boolean(hasPanelMemberAccess),
+        permissionCount
+      });
+    } else {
+      if (name) role.name = name.trim();
+      if (badge !== undefined) role.badge = badge;
+      if (icon !== undefined) role.icon = icon;
+      if (color !== undefined) role.color = color;
+      if (bgColor !== undefined) role.bgColor = bgColor;
+      if (description !== undefined) role.description = description;
+      role.defaultPermissions = normalizedPermissions;
+      role.hasPanelMemberAccess = Boolean(hasPanelMemberAccess);
+      role.permissionCount = permissionCount;
+    }
+
+    await role.save();
+
+    // If explicit userIds are supplied, assign them and detach unselected ones
+    if (Array.isArray(userIds)) {
+      const validObjectIds = userIds.map(id => mongoose.isValidObjectId(id) ? new mongoose.Types.ObjectId(id) : id);
+      if (userIds.length > 0) {
+        await User.updateMany(
+          { _id: { $in: validObjectIds }, role: 'sub_admin' },
+          {
+            $set: {
+              assignedRoleId: role.id,
+              assignedRoleName: role.name,
+              permissions: normalizedPermissions,
+              hasPanelMemberAccess: Boolean(hasPanelMemberAccess)
+            }
+          }
+        );
+      }
+      await User.updateMany(
+        {
+          role: 'sub_admin',
+          $or: [
+            { assignedRoleId: role.id },
+            ...(role._id ? [{ assignedRoleId: String(role._id) }] : [])
+          ],
+          _id: { $nin: validObjectIds }
+        },
+        {
+          $set: {
+            assignedRoleId: null,
+            assignedRoleName: null
+          }
+        }
+      );
+    }
+
+    // Immediately synchronize updated permissions & panel access to ALL assigned users
+    const syncQuery = {
+      role: 'sub_admin',
+      $or: [
+        { assignedRoleId: role.id },
+        ...(role._id ? [{ assignedRoleId: String(role._id) }] : []),
+        { assignedRoleName: role.name }
+      ]
+    };
+
+    const syncResult = await User.updateMany(syncQuery, {
+      $set: {
+        permissions: normalizedPermissions,
+        hasPanelMemberAccess: Boolean(hasPanelMemberAccess),
+        assignedRoleId: role.id,
+        assignedRoleName: role.name
+      }
+    });
+
+    console.log(`✅ [ROLE SYNC] Updated role "${role.name}" (${role.id}). Synced ${syncResult.modifiedCount} assigned user(s) with ${permissionCount} permissions.`);
+
+    res.json({
+      role,
+      updatedUsersCount: syncResult.modifiedCount,
+      message: `Role "${role.name}" updated successfully. Synced ${syncResult.modifiedCount} user(s).`
+    });
+  } catch (error) {
+    console.error('Update role error:', error);
+    res.status(500).json({ message: 'Server error updating role: ' + error.message });
+  }
+});
+
+router.delete('/roles/:roleId', authenticateToken, requireSuperAdmin, async (req, res) => {
+  try {
+    const { roleId } = req.params;
+    const { reassignToRoleId } = req.body || {};
+
+    const findQuery = mongoose.isValidObjectId(roleId)
+      ? { $or: [{ id: roleId }, { _id: roleId }] }
+      : { id: roleId };
+
+    const roleToDelete = await Role.findOne(findQuery);
+
+    // Idempotent: If role was already deleted, still clean up any lingering assignedRoleId references and return 200
+    if (!roleToDelete) {
+      await User.updateMany(
+        { role: 'sub_admin', assignedRoleId: roleId },
+        { $set: { assignedRoleId: null, assignedRoleName: null } }
+      );
+      return res.json({ message: 'Role deleted successfully or was already removed.', reassignedCount: 0 });
+    }
+
+    const actualId = roleToDelete.id;
+    const actualDbId = roleToDelete._id ? String(roleToDelete._id) : null;
+    const userMatchQuery = {
+      role: 'sub_admin',
+      $or: [
+        { assignedRoleId: actualId },
+        ...(actualDbId ? [{ assignedRoleId: actualDbId }] : []),
+        { assignedRoleName: roleToDelete.name }
+      ]
+    };
+
+    let reassignedCount = 0;
+    let message = `Role "${roleToDelete.name}" deleted successfully.`;
+
+    if (reassignToRoleId && reassignToRoleId !== 'custom') {
+      const targetQuery = mongoose.isValidObjectId(reassignToRoleId)
+        ? { $or: [{ id: reassignToRoleId }, { _id: reassignToRoleId }] }
+        : { id: reassignToRoleId };
+      const targetRole = await Role.findOne(targetQuery);
+      if (targetRole) {
+        const updateRes = await User.updateMany(userMatchQuery, {
+          $set: {
+            assignedRoleId: targetRole.id,
+            assignedRoleName: targetRole.name,
+            permissions: targetRole.defaultPermissions,
+            hasPanelMemberAccess: Boolean(targetRole.hasPanelMemberAccess)
+          }
+        });
+        reassignedCount = updateRes.modifiedCount;
+        message = `Role "${roleToDelete.name}" deleted. Reassigned ${reassignedCount} user(s) to "${targetRole.name}".`;
+      }
+    } else {
+      // Detach users from deleted role without revoking their existing permissions (convert to custom standalone access)
+      const updateRes = await User.updateMany(userMatchQuery, {
+        $set: { assignedRoleId: null, assignedRoleName: null }
+      });
+      reassignedCount = updateRes.modifiedCount;
+      if (reassignedCount > 0) {
+        message = `Role "${roleToDelete.name}" deleted. Converted ${reassignedCount} user(s) to custom standalone access.`;
+      }
+    }
+
+    await Role.deleteMany(findQuery);
+
+    res.json({ message, reassignedCount });
+  } catch (error) {
+    console.error('Delete role error:', error);
+    res.status(500).json({ message: 'Server error deleting role: ' + error.message });
   }
 });
 
