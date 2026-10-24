@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col, Card, Table, Button, Modal, Form, Badge, Spinner, Tabs, Tab } from 'react-bootstrap';
+import { FaEdit, FaQrcode, FaCopy, FaPowerOff, FaTrashAlt } from 'react-icons/fa';
 import api from '../../services/api';
 import SkeletonLoader from '../SkeletonLoader';
 import { useAuth } from '../../contexts/AuthContext';
@@ -570,11 +571,11 @@ const FormsManagement = () => {
         'feedback_form': { variant: 'info', text: 'Feedback Form' }
       };
       const config = badgeConfig[formType] || { variant: 'secondary', text: formType };
-      return <Badge bg={config.variant}>{config.text}</Badge>;
+      return <Badge bg={config.variant} style={{ fontSize: '0.72rem', padding: '0.28rem 0.45rem', fontWeight: 600 }}>{config.text}</Badge>;
     };
   
     const getStatusBadge = (isActive) => {
-      return <Badge bg={isActive ? 'success' : 'secondary'}>{isActive ? 'Active' : 'Inactive'}</Badge>;
+      return <Badge bg={isActive ? 'success' : 'secondary'} style={{ fontSize: '0.72rem', padding: '0.28rem 0.5rem', fontWeight: 600 }}>{isActive ? 'Active' : 'Inactive'}</Badge>;
     };
   
     const getCurrentForms = () => {
@@ -594,7 +595,7 @@ const FormsManagement = () => {
       if (form.formType === 'candidate_profile' && form.formCategory) {
         const category = form.formCategory === 'teaching' ? 'Teaching' : 'Non-Teaching';
         const variant = form.formCategory === 'teaching' ? 'primary' : 'secondary';
-        return <Badge bg={variant} className="me-1">{category}</Badge>;
+        return <Badge bg={variant} className="me-1" style={{ fontSize: '0.72rem', padding: '0.28rem 0.45rem', fontWeight: 600 }}>{category}</Badge>;
       }
       return null;
     };
@@ -619,8 +620,8 @@ const FormsManagement = () => {
 
       <Row>
         <Col>
-          <Card>
-            <Card.Header>
+          <Card style={{ border: '1px solid #fed7aa', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+            <Card.Header style={{ background: '#fff7ed', borderBottom: '1px solid #fed7aa', padding: '0.75rem 1.25rem' }}>
               <Tabs activeKey={activeTab} onSelect={setActiveTab} className="mb-0">
                 <Tab eventKey="teaching" title="Teaching Forms" />
                 <Tab eventKey="non_teaching" title="Non-Teaching Forms" />
@@ -628,114 +629,179 @@ const FormsManagement = () => {
                 <Tab eventKey="all" title="All Forms" />
               </Tabs>
             </Card.Header>
-            <Card.Body>
+            <Card.Body style={{ padding: '0.75rem' }}>
               {loading ? (
                 <SkeletonLoader loading={true} variant="table" rows={6} columns="1.5fr 1.5fr 1fr 1fr 1fr 1fr 1.2fr" />
               ) : (
-                <Table striped bordered hover responsive>
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Position/Department</th>
-                    <th>Type</th>
-                    <th>Submissions</th>
-                    <th>Status</th>
-                    <th>Created</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {getCurrentForms().map((form) => (
-                    <tr key={form._id}>
-                      <td>
-                        <div>
-                          <strong>{form.title}</strong>
-                          {form.description && (
-                            <>
-                              <br />
-                              <small className="text-muted">{form.description.substring(0, 50)}...</small>
-                            </>
-                          )}
-                        </div>
-                      </td>
-                      <td>
-                        {form.formType === 'candidate_profile' ? (
-                          <>
-                            <div>{form.position}</div>
-                            {form.formCategory === 'teaching' && form.department && (
-                              <small className="text-muted">{form.department}</small>
+                <div style={{ width: '100%', overflowX: 'auto' }}>
+                  <Table striped hover size="sm" style={{ marginBottom: 0, width: '100%', verticalAlign: 'middle', borderCollapse: 'collapse' }}>
+                    <thead style={{ background: '#fff7ed', borderBottom: '2px solid #fed7aa' }}>
+                      <tr>
+                        <th style={{ width: '24%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Title</th>
+                        <th style={{ width: '20%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Position/Department</th>
+                        <th style={{ width: '18%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Type</th>
+                        <th style={{ width: '9%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Submissions</th>
+                        <th style={{ width: '8%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Status</th>
+                        <th style={{ width: '8%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Created</th>
+                        <th style={{ width: '13%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {getCurrentForms().map((form) => (
+                        <tr key={form._id}>
+                          <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.6rem' }}>
+                            <div>
+                              <strong style={{ fontSize: '0.86rem', color: '#1e293b' }}>{form.title}</strong>
+                              {form.description && (
+                                <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px' }}>
+                                  {form.description.substring(0, 50)}...
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                          <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.6rem' }}>
+                            {form.formType === 'candidate_profile' ? (
+                              <>
+                                <div style={{ fontWeight: 500, fontSize: '0.84rem', color: '#334155' }}>{form.position}</div>
+                                {form.formCategory === 'teaching' && form.department && (
+                                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{form.department}</div>
+                                )}
+                                {form.formCategory === 'non_teaching' && (
+                                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Non-Teaching</div>
+                                )}
+                              </>
+                            ) : (
+                              <Badge bg="info" style={{ fontSize: '0.72rem', padding: '0.28rem 0.45rem' }}>N/A</Badge>
                             )}
-                            {form.formCategory === 'non_teaching' && (
-                              <small className="text-muted">Non-Teaching</small>
-                            )}
-                          </>
-                        ) : (
-                          <Badge bg="info">N/A</Badge>
-                        )}
-                      </td>
-                      <td>
-                        <div className="d-flex align-items-center gap-2">
-                          {getFormCategoryBadge(form)}
-                          {getFormTypeBadge(form.formType)}
-                        </div>
-                      </td>
-                      <td>{form.submissionCount}</td>
-                      <td>{getStatusBadge(form.isActive)}</td>
-                      <td>{new Date(form.createdAt).toLocaleDateString()}</td>
-                      <td>
-                        <div className="d-flex flex-wrap gap-1">
-                          {canWrite && (
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              className="me-1"
-                              onClick={() => handleEditForm(form)}
-                            >
-                              Edit
-                            </Button>
-                          )}
-                          <Button
-                            variant="info"
-                            size="sm"
-                            className="me-1"
-                            onClick={() => handleShowQRCode(form)}
-                          >
-                            QR Code
-                          </Button>
-                          <Button
-                            variant="success"
-                            size="sm"
-                            className="me-1"
-                            onClick={() => copyToClipboard(`${window.location.origin}/form/${form.uniqueLink}`)}
-                          >
-                            Copy Link
-                          </Button>
-                          {canWrite && (
-                            <>
+                          </td>
+                          <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.6rem' }}>
+                            <div className="d-flex align-items-center gap-1 flex-wrap">
+                              {getFormCategoryBadge(form)}
+                              {getFormTypeBadge(form.formType)}
+                            </div>
+                          </td>
+                          <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem', fontWeight: 600, fontSize: '0.85rem', color: '#1e293b' }}>
+                            {form.submissionCount}
+                          </td>
+                          <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem' }}>
+                            {getStatusBadge(form.isActive)}
+                          </td>
+                          <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem', fontSize: '0.82rem', color: '#475569' }}>
+                            {new Date(form.createdAt).toLocaleDateString()}
+                          </td>
+                          <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem' }}>
+                            <div className="d-flex gap-1 justify-content-center align-items-center">
+                              {canWrite && (
+                                <Button
+                                  variant="primary"
+                                  size="sm"
+                                  title="Edit Form"
+                                  onClick={() => handleEditForm(form)}
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '28px',
+                                    height: '28px',
+                                    padding: 0,
+                                    borderRadius: '6px',
+                                    background: 'linear-gradient(135deg, #b91c1c 0%, #991b1b 100%)',
+                                    border: 'none',
+                                    color: '#fff'
+                                  }}
+                                >
+                                  <FaEdit size={13} />
+                                </Button>
+                              )}
                               <Button
-                                variant={form.isActive ? "warning" : "success"}
+                                variant="info"
                                 size="sm"
-                                className="me-1"
-                                onClick={() => handleToggleStatus(form._id, form.isActive)}
+                                title="QR Code"
+                                onClick={() => handleShowQRCode(form)}
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  width: '28px',
+                                  height: '28px',
+                                  padding: 0,
+                                  borderRadius: '6px',
+                                  background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
+                                  border: 'none',
+                                  color: '#fff'
+                                }}
                               >
-                                {form.isActive ? 'Deactivate' : 'Activate'}
+                                <FaQrcode size={13} />
                               </Button>
                               <Button
-                                variant="danger"
+                                variant="success"
                                 size="sm"
-                                onClick={() => handleDeleteForm(form._id)}
+                                title="Copy Link"
+                                onClick={() => copyToClipboard(`${window.location.origin}/form/${form.uniqueLink}`)}
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  width: '28px',
+                                  height: '28px',
+                                  padding: 0,
+                                  borderRadius: '6px',
+                                  background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                                  border: 'none',
+                                  color: '#fff'
+                                }}
                               >
-                                Delete
+                                <FaCopy size={13} />
                               </Button>
-                            </>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            )}
+                              {canWrite && (
+                                <>
+                                  <Button
+                                    variant={form.isActive ? "warning" : "success"}
+                                    size="sm"
+                                    title={form.isActive ? 'Deactivate Form' : 'Activate Form'}
+                                    onClick={() => handleToggleStatus(form._id, form.isActive)}
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      width: '28px',
+                                      height: '28px',
+                                      padding: 0,
+                                      borderRadius: '6px',
+                                      background: form.isActive ? '#f59e0b' : '#10b981',
+                                      borderColor: form.isActive ? '#d97706' : '#059669',
+                                      color: '#fff'
+                                    }}
+                                  >
+                                    <FaPowerOff size={12} />
+                                  </Button>
+                                  <Button
+                                    variant="outline-danger"
+                                    size="sm"
+                                    title="Delete Form"
+                                    onClick={() => handleDeleteForm(form._id)}
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      width: '28px',
+                                      height: '28px',
+                                      padding: 0,
+                                      borderRadius: '6px'
+                                    }}
+                                  >
+                                    <FaTrashAlt size={12} />
+                                  </Button>
+                                </>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
+              )}
             {!loading && getCurrentForms().length === 0 && (
               <div className="text-center py-4">
                 <p className="text-muted">

@@ -18,7 +18,7 @@ import {
 } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
-import pydahLogoIcon from '../pydah-emblem-icon.png';
+import pydahLogoIcon from '../Pydah_logo_whitebg.avif';
 
 const SidebarContainer = styled.div`
   position: fixed;
@@ -26,12 +26,12 @@ const SidebarContainer = styled.div`
   left: 0;
   height: 100vh;
   width: ${props => props.$isOpen ? '264px' : '64px'};
-  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 60%, #f0f9ff 100%);
-  color: #0f172a;
-  border-right: 1px solid #bae6fd;
+  background: linear-gradient(180deg, #fff7ed 0%, #ffedd5 60%, #fff7ed 100%);
+  color: #1f2937;
+  border-right: 1px solid #fed7aa;
   transition: width 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1);
   z-index: 1000;
-  box-shadow: 4px 0 24px rgba(14, 165, 233, 0.12);
+  box-shadow: 4px 0 24px rgba(185, 28, 28, 0.08);
   overflow: hidden;
   overflow-x: hidden;
   overflow-y: auto;
@@ -39,22 +39,22 @@ const SidebarContainer = styled.div`
   @media (max-width: 768px) {
     width: ${props => props.$isOpen ? '280px' : '0px'};
     transform: ${props => props.$isOpen ? 'translateX(0)' : 'translateX(-100%)'};
-    box-shadow: ${props => props.$isOpen ? '4px 0 24px rgba(14, 165, 233, 0.25)' : 'none'};
+    box-shadow: ${props => props.$isOpen ? '4px 0 24px rgba(185, 28, 28, 0.2)' : 'none'};
   }
 
   &::-webkit-scrollbar { width: 4px; }
-  &::-webkit-scrollbar-track { background: #e0f2fe; }
-  &::-webkit-scrollbar-thumb { background: #0ea5e9; border-radius: 4px; }
-  &::-webkit-scrollbar-thumb:hover { background: #0284c7; }
+  &::-webkit-scrollbar-track { background: #ffedd5; }
+  &::-webkit-scrollbar-thumb { background: #f97316; border-radius: 4px; }
+  &::-webkit-scrollbar-thumb:hover { background: #ea580c; }
 `;
 
 const SidebarHeader = styled.div`
   padding: ${props => props.$isOpen ? '1.1rem 1.25rem' : '0.875rem 0'};
-  border-bottom: 1px solid #bae6fd;
+  border-bottom: 1px solid #fed7aa;
   display: flex;
   align-items: center;
   justify-content: ${props => props.$isOpen ? 'space-between' : 'center'};
-  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  background: linear-gradient(135deg, #ffedd5 0%, #fecaca 100%);
   transition: padding 0.3s ease;
   position: relative;
   width: 100%;
@@ -97,7 +97,8 @@ const LogoImg = styled.img`
   height: 36px;
   object-fit: contain;
   flex-shrink: 0;
-  filter: drop-shadow(0 2px 5px rgba(2, 132, 199, 0.25));
+  border-radius: 6px;
+  filter: drop-shadow(0 2px 5px rgba(185, 28, 28, 0.25));
   transition: transform 0.25s ease;
 
   &:hover {
@@ -113,7 +114,7 @@ const LogoText = styled.span`
   width: ${props => props.$isOpen ? 'auto' : '0'};
   overflow: hidden;
   transition: opacity 0.3s ease, width 0.3s ease;
-  background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -122,8 +123,8 @@ const LogoText = styled.span`
 
 const ToggleButton = styled.button`
   background: #ffffff;
-  border: 1px solid #0ea5e9;
-  color: #0284c7;
+  border: 1px solid #f97316;
+  color: #b91c1c;
   font-size: 1rem;
   cursor: pointer;
   padding: 0.45rem;
@@ -135,11 +136,12 @@ const ToggleButton = styled.button`
   justify-content: center;
   width: 34px;
   height: 34px;
-  box-shadow: 0 2px 6px rgba(14, 165, 233, 0.15);
+  box-shadow: 0 2px 6px rgba(249, 115, 22, 0.15);
 
   &:hover {
-    background: #0ea5e9;
+    background: #b91c1c;
     color: #ffffff;
+    border-color: #b91c1c;
   }
 
   @media (max-width: 768px) { width: 34px; height: 34px; }
@@ -184,7 +186,7 @@ const NavSection = styled.div`
 const SectionTitle = styled.h6`
   font-size: 0.68rem;
   font-weight: 800;
-  color: #0369a1;
+  color: #9a3412;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 0.4rem;
@@ -197,7 +199,7 @@ const SectionTitle = styled.h6`
 
 const Divider = styled.div`
   height: 1px;
-  background: #bae6fd;
+  background: #fed7aa;
   margin: 0.625rem 0.875rem;
   transition: margin 0.3s ease;
 `;
@@ -228,7 +230,7 @@ const NavLink = styled(Link)`
   align-items: center;
   justify-content: ${props => props.$isOpen ? 'flex-start' : 'center'};
   padding: ${props => props.$isOpen ? '0.7rem 0.875rem' : '0.7rem 0'};
-  color: #1e293b;
+  color: #1f2937;
   text-decoration: none;
   border-radius: 10px;
   transition: all 0.2s ease;
@@ -240,15 +242,15 @@ const NavLink = styled(Link)`
 
   &:hover {
     background: #ffffff;
-    color: #0284c7;
-    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.12);
+    color: #b91c1c;
+    box-shadow: 0 2px 8px rgba(185, 28, 28, 0.12);
   }
 
   &.active {
-    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
     color: #ffffff;
     font-weight: 700;
-    box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+    box-shadow: 0 4px 14px rgba(185, 28, 28, 0.35);
   }
 
   svg {
@@ -259,10 +261,10 @@ const NavLink = styled(Link)`
     height: ${props => props.$isOpen ? 'auto' : '16px'};
     transition: all 0.2s ease;
     flex-shrink: 0;
-    color: #0284c7;
+    color: #c2410c;
   }
 
-  &:hover svg { color: #0ea5e9; }
+  &:hover svg { color: #b91c1c; }
   &.active svg { color: #ffffff; }
 `;
 
@@ -282,7 +284,7 @@ const Tooltip = styled.div`
   left: ${props => props.$left ? `${props.$left}px` : '74px'};
   top: ${props => props.$top ? `${props.$top}px` : '50%'};
   transform: translateY(-50%);
-  background: #1e293b;
+  background: #1f2937;
   color: white;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
@@ -293,7 +295,7 @@ const Tooltip = styled.div`
   pointer-events: none;
   transition: opacity 0.15s ease;
   z-index: 9999;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   visibility: ${props => props.$show ? 'visible' : 'hidden'};
 
   &::before {
@@ -303,7 +305,7 @@ const Tooltip = styled.div`
     top: 50%;
     transform: translateY(-50%);
     border: 6px solid transparent;
-    border-right-color: #1e293b;
+    border-right-color: #1f2937;
   }
 
   @media (max-width: 768px) {
@@ -312,9 +314,9 @@ const Tooltip = styled.div`
 `;
 
 const UserSection = styled.div`
-  border-top: 1px solid #bae6fd;
-  padding: ${props => props.$isOpen ? '0.875rem' : '0.5rem 0.25rem'};
-  background: linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 100%);
+  border-top: 1px solid #fed7aa;
+  padding: ${props => props.$isOpen ? '0.75rem' : '0.5rem 0.25rem'};
+  background: linear-gradient(180deg, #ffedd5 0%, #fff7ed 100%);
   transition: padding 0.3s ease;
   width: 100%;
   box-sizing: border-box;
@@ -328,37 +330,36 @@ const UserSection = styled.div`
 const UserInfo = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: ${props => props.$isOpen ? '0.75rem' : '0'};
-  margin-bottom: ${props => props.$isOpen ? '0.75rem' : '0'};
-  padding: ${props => props.$isOpen ? '0.75rem' : '0'};
+  justify-content: space-between;
+  gap: ${props => props.$isOpen ? '0.5rem' : '0'};
+  margin-bottom: 0;
+  padding: ${props => props.$isOpen ? '0.6rem 0.7rem' : '0'};
   border-radius: 10px;
   background: ${props => props.$isOpen ? '#ffffff' : 'transparent'};
-  border: ${props => props.$isOpen ? '1px solid #bae6fd' : 'none'};
-  box-shadow: ${props => props.$isOpen ? '0 2px 8px rgba(14, 165, 233, 0.08)' : 'none'};
+  border: ${props => props.$isOpen ? '1px solid #fed7aa' : 'none'};
+  box-shadow: ${props => props.$isOpen ? '0 2px 8px rgba(185, 28, 28, 0.06)' : 'none'};
   transition: all 0.3s ease;
   width: 100%;
-  height: ${props => props.$isOpen ? 'auto' : '0'};
+  box-sizing: border-box;
   overflow: ${props => props.$isOpen ? 'visible' : 'hidden'};
-  max-height: ${props => props.$isOpen ? '120px' : '0'};
   opacity: ${props => props.$isOpen ? 1 : 0};
 
   &:hover {
     background: ${props => props.$isOpen ? '#ffffff' : 'transparent'};
-    box-shadow: ${props => props.$isOpen ? '0 4px 12px rgba(14, 165, 233, 0.15)' : 'none'};
+    box-shadow: ${props => props.$isOpen ? '0 4px 12px rgba(185, 28, 28, 0.12)' : 'none'};
   }
 `;
 
 const UserAvatar = styled.div`
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: #0ea5e9;
-  border: 2px solid #bae6fd;
+  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
+  border: 2px solid #fed7aa;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: white;
   flex-shrink: 0;
@@ -370,8 +371,8 @@ const UserAvatar = styled.div`
     position: absolute;
     bottom: -2px;
     right: -2px;
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
     background: #10b981;
     border: 2px solid #ffffff;
     border-radius: 50%;
@@ -384,76 +385,68 @@ const UserDetails = styled.div`
   width: ${props => props.$isOpen ? 'auto' : '0'};
   overflow: hidden;
   transition: opacity 0.3s ease, width 0.3s ease;
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 0;
+  margin-left: 0.25rem;
 `;
 
 const UserName = styled.div`
   font-weight: 600;
-  font-size: 0.875rem;
-  margin-bottom: 0.15rem;
-  color: #0f172a;
+  font-size: 0.82rem;
+  margin-bottom: 0.1rem;
+  color: #1f2937;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const UserRole = styled.div`
-  font-size: 0.72rem;
-  color: #0284c7;
+  font-size: 0.7rem;
+  color: #c2410c;
   text-transform: capitalize;
   font-weight: 500;
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const LogoutButton = styled.button`
-  width: ${props => props.$isOpen ? '100%' : '36px'};
-  height: ${props => props.$isOpen ? 'auto' : '36px'};
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
-  justify-content: ${props => props.$isOpen ? 'flex-start' : 'center'};
-  padding: ${props => props.$isOpen ? '0.65rem 0.875rem' : '0'};
+  justify-content: center;
+  padding: 0;
   background: #fef2f2;
   border: 1px solid #fecaca;
-  color: #ef4444;
+  color: #dc2626;
   text-decoration: none;
   border-radius: 8px;
   transition: all 0.2s ease;
   cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 500;
-  position: relative;
+  flex-shrink: 0;
   box-sizing: border-box;
-  margin: 0 auto;
 
   &:hover {
     background: #fee2e2;
-    color: #dc2626;
+    color: #991b1b;
     border-color: #fca5a5;
-    transform: ${props => props.$isOpen ? 'none' : 'scale(1.05)'};
+    transform: scale(1.08);
   }
 
   svg {
     font-size: 0.9rem;
-    margin-right: ${props => props.$isOpen ? '0.6rem' : '0'};
-    min-width: 14px;
-    width: 14px;
-    height: 14px;
     transition: all 0.2s ease;
     flex-shrink: 0;
-    color: #ef4444;
+    color: #dc2626;
   }
 
-  &:hover svg { color: #dc2626; }
-`;
-
-const LogoutText = styled.span`
-  opacity: ${props => props.$isOpen ? 1 : 0};
-  width: ${props => props.$isOpen ? 'auto' : '0'};
-  display: ${props => props.$isOpen ? 'inline-block' : 'none'};
-  overflow: hidden;
-  transition: opacity 0.3s ease, width 0.3s ease;
-  font-weight: 500;
-  margin: 0;
+  &:hover svg {
+    color: #991b1b;
+  }
 `;
 
 const Overlay = styled.div`
@@ -627,7 +620,11 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
       <SidebarContainer $isOpen={isOpen}>
         <SidebarHeader $isOpen={isOpen}>
           <Logo $isOpen={isOpen} onClick={!isOpen ? toggleSidebar : undefined} title={!isOpen ? "Expand sidebar" : "Pydah Staff Recruitment"}>
-            <LogoImg src={pydahLogoIcon} alt="Pydah Logo" />
+            <LogoImg 
+              src={pydahLogoIcon || (process.env.PUBLIC_URL + '/Pydah_logo_whitebg.avif')} 
+              alt="Pydah Logo" 
+              onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/Pydah_logo_whitebg.avif'; }}
+            />
             <LogoText $isOpen={isOpen}>SRS</LogoText>
           </Logo>
           {isOpen && (
@@ -679,28 +676,33 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
           </Navigation>
 
           <UserSection $isOpen={isOpen}>
-            {isOpen && (
-              <UserInfo 
-                $isOpen={isOpen}
-              >
+            {isOpen ? (
+              <UserInfo $isOpen={isOpen}>
                 <UserAvatar $isOpen={isOpen}>
                   {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                 </UserAvatar>
                 <UserDetails $isOpen={isOpen}>
-                  <UserName>{user?.name || 'User'}</UserName>
+                  <UserName title={user?.name}>{user?.name || 'User'}</UserName>
                   <UserRole>
                     <FaUserTie style={{ fontSize: '0.7rem' }} />
                     {formatUserRole(user?.role || 'User')}
                   </UserRole>
                 </UserDetails>
+                <LogoutButton 
+                  onClick={handleLogout} 
+                  title="Logout"
+                  aria-label="Logout"
+                >
+                  <FaSignOutAlt />
+                </LogoutButton>
               </UserInfo>
-            )}
-
-            <LogoutButton 
-              onClick={handleLogout} 
-              $isOpen={isOpen}
-              onMouseEnter={(e) => {
-                if (!isOpen) {
+            ) : (
+              <LogoutButton 
+                onClick={handleLogout} 
+                title="Logout"
+                aria-label="Logout"
+                style={{ width: '36px', height: '36px', margin: '0 auto' }}
+                onMouseEnter={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
                   setHoveredItem({
                     id: 'logout',
@@ -708,13 +710,12 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
                     left: rect.right + 10,
                     label: 'Logout'
                   });
-                }
-              }}
-              onMouseLeave={() => setHoveredItem(null)}
-            >
-              <FaSignOutAlt />
-              <LogoutText $isOpen={isOpen}>Logout</LogoutText>
-            </LogoutButton>
+                }}
+                onMouseLeave={() => setHoveredItem(null)}
+              >
+                <FaSignOutAlt />
+              </LogoutButton>
+            )}
           </UserSection>
         </SidebarContent>
 

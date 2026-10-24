@@ -112,8 +112,20 @@ const InterviewFeedback = () => {
         </Col>
       </Row>
 
-      <Row className="mb-3 align-items-center justify-content-between g-2">
-        <Col xs="auto">
+      {/* Re-arranged Dedicated Filter Card */}
+      <div style={{
+        background: '#ffffff',
+        border: '1px solid #fed7aa',
+        borderRadius: '12px',
+        padding: '1rem',
+        marginBottom: '1.25rem',
+        boxShadow: '0 2px 8px rgba(185, 28, 28, 0.04)'
+      }}>
+        {/* Row 1: Category Selection */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.75rem', paddingBottom: '0.75rem', borderBottom: '1px solid #fed7aa' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            Category:
+          </span>
           <ButtonGroup size="sm">
             <ToggleButton
               type="radio"
@@ -123,6 +135,7 @@ const InterviewFeedback = () => {
               checked={activeTab === 'teaching'}
               variant={activeTab === 'teaching' ? 'primary' : 'outline-primary'}
               onChange={() => { setActiveTab('teaching'); setSelectedRole('all'); }}
+              style={{ fontWeight: '600' }}
             >
               Teaching ({teachingCount})
             </ToggleButton>
@@ -134,6 +147,7 @@ const InterviewFeedback = () => {
               checked={activeTab === 'non_teaching'}
               variant={activeTab === 'non_teaching' ? 'primary' : 'outline-primary'}
               onChange={() => { setActiveTab('non_teaching'); setSelectedRole('all'); }}
+              style={{ fontWeight: '600' }}
             >
               Non-Teaching ({nonTeachingCount})
             </ToggleButton>
@@ -145,24 +159,31 @@ const InterviewFeedback = () => {
               checked={activeTab === 'all'}
               variant={activeTab === 'all' ? 'primary' : 'outline-primary'}
               onChange={() => { setActiveTab('all'); setSelectedRole('all'); }}
+              style={{ fontWeight: '600' }}
             >
               All ({candidates.length})
             </ToggleButton>
           </ButtonGroup>
-        </Col>
-        <Col xs={12} md={4} className="mt-2 mt-md-0">
+        </div>
+
+        {/* Row 2: Job Role Filter */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
+            Job Role:
+          </label>
           <Form.Select
             size="sm"
             value={selectedRole}
             onChange={(event) => setSelectedRole(event.target.value)}
+            style={{ maxWidth: '320px', borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
           >
             <option value="all">All Job Roles</option>
             {roleOptions.map(role => (
               <option key={role} value={role}>{role}</option>
             ))}
           </Form.Select>
-        </Col>
-      </Row>
+        </div>
+      </div>
 
       {error && (
         <Row className="mb-3">

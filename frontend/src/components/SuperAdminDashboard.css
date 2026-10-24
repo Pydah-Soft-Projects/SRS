@@ -19,9 +19,9 @@
 .dashboard-title {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #0284c7;
+  color: #991b1b;
   margin-bottom: 0.75rem;
-  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 60%, #38bdf8 100%);
+  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 60%, #f97316 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -39,7 +39,7 @@
 }
 
 .dashboard-user-info {
-  color: #0284c7;
+  color: #991b1b;
   font-weight: 600;
 }
 
@@ -53,9 +53,9 @@
 
 .stats-card {
   background: #ffffff;
-  border: 1px solid #e0f2fe;
+  border: 1px solid #fed7aa;
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.06);
+  box-shadow: 0 4px 16px rgba(185, 28, 28, 0.06);
   transition: all 0.25s ease;
   text-align: center;
   padding: 2rem 1.5rem;
@@ -69,13 +69,13 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+  background: linear-gradient(90deg, #b91c1c, #f97316);
 }
 
 .stats-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(14, 165, 233, 0.12);
-  border-color: #bae6fd;
+  box-shadow: 0 12px 28px rgba(185, 28, 28, 0.12);
+  border-color: #fdba74;
 }
 
 .stats-card-icon {
@@ -85,9 +85,9 @@
   z-index: 1;
 }
 
-.stats-card-primary .stats-card-icon  { color: #0ea5e9; }
+.stats-card-primary .stats-card-icon  { color: #b91c1c; }
 .stats-card-success .stats-card-icon  { color: #10b981; }
-.stats-card-info .stats-card-icon     { color: #0284c7; }
+.stats-card-info .stats-card-icon     { color: #ea580c; }
 .stats-card-warning .stats-card-icon  { color: #f59e0b; }
 .stats-card-danger .stats-card-icon   { color: #ef4444; }
 
@@ -98,12 +98,12 @@
   display: block;
   position: relative;
   z-index: 1;
-  color: #0284c7;
+  color: #991b1b;
 }
 
 .stats-label {
   font-size: 0.8rem;
-  color: #64748b;
+  color: #7c2d12;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -113,16 +113,16 @@
 
 /* ── Create New Card ─────────────────────────────────────────── */
 .create-card {
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
-  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.08);
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  box-shadow: 0 4px 16px rgba(185, 28, 28, 0.08);
   position: relative;
   overflow: hidden;
 }
 
 .create-button {
-  background: #0ea5e9;
-  border: 1px solid #0284c7;
+  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
+  border: 1px solid #991b1b;
   color: white;
   width: 100%; height: 100%;
   min-height: 130px;
@@ -138,10 +138,10 @@
 }
 
 .create-button:hover {
-  background: rgba(255,255,255,0.18);
-  border-color: rgba(255,255,255,0.4);
+  background: linear-gradient(135deg, #991b1b 0%, #c2410c 100%);
+  border-color: #7f1d1d;
   transform: scale(1.03);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+  box-shadow: 0 12px 32px rgba(185, 28, 28, 0.25);
   color: white;
 }
 

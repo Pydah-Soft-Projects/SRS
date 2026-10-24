@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Container, Row, Col, Card, Button, Badge, Modal, Tabs, Tab, Alert, Spinner, Image, FormCheck, Form, InputGroup, Pagination, Table } from 'react-bootstrap';
-import { FaFilePdf, FaFileImage, FaUser, FaCheckCircle, FaTimes, FaSearch, FaDownload, FaClipboardList } from 'react-icons/fa';
+import { FaFilePdf, FaFileImage, FaUser, FaCheckCircle, FaTimes, FaSearch, FaDownload, FaClipboardList, FaEye, FaCheck, FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import SkeletonLoader from '../SkeletonLoader';
@@ -278,14 +278,35 @@ const FormSubmissions = () => {
   };
 
   const getStatusBadge = (status) => {
-    const variants = {
-      pending: 'secondary',
-      approved: 'info',
-      rejected: 'danger',
-      shortlisted: 'warning',
-      selected: 'success'
+    const statusMap = {
+      pending: { bg: '#fff7ed', color: '#c2410c', border: '#fed7aa', label: 'Pending' },
+      approved: { bg: '#ecfdf5', color: '#047857', border: '#a7f3d0', label: 'Approved' },
+      rejected: { bg: '#fef2f2', color: '#b91c1c', border: '#fecaca', label: 'Rejected' },
+      shortlisted: { bg: '#eff6ff', color: '#1d4ed8', border: '#bfdbfe', label: 'Shortlisted' },
+      selected: { bg: '#f0fdf4', color: '#15803d', border: '#86efac', label: 'Selected' },
+      on_hold: { bg: '#fefce8', color: '#a16207', border: '#fef08a', label: 'On Hold' }
     };
-    return <Badge bg={variants[status] || 'secondary'}>{status}</Badge>;
+    const s = statusMap[status] || { bg: '#f8fafc', color: '#64748b', border: '#e2e8f0', label: status };
+    return (
+      <span
+        style={{
+          fontSize: '0.72rem',
+          padding: '0.24rem 0.65rem',
+          borderRadius: '20px',
+          fontWeight: 700,
+          background: s.bg,
+          color: s.color,
+          border: `1px solid ${s.border}`,
+          display: 'inline-block',
+          minWidth: '78px',
+          textAlign: 'center',
+          textTransform: 'uppercase',
+          letterSpacing: '0.03em'
+        }}
+      >
+        {s.label}
+      </span>
+    );
   };
 
   const renderPersonalDetailsTab = (candidate) => {
@@ -472,126 +493,160 @@ const FormSubmissions = () => {
         </Col>
       </Row>
 
-      {/* Row 1: Category Tabs, Job Role Filter, Search Bar & Select All */}
-      <Row className="mb-3 g-2 align-items-end">
-        <Col xs="auto">
-          <Button
-            size="sm"
-            variant={activeTab === 'teaching' ? 'primary' : 'outline-primary'}
-            onClick={() => { setActiveTab('teaching'); setSelectedJobRole('all'); }}
-          >
-            Teaching ({teachingCount})
-          </Button>
-        </Col>
-        <Col xs="auto">
-          <Button
-            size="sm"
-            variant={activeTab === 'non_teaching' ? 'primary' : 'outline-primary'}
-            onClick={() => { setActiveTab('non_teaching'); setSelectedJobRole('all'); }}
-          >
-            Non-Teaching ({nonTeachingCount})
-          </Button>
-        </Col>
-        <Col xs="auto">
-          <Button
-            size="sm"
-            variant={activeTab === 'all' ? 'primary' : 'outline-primary'}
-            onClick={() => { setActiveTab('all'); setSelectedJobRole('all'); }}
-          >
-            All Categories ({allCandidates.length})
-          </Button>
-        </Col>
-        <Col xs={12} md={3} className="mt-2 mt-md-0">
-          <Form.Select
-            size="sm"
-            value={selectedJobRole}
-            onChange={(e) => setSelectedJobRole(e.target.value)}
-          >
-            <option value="all">All Job Roles</option>
-            {getJobRoles().map((role, idx) => (
-              <option key={idx} value={role}>{role}</option>
-            ))}
-          </Form.Select>
-        </Col>
-        <Col xs={12} md={4} className="mt-2 mt-md-0">
-          <InputGroup size="sm">
-            <Form.Control
-              placeholder="Search by name, candidate ID, email, position, or department"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  setQuickSearch(searchInput);
-                }
-              }}
-            />
+      {/* ── Dedicated Filter & Search Section ────────────────────────── */}
+      <Card className="mb-4 border shadow-sm" style={{ borderColor: '#fed7aa', borderRadius: '12px' }}>
+        <Card.Body className="p-3" style={{ background: '#fff7ed' }}>
+          {/* Row 1: Category Filter Buttons */}
+          <div className="d-flex flex-wrap align-items-center gap-2 mb-3 pb-2 border-bottom" style={{ borderColor: '#fed7aa' }}>
+            <span className="fw-bold me-2" style={{ fontSize: '0.8rem', color: '#7c2d12', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Category:
+            </span>
             <Button
-              variant="primary"
-              onClick={() => {
-                setQuickSearch(searchInput);
-              }}
+              size="sm"
+              variant={activeTab === 'teaching' ? 'primary' : 'outline-primary'}
+              onClick={() => { setActiveTab('teaching'); setSelectedJobRole('all'); }}
               style={{
-                borderRadius: '0 8px 8px 0',
-                background: '#0ea5e9',
-                border: 'none'
+                borderRadius: '8px',
+                fontWeight: 600,
+                ...(activeTab === 'teaching' ? { background: '#b91c1c', borderColor: '#991b1b', color: '#ffffff' } : { borderColor: '#fed7aa', color: '#b91c1c', background: '#ffffff' })
               }}
             >
-              <FaSearch />
+              Teaching ({teachingCount})
             </Button>
-            {(quickSearch || searchInput) && (
-              <Button
-                variant="outline-secondary"
-                onClick={() => {
-                  setSearchInput('');
-                  setQuickSearch('');
-                }}
-                style={{ borderRadius: '8px', marginLeft: '0.5rem' }}
-              >
-                Reset
-              </Button>
-            )}
-          </InputGroup>
-        </Col>
-      </Row>
+            <Button
+              size="sm"
+              variant={activeTab === 'non_teaching' ? 'primary' : 'outline-primary'}
+              onClick={() => { setActiveTab('non_teaching'); setSelectedJobRole('all'); }}
+              style={{
+                borderRadius: '8px',
+                fontWeight: 600,
+                ...(activeTab === 'non_teaching' ? { background: '#b91c1c', borderColor: '#991b1b', color: '#ffffff' } : { borderColor: '#fed7aa', color: '#b91c1c', background: '#ffffff' })
+              }}
+            >
+              Non-Teaching ({nonTeachingCount})
+            </Button>
+            <Button
+              size="sm"
+              variant={activeTab === 'all' ? 'primary' : 'outline-primary'}
+              onClick={() => { setActiveTab('all'); setSelectedJobRole('all'); }}
+              style={{
+                borderRadius: '8px',
+                fontWeight: 600,
+                ...(activeTab === 'all' ? { background: '#b91c1c', borderColor: '#991b1b', color: '#ffffff' } : { borderColor: '#fed7aa', color: '#b91c1c', background: '#ffffff' })
+              }}
+            >
+              All Categories ({allCandidates.length})
+            </Button>
+          </div>
 
-      {/* Row 2: Status View Toggle Buttons (Placed below Category & Search controls) */}
-      <Row className="mb-4 g-2 align-items-center">
-        <Col xs="auto">
-          <span className="fw-semibold me-1" style={{ fontSize: '0.9rem', color: '#0284c7' }}>Status View:</span>
-        </Col>
-        <Col xs="auto">
-          <Button
-            size="sm"
-            variant={statusFilter === 'pending' ? 'primary' : 'outline-primary'}
-            onClick={() => setStatusFilter('pending')}
-            style={{ borderRadius: '20px', fontWeight: 600, padding: '0.35rem 1.1rem' }}
-          >
-            <FaClipboardList className="me-1" />
-            Pending Candidates ({pendingCandidates.length})
-          </Button>
-        </Col>
-        <Col xs="auto">
-          <Button
-            size="sm"
-            variant={statusFilter === 'selected' ? 'success' : 'outline-success'}
-            onClick={() => setStatusFilter('selected')}
-            style={{ borderRadius: '20px', fontWeight: 600, padding: '0.35rem 1.1rem' }}
-          >
-            <FaCheckCircle className="me-1" />
-            Selected Candidates ({progressedCandidates.length})
-          </Button>
-        </Col>
-        <Col xs="auto">
-          <Button
-            size="sm"
-            variant={statusFilter === 'all' ? 'info' : 'outline-info'}
-            onClick={() => setStatusFilter('all')}
-            style={{ borderRadius: '20px', fontWeight: 600, padding: '0.35rem 1.1rem' }}
-          >
-            All Candidates ({pendingCandidates.length + progressedCandidates.length})
-          </Button>
-        </Col>
-      </Row>
+          {/* Row 2: Job Role Filter & Search Input */}
+          <Row className="g-2 mb-3 align-items-center">
+            <Col xs={12} md={4} lg={3}>
+              <Form.Select
+                size="sm"
+                value={selectedJobRole}
+                onChange={(e) => setSelectedJobRole(e.target.value)}
+                style={{ borderRadius: '8px', border: '1px solid #fed7aa', fontSize: '0.88rem', padding: '0.45rem 0.75rem' }}
+              >
+                <option value="all">All Job Roles</option>
+                {getJobRoles().map((role, idx) => (
+                  <option key={idx} value={role}>{role}</option>
+                ))}
+              </Form.Select>
+            </Col>
+            <Col xs={12} md={8} lg={9}>
+              <InputGroup size="sm" style={{ borderRadius: '8px', overflow: 'hidden' }}>
+                <Form.Control
+                  placeholder="Search by name, candidate ID, email, position, or department..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      setQuickSearch(searchInput);
+                    }
+                  }}
+                  style={{ border: '1px solid #fed7aa', fontSize: '0.88rem', padding: '0.45rem 0.75rem' }}
+                />
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    setQuickSearch(searchInput);
+                  }}
+                  style={{
+                    background: '#b91c1c',
+                    borderColor: '#991b1b',
+                    color: '#ffffff',
+                    fontWeight: 600,
+                    padding: '0 1rem'
+                  }}
+                >
+                  <FaSearch />
+                </Button>
+                {(quickSearch || searchInput) && (
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => {
+                      setSearchInput('');
+                      setQuickSearch('');
+                    }}
+                    style={{ borderRadius: '0 8px 8px 0', border: '1px solid #cbd5e1' }}
+                  >
+                    Reset
+                  </Button>
+                )}
+              </InputGroup>
+            </Col>
+          </Row>
+
+          {/* Row 3: Status View Toggle Buttons */}
+          <div className="d-flex flex-wrap align-items-center gap-2 pt-2 border-top" style={{ borderColor: '#fed7aa' }}>
+            <span className="fw-bold me-2" style={{ fontSize: '0.8rem', color: '#7c2d12', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Status View:
+            </span>
+            <Button
+              size="sm"
+              variant={statusFilter === 'pending' ? 'primary' : 'outline-primary'}
+              onClick={() => setStatusFilter('pending')}
+              style={{
+                borderRadius: '20px',
+                fontWeight: 600,
+                padding: '0.35rem 1.1rem',
+                ...(statusFilter === 'pending' ? { background: '#b91c1c', borderColor: '#991b1b', color: '#ffffff' } : { borderColor: '#fed7aa', color: '#b91c1c', background: '#ffffff' })
+              }}
+            >
+              <FaClipboardList className="me-1" />
+              Pending Candidates ({pendingCandidates.length})
+            </Button>
+            <Button
+              size="sm"
+              variant={statusFilter === 'selected' ? 'success' : 'outline-success'}
+              onClick={() => setStatusFilter('selected')}
+              style={{
+                borderRadius: '20px',
+                fontWeight: 600,
+                padding: '0.35rem 1.1rem',
+                ...(statusFilter === 'selected' ? { background: '#16a34a', borderColor: '#15803d', color: '#ffffff' } : { borderColor: '#a7f3d0', color: '#16a34a', background: '#ffffff' })
+              }}
+            >
+              <FaCheckCircle className="me-1" />
+              Selected Candidates ({progressedCandidates.length})
+            </Button>
+            <Button
+              size="sm"
+              variant={statusFilter === 'all' ? 'secondary' : 'outline-secondary'}
+              onClick={() => setStatusFilter('all')}
+              style={{
+                borderRadius: '20px',
+                fontWeight: 600,
+                padding: '0.35rem 1.1rem',
+                ...(statusFilter === 'all' ? { background: '#475569', borderColor: '#334155', color: '#ffffff' } : { borderColor: '#cbd5e1', color: '#475569', background: '#ffffff' })
+              }}
+            >
+              All Candidates ({pendingCandidates.length + progressedCandidates.length})
+            </Button>
+          </div>
+        </Card.Body>
+      </Card>
 
       {/* Bulk Actions */}
       {selectedCandidates.size > 0 && (
@@ -634,7 +689,7 @@ const FormSubmissions = () => {
       {/* SINGLE UNIFIED CANDIDATES TABLE */}
       <Row className="mb-2">
         <Col>
-          <h4 className="mb-1" style={{ fontWeight: 600, color: '#0284c7' }}>
+          <h4 className="mb-1" style={{ fontWeight: 700, color: '#991b1b' }}>
             {statusFilter === 'pending' ? 'Pending Submissions' : statusFilter === 'selected' ? 'Selected Candidates' : 'All Application Submissions'}
           </h4>
           <p className="text-muted mb-2" style={{ fontSize: '0.9rem' }}>
@@ -648,7 +703,7 @@ const FormSubmissions = () => {
       </Row>
 
       {loading ? (
-        <Card className="shadow-sm border-0 mb-4 p-3">
+        <Card className="shadow-sm border-0 mb-4 p-3" style={{ border: '1px solid #fed7aa', borderRadius: '10px' }}>
           <SkeletonLoader loading={true} variant="table" rows={6} columns="0.5fr 1.5fr 1.5fr 1fr 1fr 1fr 1.2fr" />
         </Card>
       ) : activeCandidatesList.length === 0 ? (
@@ -661,12 +716,12 @@ const FormSubmissions = () => {
         </Row>
       ) : (
         <>
-          <Card className="shadow-sm border-0 mb-4">
-            <div className="table-responsive">
-              <Table hover className="align-middle mb-0">
-                <thead>
+          <Card className="shadow-sm border-0 mb-4" style={{ border: '1px solid #fed7aa', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+            <div style={{ width: '100%', overflowX: 'auto' }}>
+              <Table striped hover size="sm" style={{ marginBottom: 0, width: '100%', verticalAlign: 'middle', borderCollapse: 'collapse' }}>
+                <thead style={{ background: '#fff7ed', borderBottom: '2px solid #fed7aa' }}>
                   <tr>
-                    <th style={{ width: '40px' }} className="text-center">
+                    <th style={{ width: '42px', padding: '0.65rem 0.35rem' }} className="text-center">
                       <FormCheck
                         type="checkbox"
                         checked={
@@ -685,12 +740,12 @@ const FormSubmissions = () => {
                         }}
                       />
                     </th>
-                    <th>Candidate</th>
-                    <th>Position & Department</th>
-                    <th>Applied Date</th>
-                    <th>Category & ID</th>
-                    <th>Status</th>
-                    <th className="text-end" style={{ minWidth: '240px' }}>Actions</th>
+                    <th style={{ width: '22%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Candidate</th>
+                    <th style={{ width: '21%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Position & Department</th>
+                    <th style={{ width: '11%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Applied Date</th>
+                    <th style={{ width: '18%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Category & ID</th>
+                    <th style={{ width: '10%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Status</th>
+                    <th style={{ width: '14%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -698,116 +753,218 @@ const FormSubmissions = () => {
                     const isPending = candidate.status === 'pending' || candidate.status === 'on_hold' || !candidate.status;
                     return (
                       <tr key={candidate._id}>
-                        <td className="text-center">
+                        <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.35rem' }}>
                           <FormCheck
                             type="checkbox"
                             checked={selectedCandidates.has(candidate._id)}
                             onChange={() => handleSelectCandidate(candidate._id)}
                           />
                         </td>
-                        <td>
-                          <div className="d-flex align-items-center gap-2">
-                            {candidate.passportPhotoUrl ? (
-                              <Image
-                                src={candidate.passportPhotoUrl}
-                                alt={candidate.user?.name}
-                                roundedCircle
-                                style={{ width: '38px', height: '38px', objectFit: 'cover' }}
-                                onError={(e) => { e.target.style.display = 'none'; }}
-                              />
-                            ) : (
-                              <div
-                                style={{
-                                  width: '38px',
-                                  height: '38px',
-                                  borderRadius: '50%',
-                                  background: '#e0f2fe',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center'
-                                }}
-                              >
-                                <FaUser style={{ color: '#0284c7' }} />
-                              </div>
-                            )}
-                            <div>
-                              <div style={{ fontWeight: 600, fontSize: '0.95rem', color: '#0f172a' }}>{candidate.user?.name || 'N/A'}</div>
-                              <small className="text-muted" style={{ fontSize: '0.8rem' }}>{candidate.user?.email || 'N/A'}</small>
+                        <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.6rem' }}>
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1e293b', textTransform: 'uppercase', letterSpacing: '0.01em' }}>
+                              {candidate.user?.name || 'N/A'}
                             </div>
+                            <small className="text-muted" style={{ fontSize: '0.78rem', display: 'block', wordBreak: 'break-all' }}>
+                              {candidate.user?.email || 'N/A'}
+                            </small>
                           </div>
                         </td>
-                        <td>
-                          <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#334155' }}>{candidate.form?.position || 'N/A'}</div>
-                          <small className="text-muted" style={{ fontSize: '0.8rem' }}>{candidate.form?.department || 'N/A'}</small>
+                        <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.6rem' }}>
+                          <div 
+                            style={{ 
+                              fontWeight: 600, 
+                              fontSize: '0.84rem', 
+                              color: '#334155',
+                              maxWidth: '220px',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis'
+                            }} 
+                            title={candidate.form?.position || 'N/A'}
+                          >
+                            {candidate.form?.position || 'N/A'}
+                          </div>
+                          <small className="text-muted" style={{ fontSize: '0.75rem', display: 'block', textTransform: 'uppercase' }}>
+                            {candidate.form?.department || 'N/A'}
+                          </small>
                         </td>
-                        <td style={{ fontSize: '0.85rem', color: '#475569' }}>
+                        <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem', fontSize: '0.82rem', color: '#475569', whiteSpace: 'nowrap' }}>
                           {candidate.createdAt ? new Date(candidate.createdAt).toLocaleDateString() : '—'}
                         </td>
-                        <td>
-                          <div className="d-flex flex-wrap gap-1">
-                            <Badge bg={candidate.form?.formCategory === 'teaching' ? 'primary' : 'secondary'}>
+                        <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.6rem' }}>
+                          <div className="d-flex align-items-center gap-1">
+                            <span 
+                              style={{ 
+                                fontSize: '0.72rem', 
+                                padding: '0.22rem 0.5rem', 
+                                fontWeight: 600,
+                                borderRadius: '4px',
+                                background: candidate.form?.formCategory === 'teaching' ? '#fff7ed' : '#f1f5f9',
+                                color: candidate.form?.formCategory === 'teaching' ? '#c2410c' : '#475569',
+                                border: candidate.form?.formCategory === 'teaching' ? '1px solid #fed7aa' : '1px solid #cbd5e1',
+                                minWidth: '72px',
+                                textAlign: 'center',
+                                display: 'inline-block'
+                              }}
+                            >
                               {candidate.form?.formCategory === 'teaching' ? 'Teaching' : 'Non-Teaching'}
-                            </Badge>
+                            </span>
                             {candidate.candidateNumber ? (
-                              <Badge bg="dark">{candidate.candidateNumber}</Badge>
+                              <span 
+                                style={{ 
+                                  fontSize: '0.72rem', 
+                                  padding: '0.22rem 0.5rem', 
+                                  fontWeight: 700,
+                                  borderRadius: '4px',
+                                  background: '#1e293b',
+                                  color: '#ffffff',
+                                  border: '1px solid #0f172a',
+                                  letterSpacing: '0.02em'
+                                }}
+                              >
+                                {candidate.candidateNumber}
+                              </span>
                             ) : (
-                              <Badge bg="light" text="dark">No Candidate ID</Badge>
+                              <span 
+                                style={{ 
+                                  fontSize: '0.72rem', 
+                                  padding: '0.22rem 0.5rem', 
+                                  fontWeight: 500,
+                                  borderRadius: '4px',
+                                  background: '#f8fafc',
+                                  color: '#94a3b8',
+                                  border: '1px dashed #cbd5e1'
+                                }}
+                              >
+                                No Candidate ID
+                              </span>
                             )}
                           </div>
                         </td>
-                        <td>
+                        <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem' }}>
                           {getStatusBadge(candidate.status || 'pending')}
                         </td>
-                        <td className="text-end">
-                          <div className="d-inline-flex gap-1 flex-wrap justify-content-end">
+                        <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem' }}>
+                          <div className="d-flex gap-1 justify-content-center align-items-center" style={{ width: '124px', margin: '0 auto' }}>
                             <Button
-                              variant="outline-primary"
+                              variant="light"
                               size="sm"
+                              title="View Candidate Profile"
                               onClick={() => fetchCandidateProfile(candidate._id)}
                               disabled={profileLoading}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '28px',
+                                height: '28px',
+                                padding: 0,
+                                borderRadius: '6px',
+                                background: 'linear-gradient(135deg, #b91c1c 0%, #991b1b 100%)',
+                                border: 'none',
+                                color: '#fff',
+                                flexShrink: 0
+                              }}
                             >
-                              {profileLoading ? <Spinner as="span" animation="border" size="sm" /> : 'View'}
+                              {profileLoading ? <Spinner as="span" animation="border" size="sm" style={{ width: '12px', height: '12px', borderWidth: '2px' }} /> : <FaEye size={13} />}
                             </Button>
                             <Button
-                              variant="outline-secondary"
+                              variant="light"
                               size="sm"
+                              title="Download Application PDF"
                               onClick={() => downloadApplicationPdf(candidate)}
                               disabled={downloadingPdfId === candidate._id}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '28px',
+                                height: '28px',
+                                padding: 0,
+                                borderRadius: '6px',
+                                background: '#ffffff',
+                                border: '1px solid #cbd5e1',
+                                color: '#475569',
+                                flexShrink: 0
+                              }}
                             >
                               {downloadingPdfId === candidate._id ? (
-                                <Spinner as="span" animation="border" size="sm" />
+                                <Spinner as="span" animation="border" size="sm" style={{ width: '12px', height: '12px', borderWidth: '2px' }} />
                               ) : (
-                                <>
-                                  <FaDownload className="me-1" />
-                                  Download
-                                </>
+                                <FaDownload size={12} />
                               )}
                             </Button>
                             {isPending ? (
                               <>
                                 <Button
-                                  variant="success"
+                                  variant="light"
                                   size="sm"
+                                  title="Approve Candidate"
                                   onClick={() => handleApprove(candidate._id)}
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '28px',
+                                    height: '28px',
+                                    padding: 0,
+                                    borderRadius: '6px',
+                                    background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                                    border: 'none',
+                                    color: '#fff',
+                                    flexShrink: 0
+                                  }}
                                 >
-                                  Approve
+                                  <FaCheck size={12} />
                                 </Button>
                                 <Button
-                                  variant="outline-danger"
+                                  variant="light"
                                   size="sm"
+                                  title="Reject Candidate"
                                   onClick={() => handleReject(candidate._id)}
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '28px',
+                                    height: '28px',
+                                    padding: 0,
+                                    borderRadius: '6px',
+                                    background: '#ffffff',
+                                    border: '1px solid #fecaca',
+                                    color: '#dc2626',
+                                    flexShrink: 0
+                                  }}
                                 >
-                                  Reject
+                                  <FaTimes size={12} />
                                 </Button>
                               </>
                             ) : (
-                              <Button
-                                variant="outline-secondary"
-                                size="sm"
-                                onClick={() => navigate('/super-admin/candidates')}
-                              >
-                                Next Steps
-                              </Button>
+                              <>
+                                <Button
+                                  variant="light"
+                                  size="sm"
+                                  title="Next Steps (Move to Candidate Pipeline)"
+                                  onClick={() => navigate('/super-admin/candidates')}
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '28px',
+                                    height: '28px',
+                                    padding: 0,
+                                    borderRadius: '6px',
+                                    background: 'linear-gradient(135deg, #b91c1c 0%, #ea580c 100%)',
+                                    border: 'none',
+                                    color: '#fff',
+                                    flexShrink: 0
+                                  }}
+                                >
+                                  <FaArrowRight size={12} />
+                                </Button>
+                                <div style={{ width: '28px', height: '28px', flexShrink: 0 }} />
+                              </>
                             )}
                           </div>
                         </td>

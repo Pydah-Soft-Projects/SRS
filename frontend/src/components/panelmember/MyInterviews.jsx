@@ -419,15 +419,15 @@ const MyInterviews = () => {
           </EmptyState>
         ) : (
           <div className="table-responsive bg-white rounded shadow-sm border p-2">
-            <Table hover className="align-middle mb-0">
+            <Table hover className="align-middle mb-0" size="sm">
               <thead className="bg-light">
                 <tr>
-                  <th className="py-3 px-3">Candidate</th>
-                  <th className="py-3 px-3">Job Role & Dept</th>
-                  <th className="py-3 px-3">Interview Title</th>
-                  <th className="py-3 px-3">Scheduled (IST)</th>
-                  <th className="py-3 px-3">Status</th>
-                  <th className="py-3 px-3 text-end">Action</th>
+                  <th className="py-2 px-3">Candidate</th>
+                  <th className="py-2 px-3">Job Role & Dept</th>
+                  <th className="py-2 px-3">Interview Title</th>
+                  <th className="py-2 px-3">Scheduled (IST)</th>
+                  <th className="py-2 px-3">Status</th>
+                  <th className="py-2 px-3 text-end">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -448,37 +448,38 @@ const MyInterviews = () => {
 
                   return (
                     <tr key={rowKey}>
-                      <td className="px-3" data-label="Candidate">
-                        <div className="fw-semibold text-dark">{candidateName}</div>
-                        {candidateNo && <Badge bg="secondary" className="small mt-1">{candidateNo}</Badge>}
+                      <td className="py-2 px-3" data-label="Candidate">
+                        <div className="fw-semibold text-dark" style={{ lineHeight: 1.25 }}>{candidateName}</div>
+                        {candidateNo && <Badge bg="secondary" className="small mt-1" style={{ fontSize: '0.72rem' }}>{candidateNo}</Badge>}
                       </td>
-                      <td className="px-3" data-label="Job Role & Dept">
-                        <div className="fw-medium text-dark">{position}</div>
+                      <td className="py-2 px-3" data-label="Job Role & Dept">
+                        <div className="fw-medium text-dark" style={{ fontSize: '0.85rem' }}>{position}</div>
                         <div className="text-muted small">{department}</div>
                       </td>
-                      <td className="px-3" data-label="Interview Title">
-                        <div className="fw-medium text-dark">{interview.title}</div>
+                      <td className="py-2 px-3" data-label="Interview Title">
+                        <div className="fw-medium text-dark" style={{ fontSize: '0.85rem' }}>{interview.title}</div>
                       </td>
-                      <td className="px-3" data-label="Scheduled (IST)">
+                      <td className="py-2 px-3" data-label="Scheduled (IST)">
                         <div className="small fw-semibold">{scheduledText}</div>
                         {interview.duration && <div className="text-muted small">Duration: {interview.duration} mins</div>}
                         {interview.meetingLink && (
-                          <div className="mt-1">
-                            <a href={interview.meetingLink} target="_blank" rel="noopener noreferrer" className="small text-primary fw-bold">
+                          <div>
+                            <a href={interview.meetingLink} target="_blank" rel="noopener noreferrer" className="small text-primary fw-bold" style={{ fontSize: '0.75rem' }}>
                               Join Meeting
                             </a>
                           </div>
                         )}
                       </td>
-                      <td className="px-3" data-label="Status">
-                        <Badge bg={status === 'completed' ? 'success' : status === 'pending' ? 'warning' : 'info'}>
+                      <td className="py-2 px-3" data-label="Status">
+                        <Badge bg={status === 'completed' ? 'success' : status === 'pending' ? 'warning' : 'info'} style={{ fontSize: '0.75rem' }}>
                           {status === 'completed' ? 'Completed' : status === 'pending' ? 'Pending' : 'Upcoming'}
                         </Badge>
                       </td>
-                      <td className="px-3 text-end" data-label="Action">
+                      <td className="py-2 px-3 text-end" data-label="Action">
                         {interview.submittedFeedback ? (
                           <ActionButton
                             $submitted={true}
+                            style={{ margin: 0, padding: '0.35rem 0.75rem', fontSize: '0.8rem', width: 'auto', display: 'inline-flex' }}
                             onClick={() => {
                               navigate('/panel-member/feedback', {
                                 state: {
@@ -495,6 +496,7 @@ const MyInterviews = () => {
                         ) : (
                           <ActionButton
                             $variant="primary"
+                            style={{ margin: 0, padding: '0.35rem 0.75rem', fontSize: '0.8rem', width: 'auto', display: 'inline-flex' }}
                             onClick={() => {
                               navigate('/panel-member/feedback', {
                                 state: {

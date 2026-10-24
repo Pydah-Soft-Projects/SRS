@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { Badge, Table } from 'react-bootstrap';
+import { FaEdit, FaComments, FaSlidersH, FaTrashAlt } from 'react-icons/fa';
 import api from '../../services/api';
 import SkeletonLoader from '../SkeletonLoader';
 import ToastNotificationContainer from '../ToastNotificationContainer';
@@ -202,8 +203,8 @@ const TabContainer = styled.div`
 const TabButtons = styled.div`
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid #fed7aa;
 `;
 
 const TabButton = styled.button`
@@ -212,20 +213,20 @@ const TabButton = styled.button`
   padding: 0.75rem 1.5rem;
   font-size: 0.95rem;
   font-weight: 600;
-  color: ${props => props.$active ? '#3b82f6' : '#6b7280'};
-  border-bottom: 3px solid ${props => props.$active ? '#3b82f6' : 'transparent'};
+  color: ${props => props.$active ? '#b91c1c' : '#6b7280'};
+  border-bottom: 3px solid ${props => props.$active ? '#b91c1c' : 'transparent'};
   cursor: pointer;
   transition: all 0.2s ease;
   margin-bottom: -2px;
 
   &:hover {
-    color: #3b82f6;
+    color: #b91c1c;
   }
 `;
 
 const FilterSelect = styled.select`
   padding: 0.5rem 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid #fed7aa;
   border-radius: 6px;
   font-size: 0.875rem;
   background: white;
@@ -784,39 +785,55 @@ const InterviewsManagement = () => {
       </Header>
 
       {/* Unified Interview Workspace Container (One Block) */}
-      <TabContainer style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
-        <TabButtons style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-            <TabButton
-              $active={activeTab === 'teaching'}
-              onClick={() => {
-                setActiveTab('teaching');
-                setSelectedJobRole('all');
-              }}
-            >
-              Teaching Positions
-            </TabButton>
-            <TabButton
-              $active={activeTab === 'non_teaching'}
-              onClick={() => {
-                setActiveTab('non_teaching');
-                setSelectedJobRole('all');
-              }}
-            >
-              Non-Teaching Positions
-            </TabButton>
-            <TabButton
-              $active={activeTab === 'all'}
-              onClick={() => {
-                setActiveTab('all');
-                setSelectedJobRole('all');
-              }}
-            >
-              All Interviews
-            </TabButton>
-          </div>
+      <TabContainer style={{ padding: '1.5rem', marginBottom: '1.5rem', border: '1px solid #fed7aa', borderRadius: '12px' }}>
+        {/* Row 1: Position Tabs */}
+        <TabButtons style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.25rem' }}>
+          <TabButton
+            $active={activeTab === 'teaching'}
+            onClick={() => {
+              setActiveTab('teaching');
+              setSelectedJobRole('all');
+            }}
+          >
+            Teaching Positions
+          </TabButton>
+          <TabButton
+            $active={activeTab === 'non_teaching'}
+            onClick={() => {
+              setActiveTab('non_teaching');
+              setSelectedJobRole('all');
+            }}
+          >
+            Non-Teaching Positions
+          </TabButton>
+          <TabButton
+            $active={activeTab === 'all'}
+            onClick={() => {
+              setActiveTab('all');
+              setSelectedJobRole('all');
+            }}
+          >
+            All Interviews
+          </TabButton>
+        </TabButtons>
+
+        {/* Row 2: Dedicated Filter & Count Bar */}
+        <div style={{
+          padding: '0.875rem 1.25rem',
+          background: '#fff7ed',
+          border: '1px solid #fed7aa',
+          borderRadius: '8px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          marginBottom: '1.5rem'
+        }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <label style={{ fontWeight: '600', color: '#374151', margin: 0 }}>Job Role:</label>
+            <label style={{ fontWeight: '700', color: '#991b1b', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
+              Job Role:
+            </label>
             <FilterSelect
               value={selectedJobRole}
               onChange={(e) => setSelectedJobRole(e.target.value)}
@@ -827,22 +844,18 @@ const InterviewsManagement = () => {
               ))}
             </FilterSelect>
           </div>
-        </TabButtons>
 
-        <div style={{
-          padding: '0.75rem 1rem',
-          background: '#eff6ff',
-          borderRadius: '6px',
-          color: '#1e40af',
-          fontWeight: '500',
-          fontSize: '0.875rem',
-          display: 'inline-flex',
-          flexWrap: 'wrap',
-          gap: '0.35rem',
-          marginBottom: '1.5rem'
-        }}>
-          Showing <strong>{filteredInterviews.length}</strong> interview(s) for {activeTab === 'teaching' ? 'Teaching' : activeTab === 'non_teaching' ? 'Non-Teaching' : 'All'} positions
-          {selectedJobRole !== 'all' && <> - <span>{selectedJobRole}</span></>}
+          <div style={{
+            color: '#9a3412',
+            fontWeight: '600',
+            fontSize: '0.875rem',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.35rem'
+          }}>
+            Showing <strong style={{ color: '#b91c1c' }}>{filteredInterviews.length}</strong> interview(s) for {activeTab === 'teaching' ? 'Teaching' : activeTab === 'non_teaching' ? 'Non-Teaching' : 'All'} positions
+            {selectedJobRole !== 'all' && <> - <span style={{ color: '#991b1b' }}>{selectedJobRole}</span></>}
+          </div>
         </div>
 
         {loading ? (
@@ -867,51 +880,77 @@ const InterviewsManagement = () => {
           </div>
         ) : (
           <div className="table-responsive">
-            <Table hover className="align-middle mb-0">
+            <Table hover className="align-middle mb-0" size="sm">
               <thead className="bg-light">
                 <tr>
-                  <th className="py-3 px-3">Interview Details</th>
-                  <th className="py-3 px-3">Candidate</th>
-                  <th className="py-3 px-3">Position & Dept</th>
-                  <th className="py-3 px-3">Scheduled (IST)</th>
-                  <th className="py-3 px-3">Panel Members</th>
-                  <th className="py-3 px-3">Status</th>
-                  <th className="py-3 px-3 text-end">Actions</th>
+                  <th className="py-2 px-3" style={{ fontSize: '0.82rem', fontWeight: 700 }}>Interview Details</th>
+                  <th className="py-2 px-3" style={{ fontSize: '0.82rem', fontWeight: 700 }}>Candidate</th>
+                  <th className="py-2 px-3" style={{ fontSize: '0.82rem', fontWeight: 700 }}>Position & Dept</th>
+                  <th className="py-2 px-3" style={{ fontSize: '0.82rem', fontWeight: 700 }}>Scheduled (IST)</th>
+                  <th className="py-2 px-3" style={{ fontSize: '0.82rem', fontWeight: 700 }}>Panel Members</th>
+                  <th className="py-2 px-3" style={{ fontSize: '0.82rem', fontWeight: 700 }}>Status</th>
+                  <th className="py-2 px-3 text-end" style={{ fontSize: '0.82rem', fontWeight: 700 }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredInterviews.flatMap((interview) => {
+                  const isConfigured = interview.feedbackForm && interview.feedbackForm.questions && Array.isArray(interview.feedbackForm.questions) && interview.feedbackForm.questions.length > 0;
                   if (!interview.candidates || interview.candidates.length === 0) {
                     return [(
                       <tr key={interview._id}>
-                        <td className="px-3">
-                          <div className="fw-bold text-dark">{interview.title}</div>
+                        <td className="py-2 px-3">
+                          <div className="fw-bold text-dark" style={{ fontSize: '0.88rem', lineHeight: 1.25 }}>{interview.title}</div>
                           <div className="small text-muted">Round {interview.round} • {interview.type}</div>
                         </td>
-                        <td colSpan={4} className="px-3 text-muted fst-italic">
+                        <td colSpan={4} className="py-2 px-3 text-muted fst-italic" style={{ fontSize: '0.85rem' }}>
                           No candidates assigned to this interview yet
                         </td>
-                        <td className="px-3">{getInterviewStatusBadge(interview)}</td>
-                        <td className="px-3 text-end">
-                          <div className="d-flex flex-wrap gap-2 justify-content-end">
-                            <StyledButton
-                              $variant="info"
-                              $configured={interview.feedbackForm && interview.feedbackForm.questions && Array.isArray(interview.feedbackForm.questions) && interview.feedbackForm.questions.length > 0}
-                              style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+                        <td className="py-2 px-3">{getInterviewStatusBadge(interview)}</td>
+                        <td className="py-2 px-3 text-end">
+                          <div className="d-flex gap-1 justify-content-end align-items-center">
+                            <button
+                              type="button"
+                              title={isConfigured ? 'Feedback Form Configured' : 'Configure Feedback Form'}
+                              style={{
+                                background: isConfigured ? '#059669' : '#0284c7',
+                                color: 'white',
+                                border: 'none',
+                                width: '28px',
+                                height: '28px',
+                                borderRadius: '6px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                padding: 0
+                              }}
                               onClick={() => {
                                 setSelectedInterview(interview);
                                 handleConfigureFeedbackForm(interview);
                               }}
                             >
-                              Config Form
-                            </StyledButton>
-                            <StyledButton 
-                              $danger={true} 
-                              style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+                              <FaSlidersH size={13} />
+                            </button>
+                            <button
+                              type="button"
+                              title="Delete Interview"
+                              style={{
+                                background: '#ef4444',
+                                color: 'white',
+                                border: 'none',
+                                width: '28px',
+                                height: '28px',
+                                borderRadius: '6px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                padding: 0
+                              }}
                               onClick={() => handleDeleteInterview(interview._id)}
                             >
-                              Delete Interview
-                            </StyledButton>
+                              <FaTrashAlt size={13} />
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -927,40 +966,40 @@ const InterviewsManagement = () => {
 
                     return (
                       <tr key={candidateEntry._id || candidate?._id || `${interview._id}_${idx}`}>
-                        <td className="px-3">
-                          <div className="fw-bold text-dark">{interview.title}</div>
+                        <td className="py-2 px-3">
+                          <div className="fw-bold text-dark" style={{ fontSize: '0.88rem', lineHeight: 1.25 }}>{interview.title}</div>
                           <div className="small text-muted">Round {interview.round} • {interview.type}</div>
                         </td>
-                        <td className="px-3">
-                          <div className="fw-semibold text-dark">{candidate.user?.name || 'Unknown Candidate'}</div>
+                        <td className="py-2 px-3">
+                          <div className="fw-semibold text-dark" style={{ fontSize: '0.88rem', lineHeight: 1.25 }}>{candidate.user?.name || 'Unknown Candidate'}</div>
                           <div className="text-muted small">{candidate.user?.email || '—'}</div>
                           {candidate.candidateNumber && (
-                            <Badge bg="light" text="dark" className="border mt-1 small">
+                            <Badge bg="light" text="dark" className="border small" style={{ fontSize: '0.72rem', padding: '0.15rem 0.4rem' }}>
                               {candidate.candidateNumber}
                             </Badge>
                           )}
                         </td>
-                        <td className="px-3">
-                          <div className="fw-medium text-dark">{candidateForm.position || interview.form?.position || '—'}</div>
+                        <td className="py-2 px-3">
+                          <div className="fw-medium text-dark" style={{ fontSize: '0.85rem' }}>{candidateForm.position || interview.form?.position || '—'}</div>
                           <div className="text-muted small">{candidateForm.department || interview.form?.department || '—'}</div>
                         </td>
-                        <td className="px-3">
+                        <td className="py-2 px-3">
                           <div className="fw-medium small">{scheduledDisplay}</div>
                           {candidateEntry.duration && (
-                            <div className="text-muted small">Duration: {candidateEntry.duration} min</div>
+                            <div className="text-muted" style={{ fontSize: '0.75rem' }}>Duration: {candidateEntry.duration} min</div>
                           )}
                           {candidateEntry.meetingLink && (
-                            <div className="mt-1">
-                              <a href={candidateEntry.meetingLink} target="_blank" rel="noopener noreferrer" className="small text-primary fw-bold">
+                            <div>
+                              <a href={candidateEntry.meetingLink} target="_blank" rel="noopener noreferrer" className="small text-primary fw-bold" style={{ fontSize: '0.75rem' }}>
                                 Join Meeting
                               </a>
                             </div>
                           )}
                         </td>
-                        <td className="px-3">
+                        <td className="py-2 px-3">
                           <AssignButton
                             $assigned={candidateEntry.panelMembers && Array.isArray(candidateEntry.panelMembers) && candidateEntry.panelMembers.length > 0}
-                            style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem' }}
+                            style={{ fontSize: '0.75rem', padding: '0.25rem 0.55rem', borderRadius: '4px' }}
                             onClick={() => handleAssignPanelMembers(interview, candidateEntry)}
                           >
                             {candidateEntry.panelMembers && Array.isArray(candidateEntry.panelMembers) && candidateEntry.panelMembers.length > 0 ? (
@@ -970,7 +1009,7 @@ const InterviewsManagement = () => {
                             )}
                           </AssignButton>
                         </td>
-                        <td className="px-3">
+                        <td className="py-2 px-3">
                           <Badge
                             bg={
                               candidateEntry.status === 'completed'
@@ -981,15 +1020,29 @@ const InterviewsManagement = () => {
                                     ? 'danger'
                                     : 'secondary'
                             }
+                            style={{ fontSize: '0.75rem' }}
                           >
                             {candidateEntry.status || 'pending'}
                           </Badge>
                         </td>
-                        <td className="px-3 text-end">
-                          <div className="d-flex flex-wrap gap-1 justify-content-end">
-                            <StyledButton
-                              $variant="info"
-                              style={{ fontSize: '0.78rem', padding: '0.3rem 0.65rem' }}
+                        <td className="py-2 px-3 text-end">
+                          <div className="d-flex gap-1 justify-content-end align-items-center">
+                            <button
+                              type="button"
+                              title="Edit Schedule & Notes"
+                              style={{
+                                background: '#3b82f6',
+                                color: 'white',
+                                border: 'none',
+                                width: '28px',
+                                height: '28px',
+                                borderRadius: '6px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                padding: 0
+                              }}
                               onClick={() => {
                                 setSelectedInterview(interview);
                                 setSelectedCandidate(candidateEntry);
@@ -1012,11 +1065,24 @@ const InterviewsManagement = () => {
                                 setShowScheduleModal(true);
                               }}
                             >
-                              Edit
-                            </StyledButton>
-                            <StyledButton
-                              $variant="info"
-                              style={{ fontSize: '0.78rem', padding: '0.3rem 0.65rem' }}
+                              <FaEdit size={13} />
+                            </button>
+                            <button
+                              type="button"
+                              title="Candidate Feedback Summary"
+                              style={{
+                                background: '#0284c7',
+                                color: 'white',
+                                border: 'none',
+                                width: '28px',
+                                height: '28px',
+                                borderRadius: '6px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                padding: 0
+                              }}
                               onClick={async () => {
                                 try {
                                   setSelectedInterview(interview);
@@ -1030,22 +1096,47 @@ const InterviewsManagement = () => {
                                 }
                               }}
                             >
-                              Feedback
-                            </StyledButton>
-                            <StyledButton
-                              $variant="info"
-                              $configured={interview.feedbackForm && interview.feedbackForm.questions && Array.isArray(interview.feedbackForm.questions) && interview.feedbackForm.questions.length > 0}
-                              style={{ fontSize: '0.78rem', padding: '0.3rem 0.65rem' }}
+                              <FaComments size={13} />
+                            </button>
+                            <button
+                              type="button"
+                              title={isConfigured ? 'Feedback Form Configured' : 'Configure Feedback Form'}
+                              style={{
+                                background: isConfigured ? '#059669' : '#f97316',
+                                color: 'white',
+                                border: 'none',
+                                width: '28px',
+                                height: '28px',
+                                borderRadius: '6px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                padding: 0
+                              }}
                               onClick={() => {
                                 setSelectedInterview(interview);
                                 handleConfigureFeedbackForm(interview);
                               }}
                             >
-                              Config Form
-                            </StyledButton>
-                            <StyledButton
-                              $danger={true}
-                              style={{ fontSize: '0.78rem', padding: '0.3rem 0.65rem' }}
+                              <FaSlidersH size={13} />
+                            </button>
+                            <button
+                              type="button"
+                              title="Remove Candidate from Interview"
+                              style={{
+                                background: '#ef4444',
+                                color: 'white',
+                                border: 'none',
+                                width: '28px',
+                                height: '28px',
+                                borderRadius: '6px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                padding: 0
+                              }}
                               onClick={async () => {
                                 if (window.confirm(`Are you sure you want to remove ${candidate.user?.name || 'this candidate'} from this interview?`)) {
                                   try {
@@ -1058,8 +1149,8 @@ const InterviewsManagement = () => {
                                 }
                               }}
                             >
-                              Remove
-                            </StyledButton>
+                              <FaTrashAlt size={13} />
+                            </button>
                           </div>
                         </td>
                       </tr>

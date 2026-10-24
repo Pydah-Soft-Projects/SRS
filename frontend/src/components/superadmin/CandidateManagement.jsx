@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Container, Row, Col, Card, Table, Button, Badge, Modal, Tabs, Tab, Alert, Spinner, Image, Form, Offcanvas, ProgressBar, InputGroup, Pagination } from 'react-bootstrap';
-import { FaFilePdf, FaFileImage, FaDownload, FaUser, FaSearch, FaKeyboard, FaEye, FaFilter, FaChevronUp, FaChevronDown, FaUsers, FaCheckCircle } from 'react-icons/fa';
+import { FaFilePdf, FaFileImage, FaDownload, FaUser, FaSearch, FaKeyboard, FaEye, FaFilter, FaChevronUp, FaChevronDown, FaUsers, FaCheckCircle, FaCheck, FaPause, FaTimes } from 'react-icons/fa';
 import api from '../../services/api';
 import SkeletonLoader from '../SkeletonLoader';
 import { useAuth } from '../../contexts/AuthContext';
@@ -475,15 +475,15 @@ const CandidateManagement = () => {
       shortlisted: 'warning',
       selected: 'success'
     };
-    return <Badge bg={variants[status] || 'secondary'}>{status}</Badge>;
+    return <Badge bg={variants[status] || 'secondary'} style={{ fontSize: '0.72rem', padding: '0.3rem 0.5rem', fontWeight: 600 }}>{status}</Badge>;
   };
 
   const getWorkflowBadge = (workflow) => {
     if (!workflow) {
-      return <Badge bg="secondary">Unknown</Badge>;
+      return <Badge bg="secondary" style={{ fontSize: '0.72rem', padding: '0.25rem 0.45rem', fontWeight: 600 }}>Unknown</Badge>;
     }
     const meta = WORKFLOW_STAGE_META[workflow.stage] || { label: workflow.label || 'Workflow', variant: 'secondary' };
-    return <Badge bg={meta.variant}>{workflow.label || meta.label}</Badge>;
+    return <Badge bg={meta.variant} style={{ fontSize: '0.72rem', padding: '0.25rem 0.45rem', fontWeight: 600 }}>{workflow.label || meta.label}</Badge>;
   };
 
   const stageStats = useMemo(() => {
@@ -1462,14 +1462,14 @@ const CandidateManagement = () => {
           const count = stageStats[stage] || 0;
           
           const variantColors = {
-            primary: '#0ea5e9',
+            primary: '#b91c1c',
             secondary: '#64748b',
-            info: '#0284c7',
+            info: '#f97316',
             warning: '#f59e0b',
             success: '#10b981',
             danger: '#ef4444'
           };
-          const accentColor = variantColors[meta.variant] || '#0ea5e9';
+          const accentColor = variantColors[meta.variant] || '#b91c1c';
 
           return (
             <Card
@@ -1478,9 +1478,9 @@ const CandidateManagement = () => {
               style={{
                 cursor: 'pointer',
                 background: '#ffffff',
-                border: '1px solid #e0f2fe',
+                border: '1px solid #fed7aa',
                 borderRadius: '12px',
-                boxShadow: '0 2px 8px rgba(14, 165, 233, 0.05)',
+                boxShadow: '0 2px 8px rgba(185, 28, 28, 0.05)',
                 transition: 'all 0.2s ease',
                 padding: '0.875rem 0.6rem',
                 minWidth: '110px',
@@ -1491,13 +1491,13 @@ const CandidateManagement = () => {
               onClick={() => openStageDrawer(stage)}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 6px 16px rgba(14, 165, 233, 0.12)';
+                e.currentTarget.style.boxShadow = '0 6px 16px rgba(185, 28, 28, 0.12)';
                 e.currentTarget.style.borderColor = accentColor;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'none';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(14, 165, 233, 0.05)';
-                e.currentTarget.style.borderColor = '#e0f2fe';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(185, 28, 28, 0.05)';
+                e.currentTarget.style.borderColor = '#fed7aa';
               }}
             >
               <div style={{
@@ -1556,7 +1556,7 @@ const CandidateManagement = () => {
               variant="primary"
               onClick={() => setSearchTerm(searchInput)}
               style={{
-                background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
+                background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
                 border: 'none',
                 fontWeight: '600',
                 padding: '0 1.25rem'
@@ -1583,42 +1583,42 @@ const CandidateManagement = () => {
       {/* ── Top Summary Stat Badges (Total Candidates & Profiles Done) ──── */}
       <Row className="mb-3 g-3">
         <Col md={6}>
-          <Card style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+          <Card style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   TOTAL CANDIDATES
                 </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#0284c7', marginTop: '0.2rem' }}>
+                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#b91c1c', marginTop: '0.2rem' }}>
                   {filteredCandidates.length.toLocaleString()}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginTop: '0.1rem' }}>
+                <div style={{ fontSize: '0.75rem', color: '#9a3412', fontWeight: '500', marginTop: '0.1rem' }}>
                   {statusFilter !== 'all' ? statusFilter.toUpperCase() : 'Regular'}
                 </div>
               </div>
-              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#e0f2fe', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <FaUsers style={{ color: '#0284c7', fontSize: '1.2rem' }} />
+              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#fff7ed', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #fed7aa' }}>
+                <FaUsers style={{ color: '#b91c1c', fontSize: '1.2rem' }} />
               </div>
             </div>
           </Card>
         </Col>
 
         <Col md={6}>
-          <Card style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+          <Card style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#9a3412', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   PROFILES DONE
                 </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#0ea5e9', marginTop: '0.2rem' }}>
+                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#ea580c', marginTop: '0.2rem' }}>
                   {completedProfilesCount.toLocaleString()}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500', marginTop: '0.1rem' }}>
+                <div style={{ fontSize: '0.75rem', color: '#9a3412', fontWeight: '500', marginTop: '0.1rem' }}>
                   {completionPercentage}% completion
                 </div>
               </div>
-              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#e0f2fe', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <FaCheckCircle style={{ color: '#0ea5e9', fontSize: '1.2rem' }} />
+              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#fff7ed', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #fed7aa' }}>
+                <FaCheckCircle style={{ color: '#ea580c', fontSize: '1.2rem' }} />
               </div>
             </div>
           </Card>
@@ -1626,11 +1626,11 @@ const CandidateManagement = () => {
       </Row>
 
       {/* ── Expandable Filter Box Matching User Screenshot ───────────────── */}
-      <Card style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', marginBottom: '1.5rem', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+      <Card style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', marginBottom: '1.5rem', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
         <div style={{
           padding: '0.875rem 1.25rem',
-          background: '#f8fafc',
-          borderBottom: filtersOpen ? '1px solid #e2e8f0' : 'none',
+          background: '#fff7ed',
+          borderBottom: filtersOpen ? '1px solid #fed7aa' : 'none',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -1639,9 +1639,9 @@ const CandidateManagement = () => {
         }}>
           <div
             onClick={() => setFiltersOpen(!filtersOpen)}
-            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '700', fontSize: '0.85rem', color: '#334155', textTransform: 'uppercase', letterSpacing: '0.05em' }}
+            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '700', fontSize: '0.85rem', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em' }}
           >
-            <FaFilter style={{ color: '#0ea5e9' }} /> FILTERS {filtersOpen ? <FaChevronUp /> : <FaChevronDown />}
+            <FaFilter style={{ color: '#b91c1c' }} /> FILTERS {filtersOpen ? <FaChevronUp /> : <FaChevronDown />}
           </div>
 
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -1658,7 +1658,7 @@ const CandidateManagement = () => {
                 variant="light"
                 size="sm"
                 onClick={resetAllFilters}
-                style={{ fontWeight: '600', color: '#64748b', borderRadius: '6px' }}
+                style={{ fontWeight: '600', color: '#991b1b', background: '#fee2e2', border: '1px solid #fecaca', borderRadius: '6px' }}
               >
                 Reset Filters
               </Button>
@@ -1667,19 +1667,19 @@ const CandidateManagement = () => {
         </div>
 
         {filtersOpen && (
-          <Card.Body style={{ padding: '1.25rem' }}>
+          <Card.Body style={{ padding: '1.25rem', background: '#fffdfa' }}>
             <Row className="g-3">
               {/* 1. CAMPUS / STREAM */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     CAMPUS / STREAM
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={campusFilter}
                     onChange={(e) => setCampusFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
                   >
                     <option value="all">All Campuses ({candidates.length})</option>
                     {availableCampuses.map(c => {
@@ -1693,14 +1693,14 @@ const CandidateManagement = () => {
               {/* 2. CATEGORY (Teaching vs Non-Teaching) */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     RECRUITMENT CATEGORY
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
                   >
                     <option value="all">All Categories ({candidatesAfterCampus.length})</option>
                     {availableCategories.map(cat => {
@@ -1715,14 +1715,14 @@ const CandidateManagement = () => {
               {/* 3. DEPARTMENT */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     DEPARTMENT
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={departmentFilter}
                     onChange={(e) => setDepartmentFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
                   >
                     <option value="all">All Departments ({candidatesAfterCategory.length})</option>
                     {availableDepartments.map(d => {
@@ -1736,14 +1736,14 @@ const CandidateManagement = () => {
               {/* 4. POSITION */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     POSITION / DESIGNATION
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={positionFilter}
                     onChange={(e) => setPositionFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
                   >
                     <option value="all">All Positions ({candidatesAfterDept.length})</option>
                     {availablePositions.map(p => {
@@ -1757,14 +1757,14 @@ const CandidateManagement = () => {
               {/* 5. CANDIDATE STATUS */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     CANDIDATE STATUS
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
                   >
                     <option value="all">All Statuses</option>
                     <option value="pending">Pending Review</option>
@@ -1780,14 +1780,14 @@ const CandidateManagement = () => {
               {/* 6. WORKFLOW STAGE */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     WORKFLOW STAGE
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={stageFilter}
                     onChange={(e) => setStageFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
                   >
                     <option value="all">All Workflow Stages</option>
                     {Object.entries(WORKFLOW_STAGE_META).map(([stageKey, meta]) => (
@@ -1800,14 +1800,14 @@ const CandidateManagement = () => {
               {/* 7. TEST ASSESSMENT STATUS */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     TEST ASSESSMENT
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={testStatusFilter}
                     onChange={(e) => setTestStatusFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
                   >
                     <option value="all">All Test Statuses</option>
                     <option value="passed">Test Passed</option>
@@ -1822,14 +1822,14 @@ const CandidateManagement = () => {
               {/* 8. INTERVIEW STATUS */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     INTERVIEW STATUS
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={interviewStatusFilter}
                     onChange={(e) => setInterviewStatusFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
                   >
                     <option value="all">All Interview Statuses</option>
                     <option value="scheduled">Interview Scheduled</option>
@@ -1845,159 +1845,233 @@ const CandidateManagement = () => {
 
       <Row>
         <Col>
-          <Card>
-            <Card.Header>
-              <h5>Candidate Pipeline</h5>
+          <Card style={{ border: '1px solid #fed7aa', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+            <Card.Header style={{ background: '#fff7ed', borderBottom: '1px solid #fed7aa', padding: '0.85rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h5 className="mb-0" style={{ color: '#991b1b', fontWeight: '700', fontSize: '1.05rem' }}>Candidate Pipeline</h5>
+              <Badge bg="light" text="dark" style={{ border: '1px solid #fed7aa', color: '#991b1b', fontWeight: '600', padding: '0.35rem 0.75rem', borderRadius: '20px' }}>
+                {filteredCandidates.length} Candidates
+              </Badge>
             </Card.Header>
-            <Card.Body>
+            <Card.Body style={{ padding: '0.75rem' }}>
               {loading ? (
                 <SkeletonLoader loading={true} variant="table" rows={8} columns="0.5fr 1.5fr 1.5fr 1fr 1fr 1fr 1.2fr" />
               ) : filteredCandidates.length === 0 ? (
                 <Alert variant="info">No candidates match the current filters.</Alert>
               ) : (
-                <Table striped bordered hover responsive>
-                  <thead>
-                    <tr>
-                      <th style={{ width: '60px' }}>Photo</th>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Position</th>
-                      <th>Department</th>
-                      <th>Status</th>
-                      <th>Workflow</th>
-                      <th>Tests</th>
-                      <th>Interviews</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paginatedCandidates.map((candidate) => (
-                      <tr key={candidate._id}>
-                        <td className="text-center">
-                          {candidate.passportPhotoUrl ? (
-                            <Image
-                              src={candidate.passportPhotoUrl}
-                              alt={candidate.user?.name || 'Candidate'}
-                              roundedCircle
-                              style={{
-                                width: '40px',
-                                height: '40px',
-                                objectFit: 'cover',
-                                border: '2px solid #e2e8f0',
-                                display: 'block',
-                                margin: '0 auto'
-                              }}
-                              onError={(e) => {
-                                e.target.style.display = 'none';
-                                const placeholder = e.target.nextElementSibling;
-                                if (placeholder) {
-                                  placeholder.style.display = 'flex';
-                                }
-                              }}
-                            />
-                          ) : null}
-                          <div
-                            style={{
-                              width: '40px',
-                              height: '40px',
-                              borderRadius: '50%',
-                              background: '#e2e8f0',
-                              display: candidate.passportPhotoUrl ? 'none' : 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              margin: '0 auto',
-                              border: '2px solid #cbd5e1'
-                            }}
-                          >
-                            <FaUser style={{ color: '#64748b', fontSize: '18px' }} />
-                          </div>
-                        </td>
-                        <td>{candidate.user?.name || 'N/A'}</td>
-                        <td>{candidate.user?.email || 'N/A'}</td>
-                        <td>{candidate.form?.position || 'N/A'}</td>
-                        <td>{candidate.form?.department || 'N/A'}</td>
-                        <td>
-                          {candidate.finalDecision?.decision === 'selected'
-                            ? <Badge bg="success">finalized</Badge>
-                            : getStatusBadge(candidate.status)}
-                        </td>
-                        <td>
-                          <div className="mb-1">
-                            {getWorkflowBadge(candidate.workflow)}
-                          </div>
-                          <ProgressBar
-                            now={getStageProgressPercentage(candidate.workflow?.stage)}
-                            variant={getProgressVariant(candidate.workflow?.stage)}
-                            style={{ height: '6px' }}
-                          />
-                        </td>
-                        <td>
-                          <div style={{ fontWeight: 600 }}>{candidate.workflow?.tests?.assigned || 0} assigned</div>
-                          <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
-                            {candidate.workflow?.tests?.completed || 0} completed · {candidate.workflow?.tests?.passed || 0} passed
-                          </div>
-                        </td>
-                        <td>
-                          <div style={{ fontWeight: 600 }}>{candidate.workflow?.interviews?.scheduled || 0} scheduled</div>
-                          <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
-                            {candidate.workflow?.interviews?.completed || 0} completed
-                          </div>
-                        </td>
-                        <td>
-                          <Button
-                            variant="primary"
-                            size="sm"
-                            className="me-2"
-                            onClick={() => fetchCandidateProfile(candidate._id)}
-                            disabled={profileLoading}
-                          >
-                            {profileLoading ? <Spinner as="span" animation="border" size="sm" /> : 'View Profile'}
-                          </Button>
-                          {canWrite && (
-                            <>
-                              <Button
-                                variant="success"
-                                size="sm"
-                                className="me-2"
-                                disabled={candidate.status === 'selected' || candidate.finalDecision?.decision === 'selected'}
-                                onClick={() => openDecisionModal(candidate, 'selected')}
-                              >
-                                Finalize
-                              </Button>
-                              <Button
-                                variant="outline-warning"
-                                size="sm"
-                                className="me-2"
-                                disabled={
-                                  candidate.status === 'on_hold' ||
-                                  candidate.finalDecision?.decision === 'on_hold' ||
-                                  candidate.status === 'selected' ||
-                                  candidate.finalDecision?.decision === 'selected'
-                                }
-                                onClick={() => openDecisionModal(candidate, 'on_hold')}
-                              >
-                                Put On Hold
-                              </Button>
-                              <Button
-                                variant="outline-danger"
-                                size="sm"
-                                disabled={
-                                  candidate.status === 'rejected' ||
-                                  candidate.finalDecision?.decision === 'rejected' ||
-                                  candidate.status === 'selected' ||
-                                  candidate.finalDecision?.decision === 'selected'
-                                }
-                                onClick={() => openDecisionModal(candidate, 'rejected')}
-                              >
-                                Reject
-                              </Button>
-                            </>
-                          )}
-                        </td>
+                <div style={{ width: '100%', overflowX: 'auto' }}>
+                  <Table striped hover size="sm" style={{ marginBottom: 0, width: '100%', verticalAlign: 'middle', borderCollapse: 'collapse' }}>
+                    <thead style={{ background: '#fff7ed', borderBottom: '2px solid #fed7aa' }}>
+                      <tr>
+                        <th style={{ width: '50px', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.35rem' }}>Photo</th>
+                        <th style={{ width: '13%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Name</th>
+                        <th style={{ width: '16%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Email</th>
+                        <th style={{ width: '14%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Position</th>
+                        <th style={{ width: '8%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Department</th>
+                        <th style={{ width: '8%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.35rem' }}>Status</th>
+                        <th style={{ width: '13%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Workflow</th>
+                        <th style={{ width: '10%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Tests</th>
+                        <th style={{ width: '9%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Interviews</th>
+                        <th style={{ width: '9%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.35rem' }}>Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+                      {paginatedCandidates.map((candidate) => (
+                        <tr key={candidate._id}>
+                          <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.25rem' }}>
+                            {candidate.passportPhotoUrl ? (
+                              <Image
+                                src={candidate.passportPhotoUrl}
+                                alt={candidate.user?.name || 'Candidate'}
+                                roundedCircle
+                                style={{
+                                  width: '32px',
+                                  height: '32px',
+                                  objectFit: 'cover',
+                                  border: '2px solid #fed7aa',
+                                  display: 'block',
+                                  margin: '0 auto'
+                                }}
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                  const placeholder = e.target.nextElementSibling;
+                                  if (placeholder) {
+                                    placeholder.style.display = 'flex';
+                                  }
+                                }}
+                              />
+                            ) : null}
+                            <div
+                              style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '50%',
+                                background: '#fff7ed',
+                                display: candidate.passportPhotoUrl ? 'none' : 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                margin: '0 auto',
+                                border: '1px solid #fed7aa'
+                              }}
+                            >
+                              <FaUser style={{ color: '#ea580c', fontSize: '13px' }} />
+                            </div>
+                          </td>
+                          <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
+                            <div style={{ fontWeight: 600, fontSize: '0.84rem', color: '#1e293b', textTransform: 'uppercase' }}>
+                              {candidate.user?.name || 'N/A'}
+                            </div>
+                          </td>
+                          <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
+                            <div style={{ fontSize: '0.82rem', color: '#475569', wordBreak: 'break-all' }}>
+                              {candidate.user?.email || 'N/A'}
+                            </div>
+                          </td>
+                          <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
+                            <div style={{ fontSize: '0.84rem', color: '#334155', fontWeight: 500 }}>
+                              {candidate.form?.position || 'N/A'}
+                            </div>
+                          </td>
+                          <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
+                            <div style={{ fontSize: '0.82rem', color: '#64748b' }}>
+                              {candidate.form?.department || 'N/A'}
+                            </div>
+                          </td>
+                          <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.35rem' }}>
+                            {candidate.finalDecision?.decision === 'selected'
+                              ? <Badge bg="success" style={{ fontSize: '0.72rem', padding: '0.28rem 0.5rem' }}>finalized</Badge>
+                              : getStatusBadge(candidate.status)}
+                          </td>
+                          <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
+                            <div className="mb-1" style={{ fontSize: '0.75rem' }}>
+                              {getWorkflowBadge(candidate.workflow)}
+                            </div>
+                            <ProgressBar
+                              now={getStageProgressPercentage(candidate.workflow?.stage)}
+                              variant={getProgressVariant(candidate.workflow?.stage)}
+                              style={{ height: '4px', borderRadius: '2px' }}
+                            />
+                          </td>
+                          <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
+                            <div style={{ fontWeight: 600, fontSize: '0.82rem', color: '#1e293b' }}>
+                              {candidate.workflow?.tests?.assigned || 0} assigned
+                            </div>
+                            <div style={{ fontSize: '0.72rem', color: '#64748b', whiteSpace: 'nowrap' }}>
+                              {candidate.workflow?.tests?.completed || 0} completed · {candidate.workflow?.tests?.passed || 0} passed
+                            </div>
+                          </td>
+                          <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
+                            <div style={{ fontWeight: 600, fontSize: '0.82rem', color: '#1e293b' }}>
+                              {candidate.workflow?.interviews?.scheduled || 0} scheduled
+                            </div>
+                            <div style={{ fontSize: '0.72rem', color: '#64748b', whiteSpace: 'nowrap' }}>
+                              {candidate.workflow?.interviews?.completed || 0} completed
+                            </div>
+                          </td>
+                          <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.35rem' }}>
+                            <div className="d-flex gap-1 justify-content-center align-items-center">
+                              <Button
+                                variant="primary"
+                                size="sm"
+                                title="View Candidate Profile"
+                                onClick={() => fetchCandidateProfile(candidate._id)}
+                                disabled={profileLoading}
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  width: '28px',
+                                  height: '28px',
+                                  padding: 0,
+                                  borderRadius: '6px',
+                                  background: 'linear-gradient(135deg, #b91c1c 0%, #991b1b 100%)',
+                                  border: 'none',
+                                  color: '#fff'
+                                }}
+                              >
+                                {profileLoading ? (
+                                  <Spinner as="span" animation="border" size="sm" style={{ width: '12px', height: '12px', borderWidth: '2px' }} />
+                                ) : (
+                                  <FaEye size={13} />
+                                )}
+                              </Button>
+                              {canWrite && (
+                                <>
+                                  <Button
+                                    variant="success"
+                                    size="sm"
+                                    title="Finalize Candidate"
+                                    disabled={candidate.status === 'selected' || candidate.finalDecision?.decision === 'selected'}
+                                    onClick={() => openDecisionModal(candidate, 'selected')}
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      width: '28px',
+                                      height: '28px',
+                                      padding: 0,
+                                      borderRadius: '6px'
+                                    }}
+                                  >
+                                    <FaCheck size={12} />
+                                  </Button>
+                                  <Button
+                                    variant="warning"
+                                    size="sm"
+                                    title="Put Candidate On Hold"
+                                    disabled={
+                                      candidate.status === 'on_hold' ||
+                                      candidate.finalDecision?.decision === 'on_hold' ||
+                                      candidate.status === 'selected' ||
+                                      candidate.finalDecision?.decision === 'selected'
+                                    }
+                                    onClick={() => openDecisionModal(candidate, 'on_hold')}
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      width: '28px',
+                                      height: '28px',
+                                      padding: 0,
+                                      borderRadius: '6px',
+                                      background: '#f59e0b',
+                                      borderColor: '#d97706',
+                                      color: '#fff'
+                                    }}
+                                  >
+                                    <FaPause size={11} />
+                                  </Button>
+                                  <Button
+                                    variant="outline-danger"
+                                    size="sm"
+                                    title="Reject Candidate"
+                                    disabled={
+                                      candidate.status === 'rejected' ||
+                                      candidate.finalDecision?.decision === 'rejected' ||
+                                      candidate.status === 'selected' ||
+                                      candidate.finalDecision?.decision === 'selected'
+                                    }
+                                    onClick={() => openDecisionModal(candidate, 'rejected')}
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      width: '28px',
+                                      height: '28px',
+                                      padding: 0,
+                                      borderRadius: '6px'
+                                    }}
+                                  >
+                                    <FaTimes size={12} />
+                                  </Button>
+                                </>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
               )}
               {totalPages > 1 && (
                 <div className="d-flex justify-content-end align-items-center mt-3">

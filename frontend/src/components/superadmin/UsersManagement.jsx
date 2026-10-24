@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import api from '../../services/api';
+import { FaEdit, FaUserSlash, FaUserCheck, FaTrashAlt } from 'react-icons/fa';
 import SkeletonLoader from '../SkeletonLoader';
 import ToastNotificationContainer from '../ToastNotificationContainer';
 
@@ -42,14 +43,14 @@ const Subtitle = styled.p`
 `;
 
 const AddButton = styled.button`
-  background: #3b82f6;
+  background: linear-gradient(135deg, #b91c1c 0%, #f97316 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
   align-self: flex-start;
 
   @media (min-width: 768px) {
@@ -57,7 +58,8 @@ const AddButton = styled.button`
   }
 
   &:hover {
-    background: #2563eb;
+    background: linear-gradient(135deg, #991b1b 0%, #ea580c 100%);
+    box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
   }
 `;
 
@@ -83,17 +85,19 @@ const Table = styled.table`
 
 const Th = styled.th`
   background: #f8fafc;
-  padding: 1rem;
+  padding: 0.65rem 0.85rem;
   text-align: left;
   font-weight: 600;
   color: #374151;
   border-bottom: 1px solid #e5e7eb;
+  font-size: 0.85rem;
 `;
 
 const Td = styled.td`
-  padding: 1rem;
+  padding: 0.65rem 0.85rem;
   border-bottom: 1px solid #e5e7eb;
   color: #374151;
+  font-size: 0.875rem;
 `;
 
 const ActionButton = styled.button`
@@ -519,21 +523,68 @@ const UsersManagement = () => {
                     </span>
                   </Td>
                   <Td>
-                    <ActionButton onClick={() => handleEdit(member)}>
-                      Edit
-                    </ActionButton>
-                    <ActionButton
-                      $danger={true}
-                      onClick={() => handleStatusToggle(member._id, member.isActive)}
-                    >
-                      {member.isActive ? 'Deactivate' : 'Activate'}
-                    </ActionButton>
-                    <ActionButton
-                      $danger={true}
-                      onClick={() => handleDelete(member._id)}
-                    >
-                      Delete
-                    </ActionButton>
+                    <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+                      <button
+                        type="button"
+                        title="Edit Panel Member"
+                        onClick={() => handleEdit(member)}
+                        style={{
+                          background: '#10b981',
+                          color: 'white',
+                          border: 'none',
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '6px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          padding: 0
+                        }}
+                      >
+                        <FaEdit size={13} />
+                      </button>
+                      <button
+                        type="button"
+                        title={member.isActive ? 'Deactivate Panel Member' : 'Activate Panel Member'}
+                        onClick={() => handleStatusToggle(member._id, member.isActive)}
+                        style={{
+                          background: member.isActive ? '#f59e0b' : '#10b981',
+                          color: 'white',
+                          border: 'none',
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '6px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          padding: 0
+                        }}
+                      >
+                        {member.isActive ? <FaUserSlash size={13} /> : <FaUserCheck size={13} />}
+                      </button>
+                      <button
+                        type="button"
+                        title="Delete Panel Member"
+                        onClick={() => handleDelete(member._id)}
+                        style={{
+                          background: '#ef4444',
+                          color: 'white',
+                          border: 'none',
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '6px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer',
+                          padding: 0
+                        }}
+                      >
+                        <FaTrashAlt size={13} />
+                      </button>
+                    </div>
                   </Td>
                 </tr>
               ))}

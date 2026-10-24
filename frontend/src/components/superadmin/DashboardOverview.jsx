@@ -86,7 +86,7 @@ const HeaderRow = styled.div`
   @media (min-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
   }
 
   @media (max-width: 768px) {
@@ -121,7 +121,8 @@ const HeaderActions = styled.div`
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 
   @media (max-width: 768px) {
     position: fixed;
@@ -141,6 +142,8 @@ const Timestamp = styled.span`
   font-size: 0.85rem;
   color: #64748b;
   font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
 
   @media (max-width: 768px) {
     display: none !important;
@@ -150,8 +153,9 @@ const Timestamp = styled.span`
 const RefreshButton = styled.button`
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  background: #0ea5e9;
+  background: #b91c1c;
   color: white;
   border: none;
   border-radius: 8px;
@@ -160,21 +164,27 @@ const RefreshButton = styled.button`
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
+  flex-shrink: 0;
+  min-width: 108px;
+  height: 38px;
+  white-space: nowrap;
 
   &:hover:enabled {
-    background: #0284c7;
+    background: #991b1b;
     transform: translateY(-1px);
   }
 
   &:disabled {
-    background: #94a3b8;
+    background: #b91c1c;
+    opacity: 0.9;
     cursor: not-allowed;
-    box-shadow: none;
+    box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
   }
 
   @media (max-width: 768px) {
     width: 40px;
+    min-width: 40px;
     height: 40px;
     padding: 0;
     border-radius: 10px;
@@ -331,7 +341,7 @@ const StatsCard = styled.div`
     background: ${({ $variant }) => {
       switch ($variant) {
         case 'primary':
-          return 'linear-gradient(90deg, #0ea5e9, #38bdf8)';
+          return 'linear-gradient(90deg, #b91c1c, #f97316)';
         case 'success':
           return 'linear-gradient(90deg, #10b981, #059669)';
         case 'info':
@@ -421,7 +431,7 @@ const StatsIcon = styled.div`
   color: ${({ $variant }) => {
     switch ($variant) {
       case 'primary':
-        return '#0ea5e9';
+        return '#b91c1c';
       case 'success':
         return '#10b981';
       case 'info':
@@ -452,7 +462,7 @@ const StatsCountBadge = styled.div`
   background: ${({ $variant }) => {
     switch ($variant) {
       case 'primary':
-        return '#0ea5e9';
+        return '#b91c1c';
       case 'success':
         return '#10b981';
       case 'info':
@@ -718,7 +728,7 @@ const formatDateTime = (date) => {
         <OverviewWrapper>
           {error && <ErrorBanner>{error}</ErrorBanner>}
           <HeaderRow>
-            <div>
+            <div style={{ minWidth: 0, flex: '1 1 auto', marginRight: '1rem' }}>
               <Title>Data Analytics Dashboard</Title>
               <Subtitle>Live graphical analytics and metrics</Subtitle>
             </div>
@@ -915,7 +925,7 @@ const formatDateTime = (date) => {
     <OverviewContainer>
       <OverviewWrapper>
         <HeaderRow>
-          <div>
+          <div style={{ minWidth: 0, flex: '1 1 auto', marginRight: '1rem' }}>
             <Title>Recruitment Analytics Dashboard</Title>
             <Subtitle>Graphical visualizer for campus performance, candidate distribution, and vacancy analytics.</Subtitle>
           </div>
@@ -987,37 +997,35 @@ const formatDateTime = (date) => {
         {/* ── Campus Management Reference & Stream Analytics ────────────────── */}
         <SectionCard style={{ padding: '1.25rem', width: '100%' }}>
           <div className="campus-header-row">
-            <div>
-              <SectionTitle style={{ fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <FaBuilding style={{ color: '#0ea5e9' }} /> Campus Reference & Stream Analytics
-              </SectionTitle>
-            </div>
-            
-            {/* Campus Stream Filter Buttons */}
-            <div className="stream-filter-bar">
-              <span className="stream-filter-label">Stream Filter:</span>
-              {['all', 'Btech', 'Degree', 'Pharmacy', 'Diploma'].map(campusKey => {
-                const isActive = selectedCampusFilter === campusKey;
+            <SectionTitle style={{ fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+              <FaBuilding style={{ color: '#b91c1c' }} /> Campus Reference & Stream Analytics
+            </SectionTitle>
+          </div>
+          
+          {/* Dedicated Campus Stream Filter Row */}
+          <div className="stream-filter-bar mb-3">
+            <span className="stream-filter-label">Stream Filter:</span>
+            {['all', 'Btech', 'Degree', 'Pharmacy', 'Diploma'].map(campusKey => {
+              const isActive = selectedCampusFilter === campusKey;
 
-                return (
-                  <button
-                    key={campusKey}
-                    type="button"
-                    className={`stream-filter-btn ${isActive ? 'active' : ''}`}
-                    onClick={() => setSelectedCampusFilter(campusKey)}
-                  >
-                    {campusKey === 'all' ? (
-                      <>
-                        <span className="desktop-only-txt">All Campuses (Total)</span>
-                        <span className="mobile-only-txt">All</span>
-                      </>
-                    ) : (
-                      campusKey
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+              return (
+                <button
+                  key={campusKey}
+                  type="button"
+                  className={`stream-filter-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => setSelectedCampusFilter(campusKey)}
+                >
+                  {campusKey === 'all' ? (
+                    <>
+                      <span className="desktop-only-txt">All Campuses (Total)</span>
+                      <span className="mobile-only-txt">All</span>
+                    </>
+                  ) : (
+                    campusKey
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           {/* Campus Stream Analytics Content */}
@@ -1068,11 +1076,11 @@ const formatDateTime = (date) => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingTop: '0.75rem' }}>
                   {/* Total All Campuses Summary Card */}
                   <div style={{
-                    background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
+                    background: 'linear-gradient(135deg, #b91c1c 0%, #ea580c 100%)',
                     color: 'white',
                     padding: '1.1rem',
                     borderRadius: '12px',
-                    boxShadow: '0 6px 20px rgba(14, 165, 233, 0.25)',
+                    boxShadow: '0 6px 20px rgba(185, 28, 28, 0.25)',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '0.75rem'

@@ -456,7 +456,7 @@ const BottomActionBar = styled.div`
 `;
 
 const PrimaryBtn = styled.button`
-  background: #0ea5e9;
+  background: linear-gradient(135deg, #b91c1c 0%, #f97316 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -465,13 +465,13 @@ const PrimaryBtn = styled.button`
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
 
   &:hover:enabled {
-    background: #0284c7;
+    background: linear-gradient(135deg, #991b1b 0%, #ea580c 100%);
     transform: translateY(-1px);
   }
 

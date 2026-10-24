@@ -32,7 +32,9 @@ import {
   FaCopy,
   FaUser,
   FaKeyboard,
-  FaFilePdf
+  FaFilePdf,
+  FaUserCheck,
+  FaFileAlt
 } from 'react-icons/fa';
 import api from '../../services/api';
 import { rewriteAppLink, buildTypingTestTakeLink } from '../../utils/appUrl';
@@ -1908,8 +1910,13 @@ const TestsManagement = () => {
 
       <Tabs activeKey={activeTab} onSelect={(key) => setActiveTab(key || 'assessments')} className="mb-4">
         <Tab eventKey="assessments" title="Candidate Assessments">
-          <Row className="g-3 align-items-end mb-3">
-            <Col lg={3}>
+          {/* Re-arranged Dedicated Filter Container */}
+          <Card style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', padding: '1rem', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(185, 28, 28, 0.04)' }}>
+            {/* Row 1: Category Filter Buttons */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.875rem', paddingBottom: '0.75rem', borderBottom: '1px solid #fed7aa' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Category:
+              </span>
               <div className="d-flex flex-wrap gap-2">
                 <Button
                   size="sm"
@@ -1917,24 +1924,17 @@ const TestsManagement = () => {
                   onClick={() => setCandidateFilters(prev => ({ ...prev, category: 'all' }))}
                   style={{ 
                     borderRadius: '8px',
-                    fontWeight: '500',
-                    transition: 'all 0.3s',
-                    ...(candidateFilters.category === 'all' && {
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      border: 'none'
+                    fontWeight: '600',
+                    transition: 'all 0.2s',
+                    ...(candidateFilters.category === 'all' ? {
+                      background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                      border: 'none',
+                      color: '#ffffff'
+                    } : {
+                      borderColor: '#fed7aa',
+                      color: '#991b1b',
+                      background: '#fff7ed'
                     })
-                  }}
-                  onMouseEnter={(e) => {
-                    if (candidateFilters.category !== 'all') {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (candidateFilters.category !== 'all') {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }
                   }}
                 >
                   All ({candidates.length})
@@ -1945,24 +1945,17 @@ const TestsManagement = () => {
                   onClick={() => setCandidateFilters(prev => ({ ...prev, category: 'teaching' }))}
                   style={{ 
                     borderRadius: '8px',
-                    fontWeight: '500',
-                    transition: 'all 0.3s',
-                    ...(candidateFilters.category === 'teaching' && {
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      border: 'none'
+                    fontWeight: '600',
+                    transition: 'all 0.2s',
+                    ...(candidateFilters.category === 'teaching' ? {
+                      background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                      border: 'none',
+                      color: '#ffffff'
+                    } : {
+                      borderColor: '#fed7aa',
+                      color: '#991b1b',
+                      background: '#fff7ed'
                     })
-                  }}
-                  onMouseEnter={(e) => {
-                    if (candidateFilters.category !== 'teaching') {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (candidateFilters.category !== 'teaching') {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }
                   }}
                 >
                   Teaching ({categoryCounts.teaching})
@@ -1973,99 +1966,115 @@ const TestsManagement = () => {
                   onClick={() => setCandidateFilters(prev => ({ ...prev, category: 'non_teaching' }))}
                   style={{ 
                     borderRadius: '8px',
-                    fontWeight: '500',
-                    transition: 'all 0.3s',
-                    ...(candidateFilters.category === 'non_teaching' && {
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      border: 'none'
+                    fontWeight: '600',
+                    transition: 'all 0.2s',
+                    ...(candidateFilters.category === 'non_teaching' ? {
+                      background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                      border: 'none',
+                      color: '#ffffff'
+                    } : {
+                      borderColor: '#fed7aa',
+                      color: '#991b1b',
+                      background: '#fff7ed'
                     })
-                  }}
-                  onMouseEnter={(e) => {
-                    if (candidateFilters.category !== 'non_teaching') {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (candidateFilters.category !== 'non_teaching') {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                    }
                   }}
                 >
                   Non-Teaching ({categoryCounts.non_teaching})
                 </Button>
               </div>
-            </Col>
-            <Col lg={2}>
-              <Form.Select
-                size="sm"
-                value={testStatusFilter}
-                onChange={(event) => setTestStatusFilter(event.target.value)}
-              >
-                <option value="all">All Test States</option>
-                <option value="pending">Pending Tests</option>
-                <option value="conducted">Test Conducted</option>
-              </Form.Select>
-            </Col>
-            <Col lg={2}>
-              <Form.Select
-                size="sm"
-                value={candidateFilters.position}
-                onChange={(event) => setCandidateFilters(prev => ({ ...prev, position: event.target.value }))}
-              >
-                <option value="all">All Job Roles</option>
-                {availablePositions.map(position => (
-                  <option key={position} value={position}>{position}</option>
-                ))}
-              </Form.Select>
-            </Col>
-            <Col lg={4}>
-              <InputGroup size="sm">
-                <Form.Control
-                  placeholder="Search by name, candidate ID, role, or department..."
-                  value={searchInput}
-                  onChange={(event) => setSearchInput(event.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      setCandidateFilters(prev => ({ ...prev, search: searchInput }));
-                    }
-                  }}
-                />
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    setCandidateFilters(prev => ({ ...prev, search: searchInput }));
-                  }}
-                  style={{ 
-                    borderRadius: '0 8px 8px 0',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    border: 'none'
-                  }}
-                >
-                  <FaSearch />
-                </Button>
-                <Button
-                  variant="outline-secondary"
-                  onClick={() => {
-                    setSearchInput('');
-                    setCandidateFilters({ category: 'all', position: 'all', search: '' });
-                    setTestStatusFilter('all');
-                  }}
-                  style={{ borderRadius: '8px', marginLeft: '0.5rem' }}
-                >
-                  Reset
-                </Button>
-              </InputGroup>
-            </Col>
-          </Row>
+            </div>
+
+            {/* Row 2: Status, Job Role, Search */}
+            <Row className="g-3 align-items-center">
+              <Col md={3} sm={6}>
+                <Form.Group>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                    Test State
+                  </Form.Label>
+                  <Form.Select
+                    size="sm"
+                    value={testStatusFilter}
+                    onChange={(event) => setTestStatusFilter(event.target.value)}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                  >
+                    <option value="all">All Test States</option>
+                    <option value="pending">Pending Tests</option>
+                    <option value="conducted">Test Conducted</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={3} sm={6}>
+                <Form.Group>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                    Job Role
+                  </Form.Label>
+                  <Form.Select
+                    size="sm"
+                    value={candidateFilters.position}
+                    onChange={(event) => setCandidateFilters(prev => ({ ...prev, position: event.target.value }))}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                  >
+                    <option value="all">All Job Roles</option>
+                    {availablePositions.map(position => (
+                      <option key={position} value={position}>{position}</option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={6} sm={12}>
+                <Form.Group>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                    Search Candidates
+                  </Form.Label>
+                  <InputGroup size="sm">
+                    <Form.Control
+                      placeholder="Search by name, ID, role, or department..."
+                      value={searchInput}
+                      onChange={(event) => setSearchInput(event.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          setCandidateFilters(prev => ({ ...prev, search: searchInput }));
+                        }
+                      }}
+                      style={{ border: '1px solid #fed7aa', borderRight: 'none' }}
+                    />
+                    <Button
+                      variant="primary"
+                      onClick={() => {
+                        setCandidateFilters(prev => ({ ...prev, search: searchInput }));
+                      }}
+                      style={{ 
+                        background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                        border: 'none',
+                        fontWeight: '600',
+                        padding: '0 1rem'
+                      }}
+                    >
+                      <FaSearch />
+                    </Button>
+                    <Button
+                      variant="light"
+                      onClick={() => {
+                        setSearchInput('');
+                        setCandidateFilters({ category: 'all', position: 'all', search: '' });
+                        setTestStatusFilter('all');
+                      }}
+                      style={{ border: '1px solid #fed7aa', background: '#fee2e2', color: '#991b1b', fontWeight: '600' }}
+                    >
+                      Reset
+                    </Button>
+                  </InputGroup>
+                </Form.Group>
+              </Col>
+            </Row>
+          </Card>
           <Row className="g-4">
             <Col lg={12}>
               <Card className="h-100 border-0 shadow-sm" style={{ borderRadius: '12px', overflow: 'hidden' }}>
                 <Card.Header 
                   className="d-flex justify-content-between align-items-center"
                   style={{ 
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
                     color: 'white',
                     borderBottom: 'none',
                     padding: '1.25rem'
@@ -2099,193 +2108,230 @@ const TestsManagement = () => {
                   ) : filteredAssessmentCandidates.length === 0 ? (
                     <Alert variant="light">No candidates match the current filters.</Alert>
                   ) : (
-                    <Table responsive striped hover size="sm" style={{ marginBottom: 0 }}>
-                      <thead style={{ background: '#f8f9fa' }}>
-                        <tr>
-                          <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Name</th>
-                          <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Candidate ID</th>
-                          <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Position</th>
-                          <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Department</th>
-                          <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Stage</th>
-                          <th className="text-end" style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {paginatedAssessmentCandidates.map(candidate => (
-                          <tr key={candidate._id}>
-                            <td>{candidate.user?.name}</td>
-                            <td>{candidate.candidateNumber || '—'}</td>
-                            <td>{candidate.form?.position}</td>
-                            <td>{candidate.form?.department}</td>
-                            <td>
-                              {(() => {
-                                const status = (candidate.status || '').toLowerCase();
-                                const workflowStage = candidate.workflow?.stage;
-                                const finalDecision = candidate.workflow?.finalDecision?.decision || candidate.finalDecision?.decision || null;
-                                const tests = candidate.workflow?.tests || {};
-                                const testsCompleted = Number(tests.completed) || 0;
-                                const testsAssigned = Number(tests.assigned) || 0;
-                                const interviews = candidate.workflow?.interviews || {};
-                                const interviewsScheduled = Number(interviews.scheduled) || 0;
-                                const interviewsCompleted = Number(interviews.completed) || 0;
-
-                                let label = 'Awaiting Action';
-                                let variant = 'secondary';
-
-                                if (finalDecision === 'selected' || status === 'selected') {
-                                  label = 'Selected';
-                                  variant = 'success';
-                                } else if (finalDecision === 'rejected' || status === 'rejected') {
-                                  label = 'Rejected';
-                                  variant = 'danger';
-                                } else if (finalDecision === 'on_hold' || status === 'on_hold') {
-                                  label = 'On Hold';
-                                  variant = 'warning';
-                                } else if (workflowStage === 'awaiting_decision') {
-                                  label = 'Awaiting Decision';
-                                  variant = 'info';
-                                } else if (
-                                  workflowStage === 'interview_scheduled' ||
-                                  workflowStage === 'awaiting_interview' ||
-                                  interviewsScheduled > 0 ||
-                                  interviewsCompleted > 0 ||
-                                  status === 'shortlisted'
-                                ) {
-                                  label = 'Moved to Interview';
-                                  variant = 'info';
-                                } else if (testsCompleted > 0) {
-                                  label = 'Test Completed';
-                                  variant = 'primary';
-                                } else if (testsAssigned > 0) {
-                                  label = 'Test Assigned';
-                                  variant = 'secondary';
-                                } else if (status === 'approved') {
-                                  label = 'Approved';
-                                  variant = 'success';
-                                } else if (status === 'pending') {
-                                  label = 'Pending Review';
-                                  variant = 'light';
-                                }
-
-                                return (
-                                  <Badge bg={variant} className="text-uppercase" style={{ letterSpacing: '0.03em' }}>
-                                    {label}
-                                  </Badge>
-                                );
-                              })()}
-                            </td>
-                            <td className="text-end">
-                              {(() => {
-                                const status = (candidate.status || '').toLowerCase();
-                                const finalDecision = candidate.workflow?.finalDecision?.decision || candidate.finalDecision?.decision || null;
-                                const workflowStage = candidate.workflow?.stage;
-                                const tests = candidate.workflow?.tests || {};
-                                const testsCompleted = Number(tests.completed) || 0;
-                                const testsAssigned = Number(tests.assigned) || 0;
-                                const hasCompletedTests = testsCompleted > 0;
-                                const isFinalised = ['selected', 'rejected'].includes(status) || ['selected', 'rejected'].includes((finalDecision || '').toLowerCase());
-                                const movedToInterview =
-                                  workflowStage === 'interview_scheduled' ||
-                                  workflowStage === 'awaiting_interview' ||
-                                  workflowStage === 'awaiting_decision' ||
-                                  status === 'shortlisted';
-
-                                const decisionLabel = () => {
-                                  if (['selected', 'rejected'].includes((finalDecision || '').toLowerCase())) {
-                                    return finalDecision === 'selected' ? 'Candidate Selected' : 'Candidate Rejected';
-                                  }
-                                  if (['selected', 'rejected'].includes(status)) {
-                                    return status === 'selected' ? 'Candidate Selected' : 'Candidate Rejected';
-                                  }
-                                  if (movedToInterview) {
-                                    return 'Moved to Interview';
-                                  }
-                                  if (hasCompletedTests) {
-                                    return 'Test Completed';
-                                  }
-                                  if (testsAssigned > 0) {
-                                    return 'Test Assigned';
-                                  }
-                                  return 'Awaiting Assignment';
-                                };
-
-                                const decisionVariant = () => {
-                                  if ((finalDecision || '').toLowerCase() === 'selected' || status === 'selected') return 'success';
-                                  if ((finalDecision || '').toLowerCase() === 'rejected' || status === 'rejected') return 'danger';
-                                  if (movedToInterview) return 'info';
-                                  if (hasCompletedTests || testsAssigned > 0) return 'secondary';
-                                  return 'outline-secondary';
-                                };
-
-                                const isNonTeaching = candidate.form?.formCategory === 'non_teaching';
-                                const primaryLabel = hasCompletedTests ? 'Conduct Test Again' : (testsAssigned > 0 ? 'Conduct Test Again' : 'Build Assessment');
-                                const primaryVariant = hasCompletedTests || testsAssigned > 0 ? 'warning' : 'primary';
-                                const showPrimaryAction = !movedToInterview;
-                                const canPromoteDirectly = !isFinalised && !movedToInterview;
-
-                                return (
-                                  <div className="d-flex flex-column flex-sm-row gap-2 justify-content-end">
-                                    <Button size="sm" variant={decisionVariant()} disabled className="text-nowrap">
-                                      {decisionLabel()}
-                                    </Button>
-                                    {!isFinalised && (
-                                      <>
-                                        {showPrimaryAction && (
-                                          <>
-                                            {isNonTeaching ? (
-                                              <Button
-                                                size="sm"
-                                                variant="info"
-                                                onClick={() => openTypingTestModal(candidate)}
-                                                className="text-nowrap"
-                                                style={{
-                                                  background: 'linear-gradient(135deg, #17a2b8 0%, #138496 100%)',
-                                                  border: 'none'
-                                                }}
-                                              >
-                                                ⌨️ Create Typing Test
-                                              </Button>
-                                            ) : (
-                                              <Button
-                                                size="sm"
-                                                variant={primaryVariant}
-                                                onClick={() => openBuilderModal(candidate)}
-                                                className="text-nowrap"
-                                              >
-                                                {primaryLabel}
-                                              </Button>
-                                            )}
-                                          </>
-                                        )}
-                                        {canPromoteDirectly && (
-                                          <Button
-                                            size="sm"
-                                            variant="success"
-                                            onClick={() => openPromoteModal(candidate)}
-                                            className="text-nowrap"
-                                          >
-                                            Promote to Interview
-                                          </Button>
-                                        )}
-                                      </>
-                                    )}
-                                    <Button
-                                      size="sm"
-                                      variant="outline-primary"
-                                      onClick={() => openProfileModal(candidate._id)}
-                                      className="text-nowrap"
-                                    >
-                                      <FaEye className="me-1" />
-                                      View Test Results
-                                    </Button>
-                                  </div>
-                                );
-                              })()}
-                            </td>
+                    <div style={{ width: '100%' }}>
+                      <Table striped hover size="sm" style={{ marginBottom: 0, width: '100%', verticalAlign: 'middle' }}>
+                        <thead style={{ background: '#f8f9fa' }}>
+                          <tr>
+                            <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '22%' }}>Name</th>
+                            <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '13%' }}>Candidate ID</th>
+                            <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '22%' }}>Position</th>
+                            <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '13%' }}>Department</th>
+                            <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '16%' }}>Stage</th>
+                            <th className="text-end" style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '14%' }}>Actions</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </Table>
+                        </thead>
+                        <tbody>
+                          {paginatedAssessmentCandidates.map(candidate => (
+                            <tr key={candidate._id}>
+                              <td style={{ fontWeight: 600 }}>{candidate.user?.name}</td>
+                              <td>{candidate.candidateNumber || '—'}</td>
+                              <td>{candidate.form?.position}</td>
+                              <td>{candidate.form?.department}</td>
+                              <td>
+                                {(() => {
+                                  const status = (candidate.status || '').toLowerCase();
+                                  const workflowStage = candidate.workflow?.stage;
+                                  const finalDecision = candidate.workflow?.finalDecision?.decision || candidate.finalDecision?.decision || null;
+                                  const tests = candidate.workflow?.tests || {};
+                                  const testsCompleted = Number(tests.completed) || 0;
+                                  const testsAssigned = Number(tests.assigned) || 0;
+                                  const interviews = candidate.workflow?.interviews || {};
+                                  const interviewsScheduled = Number(interviews.scheduled) || 0;
+                                  const interviewsCompleted = Number(interviews.completed) || 0;
+
+                                  let label = 'Awaiting Action';
+                                  let variant = 'secondary';
+
+                                  if (finalDecision === 'selected' || status === 'selected') {
+                                    label = 'Selected';
+                                    variant = 'success';
+                                  } else if (finalDecision === 'rejected' || status === 'rejected') {
+                                    label = 'Rejected';
+                                    variant = 'danger';
+                                  } else if (finalDecision === 'on_hold' || status === 'on_hold') {
+                                    label = 'On Hold';
+                                    variant = 'warning';
+                                  } else if (workflowStage === 'awaiting_decision') {
+                                    label = 'Awaiting Decision';
+                                    variant = 'info';
+                                  } else if (
+                                    workflowStage === 'interview_scheduled' ||
+                                    workflowStage === 'awaiting_interview' ||
+                                    interviewsScheduled > 0 ||
+                                    interviewsCompleted > 0 ||
+                                    status === 'shortlisted'
+                                  ) {
+                                    label = 'Moved to Interview';
+                                    variant = 'info';
+                                  } else if (testsCompleted > 0) {
+                                    label = 'Test Completed';
+                                    variant = 'primary';
+                                  } else if (testsAssigned > 0) {
+                                    label = 'Test Assigned';
+                                    variant = 'secondary';
+                                  } else if (status === 'approved') {
+                                    label = 'Approved';
+                                    variant = 'success';
+                                  } else if (status === 'pending') {
+                                    label = 'Pending Review';
+                                    variant = 'light';
+                                  }
+
+                                  return (
+                                    <Badge bg={variant} className="text-uppercase" style={{ letterSpacing: '0.03em', fontSize: '0.72rem' }}>
+                                      {label}
+                                    </Badge>
+                                  );
+                                })()}
+                              </td>
+                              <td className="text-end">
+                                {(() => {
+                                  const status = (candidate.status || '').toLowerCase();
+                                  const finalDecision = candidate.workflow?.finalDecision?.decision || candidate.finalDecision?.decision || null;
+                                  const workflowStage = candidate.workflow?.stage;
+                                  const tests = candidate.workflow?.tests || {};
+                                  const testsCompleted = Number(tests.completed) || 0;
+                                  const testsAssigned = Number(tests.assigned) || 0;
+                                  const hasCompletedTests = testsCompleted > 0;
+                                  const isFinalised = ['selected', 'rejected'].includes(status) || ['selected', 'rejected'].includes((finalDecision || '').toLowerCase());
+                                  const movedToInterview =
+                                    workflowStage === 'interview_scheduled' ||
+                                    workflowStage === 'awaiting_interview' ||
+                                    workflowStage === 'awaiting_decision' ||
+                                    status === 'shortlisted';
+
+                                  const decisionLabel = () => {
+                                    if (['selected', 'rejected'].includes((finalDecision || '').toLowerCase())) {
+                                      return finalDecision === 'selected' ? 'Selected' : 'Rejected';
+                                    }
+                                    if (['selected', 'rejected'].includes(status)) {
+                                      return status === 'selected' ? 'Selected' : 'Rejected';
+                                    }
+                                    if (movedToInterview) {
+                                      return 'In Interview';
+                                    }
+                                    if (hasCompletedTests) {
+                                      return 'Test Completed';
+                                    }
+                                    if (testsAssigned > 0) {
+                                      return 'Assigned';
+                                    }
+                                    return 'Pending';
+                                  };
+
+                                  const decisionVariant = () => {
+                                    if ((finalDecision || '').toLowerCase() === 'selected' || status === 'selected') return 'success';
+                                    if ((finalDecision || '').toLowerCase() === 'rejected' || status === 'rejected') return 'danger';
+                                    if (movedToInterview) return 'info';
+                                    if (hasCompletedTests || testsAssigned > 0) return 'secondary';
+                                    return 'outline-secondary';
+                                  };
+
+                                  const isNonTeaching = candidate.form?.formCategory === 'non_teaching';
+                                  const primaryLabel = hasCompletedTests ? 'Conduct Test Again' : (testsAssigned > 0 ? 'Conduct Test Again' : 'Build Assessment');
+                                  const primaryVariant = hasCompletedTests || testsAssigned > 0 ? 'warning' : 'primary';
+                                  const showPrimaryAction = !movedToInterview;
+                                  const canPromoteDirectly = !isFinalised && !movedToInterview;
+
+                                  return (
+                                    <div className="d-flex gap-1 justify-content-end align-items-center">
+                                      {isFinalised || movedToInterview ? (
+                                        <Badge bg={decisionVariant()} style={{ fontSize: '0.72rem', padding: '0.35rem 0.5rem', fontWeight: 600 }}>
+                                          {decisionLabel()}
+                                        </Badge>
+                                      ) : (
+                                        <>
+                                          {showPrimaryAction && (
+                                            <>
+                                              {isNonTeaching ? (
+                                                <Button
+                                                  size="sm"
+                                                  variant="info"
+                                                  title="Create Typing Test"
+                                                  onClick={() => openTypingTestModal(candidate)}
+                                                  style={{
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    width: '28px',
+                                                    height: '28px',
+                                                    padding: 0,
+                                                    borderRadius: '6px',
+                                                    background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
+                                                    border: 'none',
+                                                    color: '#fff'
+                                                  }}
+                                                >
+                                                  <FaKeyboard size={13} />
+                                                </Button>
+                                              ) : (
+                                                <Button
+                                                  size="sm"
+                                                  variant={primaryVariant}
+                                                  title={primaryLabel}
+                                                  onClick={() => openBuilderModal(candidate)}
+                                                  style={{
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    width: '28px',
+                                                    height: '28px',
+                                                    padding: 0,
+                                                    borderRadius: '6px'
+                                                  }}
+                                                >
+                                                  <FaFileAlt size={13} />
+                                                </Button>
+                                              )}
+                                            </>
+                                          )}
+                                          {canPromoteDirectly && (
+                                            <Button
+                                              size="sm"
+                                              variant="success"
+                                              title="Promote to Interview"
+                                              onClick={() => openPromoteModal(candidate)}
+                                              style={{
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: '28px',
+                                                height: '28px',
+                                                padding: 0,
+                                                borderRadius: '6px'
+                                              }}
+                                            >
+                                              <FaUserCheck size={13} />
+                                            </Button>
+                                          )}
+                                        </>
+                                      )}
+                                      <Button
+                                        size="sm"
+                                        variant="outline-primary"
+                                        title="View Test Results"
+                                        onClick={() => openProfileModal(candidate._id)}
+                                        style={{
+                                          display: 'inline-flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                          width: '28px',
+                                          height: '28px',
+                                          padding: 0,
+                                          borderRadius: '6px'
+                                        }}
+                                      >
+                                        <FaEye size={13} />
+                                      </Button>
+                                    </div>
+                                  );
+                                })()}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </div>
                   )}
                 </Card.Body>
                 {totalPages > 1 && (
@@ -2317,28 +2363,34 @@ const TestsManagement = () => {
         </Tab>
 
         <Tab eventKey="topics" title="Topic Library">
-          <Row className="mb-3">
+          <Row className="mb-3 align-items-center">
             <Col className="d-flex justify-content-between align-items-center">
               <div>
-                <h5 className="mb-1" style={{ fontWeight: '600', color: '#212529' }}>Reusable Question Topics</h5>
-                <span className="text-muted" style={{ fontSize: '0.9rem' }}>Organise MCQ templates by department & stream</span>
+                <h5 className="mb-1" style={{ fontWeight: '700', color: '#991b1b', letterSpacing: '-0.01em' }}>Reusable Question Topics</h5>
+                <span className="text-muted" style={{ fontSize: '0.85rem' }}>Organise MCQ templates by department & stream</span>
               </div>
               <Button 
                 onClick={() => openTopicModal()}
                 style={{ 
                   borderRadius: '8px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #b91c1c 0%, #ea580c 100%)',
                   border: 'none',
-                  fontWeight: '500',
-                  transition: 'all 0.3s'
+                  fontWeight: '600',
+                  fontSize: '0.875rem',
+                  padding: '0.5rem 1.25rem',
+                  color: '#ffffff',
+                  boxShadow: '0 2px 6px rgba(185, 28, 28, 0.25)',
+                  transition: 'all 0.2s ease',
+                  display: 'inline-flex',
+                  alignItems: 'center'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 6px 12px rgba(102, 126, 234, 0.4)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(185, 28, 28, 0.35)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(185, 28, 28, 0.25)';
                 }}
               >
                 <FaPlus className="me-2" />Add Topic
@@ -2350,108 +2402,161 @@ const TestsManagement = () => {
               const items = topicsByCategory[category.value] || [];
               return (
                 <Col key={category.value} md={6}>
-                  <Card className="h-100 border-0 shadow-sm" style={{ borderRadius: '12px', overflow: 'hidden' }}>
+                  <Card 
+                    className="h-100 shadow-sm" 
+                    style={{ 
+                      borderRadius: '12px', 
+                      overflow: 'hidden', 
+                      border: '1px solid #fed7aa',
+                      boxShadow: '0 2px 10px rgba(185, 28, 28, 0.05)',
+                      background: '#ffffff'
+                    }}
+                  >
                     <Card.Header 
                       className="d-flex justify-content-between align-items-center"
                       style={{ 
                         background: category.value === 'teaching' 
-                          ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-                          : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                        color: 'white',
+                          ? 'linear-gradient(135deg, #991b1b 0%, #b91c1c 100%)'
+                          : 'linear-gradient(135deg, #c2410c 0%, #ea580c 100%)',
+                        color: '#ffffff',
                         borderBottom: 'none',
-                        padding: '1.25rem'
+                        padding: '0.85rem 1.25rem'
                       }}
                     >
                       <div className="d-flex align-items-center gap-2">
-                        <FaLayerGroup style={{ fontSize: '1.2rem' }} />
-                        <span style={{ fontWeight: '600' }}>{category.label}</span>
+                        <FaLayerGroup style={{ fontSize: '1.1rem', color: '#ffffff' }} />
+                        <span style={{ fontWeight: '700', fontSize: '0.98rem', letterSpacing: '0.02em' }}>{category.label}</span>
                       </div>
                       <Badge 
-                        bg="light" 
-                        text="dark"
                         style={{ 
-                          fontSize: '0.9rem', 
-                          padding: '0.5rem 1rem',
-                          fontWeight: '600',
-                          borderRadius: '20px'
+                          fontSize: '0.85rem', 
+                          padding: '0.35rem 0.85rem',
+                          fontWeight: '700',
+                          borderRadius: '20px',
+                          background: '#ffffff',
+                          color: category.value === 'teaching' ? '#991b1b' : '#c2410c',
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                         }}
                       >
                         {items.length}
                       </Badge>
                     </Card.Header>
-                    <Card.Body style={{ maxHeight: '420px', overflowY: 'auto', padding: '1.25rem', background: '#ffffff' }}>
+                    <Card.Body 
+                      style={{ 
+                        minHeight: '520px', 
+                        maxHeight: '560px', 
+                        overflowY: 'auto', 
+                        padding: '1rem', 
+                        background: '#fffdfa' 
+                      }}
+                    >
                       {topicsLoading ? (
                         <div className="text-center py-4">
-                          <Spinner animation="border" size="sm" />
+                          <Spinner animation="border" size="sm" style={{ color: '#b91c1c' }} />
                         </div>
                       ) : items.length === 0 ? (
-                        <Alert variant="light" className="mb-0">No topics created yet.</Alert>
+                        <Alert variant="light" className="mb-0" style={{ border: '1px dashed #fed7aa', background: '#ffffff', color: '#78350f' }}>No topics created yet.</Alert>
                       ) : (
                         items.map(topic => (
                           <Card 
                             key={topic._id} 
-                            className="mb-3 border-0 shadow-sm"
+                            className="mb-2 shadow-sm"
                             style={{ 
-                              borderRadius: '10px',
-                              transition: 'transform 0.2s, box-shadow 0.2s',
-                              border: '1px solid #e9ecef'
+                              borderRadius: '8px',
+                              transition: 'all 0.2s ease',
+                              border: '1px solid #fed7aa',
+                              background: '#ffffff'
                             }}
                             onMouseEnter={(e) => {
-                              e.currentTarget.style.transform = 'translateY(-2px)';
-                              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                              e.currentTarget.style.transform = 'translateY(-1px)';
+                              e.currentTarget.style.borderColor = '#f97316';
+                              e.currentTarget.style.boxShadow = '0 4px 10px rgba(185, 28, 28, 0.08)';
                             }}
                             onMouseLeave={(e) => {
                               e.currentTarget.style.transform = 'translateY(0)';
-                              e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+                              e.currentTarget.style.borderColor = '#fed7aa';
+                              e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
                             }}
                           >
-                            <Card.Body style={{ padding: '1rem' }}>
-                              <div className="d-flex justify-content-between align-items-start">
-                                <div style={{ flex: 1 }}>
-                                  <h6 className="mb-1" style={{ fontWeight: '600', color: '#212529' }}>{topic.name}</h6>
-                                  {topic.description && (
-                                    <p className="text-muted mb-2" style={{ fontSize: '0.9rem', lineHeight: '1.5' }}>{topic.description}</p>
-                                  )}
-                                  <div className="d-flex gap-2 flex-wrap">
-                                    <Badge 
-                                      bg="info" 
-                                      className="me-2"
+                            <Card.Body style={{ padding: '0.75rem 0.9rem' }}>
+                              <div className="d-flex justify-content-between align-items-center">
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                  <div className="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                                    <span style={{ fontWeight: '700', color: '#1f2937', fontSize: '0.92rem' }}>
+                                      {topic.name}
+                                    </span>
+                                    <span 
                                       style={{ 
-                                        fontSize: '0.8rem', 
-                                        padding: '0.4rem 0.8rem',
-                                        borderRadius: '6px',
-                                        fontWeight: '500'
-                                      }}
-                                    >
-                                      <FaListUl className="me-1" />{topic.questionCount || 0} questions
-                                    </Badge>
-                                    <Badge 
-                                      bg={topic.isActive ? 'success' : 'secondary'}
-                                      style={{ 
-                                        fontSize: '0.8rem', 
-                                        padding: '0.4rem 0.8rem',
-                                        borderRadius: '6px',
-                                        fontWeight: '500'
+                                        fontSize: '0.72rem', 
+                                        padding: '0.15rem 0.5rem',
+                                        borderRadius: '4px',
+                                        fontWeight: '600',
+                                        background: topic.isActive ? '#ecfdf5' : '#f3f4f6',
+                                        color: topic.isActive ? '#047857' : '#6b7280',
+                                        border: topic.isActive ? '1px solid #a7f3d0' : '1px solid #e5e7eb'
                                       }}
                                     >
                                       {topic.isActive ? 'Active' : 'Inactive'}
-                                    </Badge>
+                                    </span>
+                                  </div>
+                                  {topic.description && (
+                                    <p className="text-muted mb-1 text-truncate" style={{ fontSize: '0.8rem', lineHeight: '1.4' }}>
+                                      {topic.description}
+                                    </p>
+                                  )}
+                                  <div className="d-flex align-items-center gap-2">
+                                    <span 
+                                      style={{ 
+                                        fontSize: '0.75rem', 
+                                        padding: '0.2rem 0.55rem',
+                                        borderRadius: '6px',
+                                        fontWeight: '600',
+                                        background: '#fff7ed',
+                                        color: '#c2410c',
+                                        border: '1px solid #fed7aa',
+                                        display: 'inline-flex',
+                                        alignItems: 'center'
+                                      }}
+                                    >
+                                      <FaListUl className="me-1" style={{ fontSize: '0.7rem' }} />
+                                      {topic.questionCount || 0} questions
+                                    </span>
                                   </div>
                                 </div>
-                                <div className="d-flex flex-column gap-2 ms-3">
+                                <div className="d-flex align-items-center gap-1 ms-3 flex-shrink-0">
                                   <Button 
-                                    variant="outline-secondary" 
+                                    variant="light" 
                                     size="sm" 
                                     onClick={() => openTopicModal(topic)}
-                                    style={{ borderRadius: '6px', fontWeight: '500' }}
+                                    style={{ 
+                                      borderRadius: '6px', 
+                                      fontWeight: '600', 
+                                      fontSize: '0.75rem',
+                                      padding: '0.25rem 0.6rem',
+                                      background: '#ffffff',
+                                      border: '1px solid #fed7aa',
+                                      color: '#4b5563',
+                                      transition: 'all 0.15s'
+                                    }}
+                                    title="Edit Topic"
                                   >
-                                    <FaEdit className="me-1" />Edit
+                                    <FaEdit className="me-1" style={{ color: '#b91c1c' }} />Edit
                                   </Button>
                                   <Button
-                                    variant={topic.isActive ? 'outline-danger' : 'outline-success'}
+                                    variant="light"
                                     size="sm"
                                     onClick={() => handleToggleTopicActive(topic)}
-                                    style={{ borderRadius: '6px', fontWeight: '500' }}
+                                    style={{ 
+                                      borderRadius: '6px', 
+                                      fontWeight: '600', 
+                                      fontSize: '0.75rem',
+                                      padding: '0.25rem 0.6rem',
+                                      background: topic.isActive ? '#fff5f5' : '#f0fdf4',
+                                      border: topic.isActive ? '1px solid #fecaca' : '1px solid #bbf7d0',
+                                      color: topic.isActive ? '#dc2626' : '#16a34a',
+                                      transition: 'all 0.15s'
+                                    }}
+                                    title={topic.isActive ? 'Deactivate Topic' : 'Activate Topic'}
                                   >
                                     {topic.isActive ? 'Deactivate' : 'Activate'}
                                   </Button>
@@ -2470,163 +2575,205 @@ const TestsManagement = () => {
         </Tab>
 
         <Tab eventKey="questionBank" title="Question Bank">
-          <Row className="mb-3 g-3 align-items-center">
-            <Col md={3} sm={6}>
-              <Form.Select
-                value={questionFilters.campus}
-                onChange={(event) => {
-                  setQuestionFilters(prev => ({ 
-                    ...prev, 
-                    campus: event.target.value,
-                    department: 'all', // Reset department when campus changes
-                    set: 'all' // Reset set when campus changes
-                  }));
-                }}
-              >
-                <option value="all">All Campuses</option>
-                {filterOptions.campuses.map(campus => (
-                  <option key={campus} value={campus}>
-                    {campus}
-                  </option>
-                ))}
-              </Form.Select>
-            </Col>
-            <Col md={3} sm={6}>
-              <Form.Select
-                value={questionFilters.department}
-                onChange={(event) => {
-                  setQuestionFilters(prev => ({ 
-                    ...prev, 
-                    department: event.target.value,
-                    set: 'all' // Reset set when department changes
-                  }));
-                }}
-                disabled={questionFilters.campus === 'all'}
-              >
-                <option value="all">All Departments</option>
-                {filterOptions.departments.map(dept => (
-                  <option key={dept} value={dept}>
-                    {dept}
-                  </option>
-                ))}
-              </Form.Select>
-            </Col>
-            <Col md={3} sm={6}>
-              <Form.Select
-                value={questionFilters.set}
-                onChange={(event) => setQuestionFilters(prev => ({ ...prev, set: event.target.value }))}
-                disabled={questionFilters.campus === 'all' && questionFilters.department === 'all'}
-              >
-                <option value="all">All Sets</option>
-                {filterOptions.sets.map(set => (
-                  <option key={set} value={set}>
-                    {set}
-                  </option>
-                ))}
-              </Form.Select>
-            </Col>
-            <Col md={3} sm={6}>
-              <Form.Select
-                value={questionFilters.topicId}
-                onChange={(event) => setQuestionFilters(prev => ({ ...prev, topicId: event.target.value }))}
-              >
-                <option value="all">All Topics</option>
-                {filterOptions.topics.map(topic => (
-                  <option key={topic._id} value={topic._id}>
-                    {topic.name} ({topic.category === 'teaching' ? 'Teaching' : 'Non-Teaching'})
-                  </option>
-                ))}
-              </Form.Select>
-            </Col>
-            <Col md={6} sm={12}>
-              <InputGroup>
-                <Form.Control
-                  placeholder="Search question text..."
-                  value={questionFilters.search}
-                  onChange={(event) => setQuestionFilters(prev => ({ ...prev, search: event.target.value }))}
-                />
-                <Button variant="outline-secondary" onClick={fetchQuestions}>
-                  <FaSearch />
+          <Card style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', padding: '1rem', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(185, 28, 28, 0.04)' }}>
+            {/* Filter Dropdowns Row */}
+            <Row className="mb-3 g-3">
+              <Col md={3} sm={6}>
+                <Form.Group>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                    Campus
+                  </Form.Label>
+                  <Form.Select
+                    size="sm"
+                    value={questionFilters.campus}
+                    onChange={(event) => {
+                      setQuestionFilters(prev => ({ 
+                        ...prev, 
+                        campus: event.target.value,
+                        department: 'all', // Reset department when campus changes
+                        set: 'all' // Reset set when campus changes
+                      }));
+                    }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                  >
+                    <option value="all">All Campuses</option>
+                    {filterOptions.campuses.map(campus => (
+                      <option key={campus} value={campus}>
+                        {campus}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={3} sm={6}>
+                <Form.Group>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                    Department
+                  </Form.Label>
+                  <Form.Select
+                    size="sm"
+                    value={questionFilters.department}
+                    onChange={(event) => {
+                      setQuestionFilters(prev => ({ 
+                        ...prev, 
+                        department: event.target.value,
+                        set: 'all' // Reset set when department changes
+                      }));
+                    }}
+                    disabled={questionFilters.campus === 'all'}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                  >
+                    <option value="all">All Departments</option>
+                    {filterOptions.departments.map(dept => (
+                      <option key={dept} value={dept}>
+                        {dept}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={3} sm={6}>
+                <Form.Group>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                    Set
+                  </Form.Label>
+                  <Form.Select
+                    size="sm"
+                    value={questionFilters.set}
+                    onChange={(event) => setQuestionFilters(prev => ({ ...prev, set: event.target.value }))}
+                    disabled={questionFilters.campus === 'all' && questionFilters.department === 'all'}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                  >
+                    <option value="all">All Sets</option>
+                    {filterOptions.sets.map(set => (
+                      <option key={set} value={set}>
+                        {set}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={3} sm={6}>
+                <Form.Group>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                    Topic
+                  </Form.Label>
+                  <Form.Select
+                    size="sm"
+                    value={questionFilters.topicId}
+                    onChange={(event) => setQuestionFilters(prev => ({ ...prev, topicId: event.target.value }))}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                  >
+                    <option value="all">All Topics</option>
+                    {filterOptions.topics.map(topic => (
+                      <option key={topic._id} value={topic._id}>
+                        {topic.name} ({topic.category === 'teaching' ? 'Teaching' : 'Non-Teaching'})
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
+
+            {/* Search and Action Buttons Row */}
+            <Row className="g-3 align-items-center">
+              <Col lg={5} md={12}>
+                <InputGroup size="sm">
+                  <Form.Control
+                    placeholder="Search question text..."
+                    value={questionFilters.search}
+                    onChange={(event) => setQuestionFilters(prev => ({ ...prev, search: event.target.value }))}
+                    style={{ border: '1px solid #fed7aa', borderRight: 'none' }}
+                  />
+                  <Button
+                    variant="primary"
+                    onClick={fetchQuestions}
+                    style={{
+                      background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                      border: 'none',
+                      padding: '0 1rem'
+                    }}
+                  >
+                    <FaSearch />
+                  </Button>
+                </InputGroup>
+              </Col>
+              <Col lg={7} md={12} className="d-flex justify-content-lg-end align-items-center gap-2 flex-wrap">
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  onClick={() => {
+                    setBulkUploadState({ 
+                      file: null,
+                      campus: '',
+                      department: '',
+                      topicOption: 'none',
+                      topicId: '',
+                      newTopicName: '',
+                      category: 'teaching',
+                      set: ''
+                    });
+                    setBulkModalVisible(true);
+                  }}
+                  style={{ fontWeight: '600', borderColor: '#fed7aa', color: '#991b1b', background: '#fff7ed' }}
+                >
+                  <FaUpload className="me-2" />Bulk Upload (Excel)
                 </Button>
-              </InputGroup>
-            </Col>
-            <Col md={6} sm={12} className="d-flex justify-content-md-end align-items-center gap-2 flex-wrap">
-              <Button
-                variant="outline-primary"
-                size="sm"
-                onClick={() => {
-                  setBulkUploadState({ 
-                    file: null,
-                    campus: '',
-                    department: '',
-                    topicOption: 'none',
-                    topicId: '',
-                    newTopicName: '',
-                    category: 'teaching',
-                    set: ''
-                  });
-                  setBulkModalVisible(true);
-                }}
-              >
-                <FaUpload className="me-2" />Bulk Upload (Excel)
-              </Button>
-              <Button
-                variant="outline-success"
-                size="sm"
-                onClick={() => {
-                  setBulkTextUploadState({
-                    file: null,
-                    campus: '',
-                    department: '',
-                    topicOption: 'none',
-                    topicId: '',
-                    newTopicName: '',
-                    category: 'teaching',
-                    set: ''
-                  });
-                  setBulkTextModalVisible(true);
-                }}
-              >
-                <FaUpload className="me-2" />Bulk Upload (Word)
-              </Button>
-              <Button 
-                variant="outline-secondary" 
-                size="sm" 
-                onClick={fetchQuestions}
-                style={{ 
-                  borderRadius: '6px',
-                  fontWeight: '500',
-                  transition: 'all 0.3s'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                <FaSync className="me-2" />Refresh
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => {
-                  setQuestionForm(defaultQuestionForm);
-                  setQuestionModalVisible(true);
-                }}
-              >
-                <FaPlus className="me-2" />Add MCQ
-              </Button>
-            </Col>
-          </Row>
+                <Button
+                  variant="outline-success"
+                  size="sm"
+                  onClick={() => {
+                    setBulkTextUploadState({
+                      file: null,
+                      campus: '',
+                      department: '',
+                      topicOption: 'none',
+                      topicId: '',
+                      newTopicName: '',
+                      category: 'teaching',
+                      set: ''
+                    });
+                    setBulkTextModalVisible(true);
+                  }}
+                >
+                  <FaUpload className="me-2" />Bulk Upload (Word)
+                </Button>
+                <Button 
+                  variant="outline-secondary" 
+                  size="sm" 
+                  onClick={fetchQuestions}
+                  style={{ 
+                    borderRadius: '6px',
+                    fontWeight: '500',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <FaSync className="me-2" />Refresh
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
+                    setQuestionForm(defaultQuestionForm);
+                    setQuestionModalVisible(true);
+                  }}
+                  style={{
+                    background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                    border: 'none',
+                    fontWeight: '600'
+                  }}
+                >
+                  <FaPlus className="me-2" />Add MCQ
+                </Button>
+              </Col>
+            </Row>
+          </Card>
 
           <Row className="mb-3">
             <Col>
               <div className="d-flex justify-content-between align-items-center" style={{ 
                 padding: '1rem',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
                 borderRadius: '12px',
                 color: 'white',
                 position: 'sticky',
@@ -2691,13 +2838,17 @@ const TestsManagement = () => {
                   </Alert>
                 ) : (
                   <>
-                    <div className="mb-3" style={{ padding: '0.75rem', background: '#f8f9fa', borderRadius: '8px', border: '1px solid #dee2e6' }}>
+                    <div className="mb-3 d-flex align-items-center justify-content-between" style={{ padding: '0.6rem 1rem', background: '#fff7ed', borderRadius: '8px', border: '1px solid #fed7aa' }}>
                       <Form.Check
                         type="checkbox"
+                        id="select-all-questions-check"
                         checked={questions.length > 0 && selectedQuestions.length === questions.length}
                         onChange={handleSelectAllQuestions}
-                        label={`Select All (${selectedQuestions.length} selected)`}
-                        style={{ fontWeight: '500' }}
+                        label={
+                          <span style={{ fontWeight: '600', color: '#991b1b', fontSize: '0.86rem' }}>
+                            Select All ({selectedQuestions.length} selected)
+                          </span>
+                        }
                       />
                     </div>
                     <Row className="g-3">
@@ -2718,20 +2869,23 @@ const TestsManagement = () => {
                             <Card 
                               style={{ 
                                 height: '100%',
-                                border: isSelected ? '2px solid #0d6efd' : '1px solid #dee2e6',
-                                borderRadius: '12px',
-                                transition: 'all 0.3s ease',
-                                boxShadow: isSelected ? '0 4px 12px rgba(13, 110, 253, 0.2)' : '0 2px 4px rgba(0,0,0,0.1)'
+                                border: isSelected ? '2px solid #b91c1c' : '1px solid #fed7aa',
+                                borderRadius: '10px',
+                                background: '#ffffff',
+                                transition: 'all 0.2s ease',
+                                boxShadow: isSelected ? '0 4px 12px rgba(185, 28, 28, 0.15)' : '0 2px 6px rgba(185, 28, 28, 0.04)'
                               }}
                               onMouseEnter={(e) => {
                                 if (!isSelected) {
-                                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(185, 28, 28, 0.1)';
+                                  e.currentTarget.style.borderColor = '#f97316';
                                   e.currentTarget.style.transform = 'translateY(-2px)';
                                 }
                               }}
                               onMouseLeave={(e) => {
                                 if (!isSelected) {
-                                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(185, 28, 28, 0.04)';
+                                  e.currentTarget.style.borderColor = '#fed7aa';
                                   e.currentTarget.style.transform = 'translateY(0)';
                                 }
                               }}
@@ -2746,14 +2900,29 @@ const TestsManagement = () => {
                                     style={{ marginTop: '4px' }}
                                   />
                                   <Button 
-                                    variant="outline-primary" 
+                                    variant="light" 
                                     size="sm" 
                                     onClick={() => handleEditQuestion(question)}
                                     title="Edit Question"
                                     style={{ 
-                                      borderRadius: '8px',
-                                      padding: '0.375rem 0.75rem',
-                                      fontWeight: '500'
+                                      borderRadius: '6px',
+                                      padding: '0.25rem 0.65rem',
+                                      fontWeight: '600',
+                                      fontSize: '0.76rem',
+                                      background: '#ffffff',
+                                      border: '1px solid #fed7aa',
+                                      color: '#991b1b',
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      transition: 'all 0.15s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      e.currentTarget.style.background = '#fff7ed';
+                                      e.currentTarget.style.borderColor = '#f97316';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.currentTarget.style.background = '#ffffff';
+                                      e.currentTarget.style.borderColor = '#fed7aa';
                                     }}
                                   >
                                     <FaEdit className="me-1" />
@@ -2763,9 +2932,9 @@ const TestsManagement = () => {
                                 <div style={{ flex: 1, marginBottom: '1rem' }}>
                                   <div style={{ 
                                     whiteSpace: 'pre-wrap', 
-                                    fontSize: '0.95rem',
-                                    fontWeight: '500',
-                                    color: '#212529',
+                                    fontSize: '0.9rem',
+                                    fontWeight: '600',
+                                    color: '#1f2937',
                                     marginBottom: '0.75rem',
                                     lineHeight: '1.5'
                                   }}>
@@ -2775,56 +2944,83 @@ const TestsManagement = () => {
                                     marginTop: '0.5rem',
                                     display: 'flex',
                                     flexWrap: 'wrap',
-                                    gap: '0.5rem'
+                                    gap: '0.45rem'
                                   }}>
                                     {question.options?.map((option, index) => (
                                       <div 
                                         key={index}
                                         style={{ 
-                                          padding: '0.5rem 0.75rem',
-                                          background: '#f8f9fa',
+                                          padding: '0.35rem 0.65rem',
+                                          background: '#fffdfa',
                                           borderRadius: '6px',
-                                          fontSize: '0.9rem',
-                                          border: '1px solid #e9ecef',
+                                          fontSize: '0.82rem',
+                                          border: '1px solid #fed7aa',
                                           whiteSpace: 'nowrap',
-                                          flex: '0 1 auto'
+                                          flex: '0 1 auto',
+                                          display: 'inline-flex',
+                                          alignItems: 'center',
+                                          gap: '0.35rem'
                                         }}
                                       >
-                                        <strong style={{ color: '#495057' }}>
+                                        <span style={{ 
+                                          fontWeight: '700', 
+                                          color: '#991b1b',
+                                          background: '#fff7ed',
+                                          padding: '0.1rem 0.35rem',
+                                          borderRadius: '4px',
+                                          fontSize: '0.75rem'
+                                        }}>
                                           {String.fromCharCode(65 + index)}.
-                                        </strong> {option}
+                                        </span>
+                                        <span style={{ color: '#374151', fontWeight: '500' }}>{option}</span>
                                       </div>
                                     ))}
                                   </div>
                                 </div>
                                 <div style={{ 
                                   marginTop: 'auto',
-                                  padding: '0.75rem',
-                                  background: correctAnswerIndex !== null ? '#d1e7dd' : '#e9ecef',
+                                  padding: '0.65rem 0.85rem',
+                                  background: correctAnswerIndex !== null ? '#ecfdf5' : '#f9fafb',
                                   borderRadius: '8px',
-                                  border: `1px solid ${correctAnswerIndex !== null ? '#badbcc' : '#dee2e6'}`
+                                  border: `1px solid ${correctAnswerIndex !== null ? '#a7f3d0' : '#e5e7eb'}`
                                 }}>
                                   <div style={{ 
-                                    fontSize: '0.85rem',
-                                    fontWeight: '600',
-                                    color: '#495057',
+                                    fontSize: '0.72rem',
+                                    fontWeight: '700',
+                                    color: correctAnswerIndex !== null ? '#047857' : '#6b7280',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.04em',
                                     marginBottom: '0.25rem'
                                   }}>
                                     Correct Answer:
                                   </div>
                                   {correctAnswerIndex !== null ? (
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                      <Badge bg="success" style={{ fontSize: '0.85rem', padding: '0.4rem 0.6rem' }}>
+                                      <span style={{ 
+                                        fontSize: '0.75rem', 
+                                        padding: '0.2rem 0.5rem', 
+                                        fontWeight: '700',
+                                        background: '#047857',
+                                        color: '#ffffff',
+                                        borderRadius: '4px'
+                                      }}>
                                         {correctAnswerLetter}
-                                      </Badge>
-                                      <span style={{ fontSize: '0.9rem', color: '#155724', fontWeight: '500' }}>
+                                      </span>
+                                      <span style={{ fontSize: '0.84rem', color: '#065f46', fontWeight: '600' }}>
                                         {correctAnswerText}
                                       </span>
                                     </div>
                                   ) : (
-                                    <Badge bg="secondary" style={{ fontSize: '0.85rem', padding: '0.4rem 0.6rem' }}>
+                                    <span style={{ 
+                                      fontSize: '0.75rem', 
+                                      padding: '0.2rem 0.5rem', 
+                                      fontWeight: '600',
+                                      background: '#f3f4f6',
+                                      color: '#6b7280',
+                                      borderRadius: '4px'
+                                    }}>
                                       Not Set
-                                    </Badge>
+                                    </span>
                                   )}
                                 </div>
                               </Card.Body>

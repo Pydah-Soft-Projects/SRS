@@ -79,20 +79,20 @@ self.addEventListener('push', (event) => {
   const getNotificationStyle = (type) => {
     const styles = {
       'new_application': {
-        icon: notificationData.icon || '/pydah-logo.png',
-        badge: notificationData.badge || '/pydah-logo.png',
+        icon: notificationData.icon || '/Pydah_logo_whitebg.avif',
+        badge: notificationData.badge || '/Pydah_logo_whitebg.avif',
         color: '#10b981', // Green for new applications
         vibrate: [200, 100, 200]
       },
       'test_completed': {
-        icon: notificationData.icon || '/pydah-logo.png',
-        badge: notificationData.badge || '/pydah-logo.png',
+        icon: notificationData.icon || '/Pydah_logo_whitebg.avif',
+        badge: notificationData.badge || '/Pydah_logo_whitebg.avif',
         color: '#3b82f6', // Blue for test completions
         vibrate: [100, 50, 100, 50, 100]
       },
       'default': {
-        icon: notificationData.icon || '/pydah-logo.png',
-        badge: notificationData.badge || '/pydah-logo.png',
+        icon: notificationData.icon || '/Pydah_logo_whitebg.avif',
+        badge: notificationData.badge || '/Pydah_logo_whitebg.avif',
         color: '#6366f1', // Indigo for default
         vibrate: [200, 100, 200]
       }

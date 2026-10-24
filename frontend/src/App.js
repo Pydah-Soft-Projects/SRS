@@ -118,7 +118,7 @@ const AppLayout = ({ children, showSidebar = true }) => {
             top: '12px',
             left: '12px',
             zIndex: 1100,
-            background: '#0ea5e9',
+            background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
             border: 'none',
             borderRadius: '10px',
             width: '42px',
@@ -127,7 +127,7 @@ const AppLayout = ({ children, showSidebar = true }) => {
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            boxShadow: '0 4px 12px rgba(14,165,233,0.35)',
+            boxShadow: '0 4px 12px rgba(185,28,28,0.35)',
             color: '#ffffff',
             fontSize: '1.1rem',
           }}
