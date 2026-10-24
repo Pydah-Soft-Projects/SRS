@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import api from '../../services/api';
+import api, { clearApiCache } from '../../services/api';
 import SkeletonLoader from '../SkeletonLoader';
 import ToastNotificationContainer from '../ToastNotificationContainer';
 
@@ -14,6 +14,10 @@ const Container = styled.div`
   gap: 0.75rem;
   padding: 0;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    gap: 0.85rem;
+  }
 `;
 
 // Navigation Tabs
@@ -23,6 +27,12 @@ const TabNav = styled.div`
   justify-content: space-between;
   gap: 0.75rem;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
 `;
 
 const TabGroup = styled.div`
@@ -30,13 +40,25 @@ const TabGroup = styled.div`
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    margin-bottom: -4px;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const TabButton = styled.button`
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.42rem 0.95rem;
+  padding: 0.45rem 0.95rem;
   border-radius: 8px;
   font-size: 0.84rem;
   font-weight: 600;
@@ -46,6 +68,14 @@ const TabButton = styled.button`
   background: ${({ $active }) => ($active ? '#0ea5e9' : '#ffffff')};
   color: ${({ $active }) => ($active ? '#ffffff' : '#475569')};
   box-shadow: ${({ $active }) => ($active ? '0 3px 10px rgba(14, 165, 233, 0.25)' : 'none')};
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    font-size: 0.82rem;
+    padding: 0.48rem 0.85rem;
+    min-height: 38px;
+  }
 
   &:hover {
     background: ${({ $active }) => ($active ? '#0284c7' : '#f8fafc')};
@@ -58,6 +88,21 @@ const TabButton = styled.button`
   }
 `;
 
+const TabNavActions = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    button {
+      flex: 1;
+      justify-content: center;
+      min-height: 40px;
+    }
+  }
+`;
+
 // 3-Column Layout
 const ThreeColumnLayout = styled.div`
   display: grid;
@@ -67,6 +112,7 @@ const ThreeColumnLayout = styled.div`
 
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 `;
 
@@ -88,6 +134,7 @@ const ColumnHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  flex-wrap: wrap;
 
   .col-title {
     font-size: 0.92rem;
@@ -96,6 +143,10 @@ const ColumnHeader = styled.div`
     align-items: center;
     gap: 0.45rem;
     margin: 0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.6rem 0.75rem;
   }
 `;
 
@@ -113,6 +164,51 @@ const ColumnBody = styled.div`
   &::-webkit-scrollbar-thumb {
     background: #cbd5e1;
     border-radius: 3px;
+  }
+
+  @media (max-width: 1024px) {
+    max-height: none !important;
+    overflow-y: visible !important;
+    padding: 0.85rem 0.875rem;
+  }
+`;
+
+// Responsive 2-column grid helper
+const ResponsiveTwoColGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+// Modal 3-column grid helper
+const ModalThreeColGrid = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 0.75rem;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+`;
+
+// Modal 2-column form helper
+const RoleUserModalBody = styled.div`
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 1.5rem;
+  flex: 1;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1.25rem;
   }
 `;
 
@@ -139,7 +235,7 @@ const Label = styled.label`
 
 const Input = styled.input`
   width: 100%;
-  padding: 0.42rem 0.75rem;
+  padding: 0.45rem 0.75rem;
   border: 1.5px solid #e0f2fe;
   border-radius: 8px;
   font-size: 0.84rem;
@@ -162,7 +258,7 @@ const Input = styled.input`
 
 const Select = styled.select`
   width: 100%;
-  padding: 0.42rem 0.75rem;
+  padding: 0.45rem 0.75rem;
   border: 1.5px solid #e0f2fe;
   border-radius: 8px;
   font-size: 0.84rem;
@@ -245,12 +341,19 @@ const PermissionRowCard = styled.div`
   border: 1px solid ${({ $enabled }) => ($enabled ? '#bae6fd' : '#e2e8f0')};
   background: ${({ $enabled }) => ($enabled ? '#f0f9ff' : '#ffffff')};
   border-radius: 8px;
-  padding: 0.35rem 0.65rem;
+  padding: 0.4rem 0.65rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
   transition: all 0.15s ease;
+
+  @media (max-width: 540px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.55rem 0.65rem;
+  }
 `;
 
 const PermissionRowHeader = styled.div`
@@ -287,6 +390,10 @@ const AccessSegmentedGroup = styled.div`
   padding: 2px;
   gap: 2px;
   flex-shrink: 0;
+
+  @media (max-width: 540px) {
+    width: 100%;
+  }
 `;
 
 const SegmentButton = styled.button`
@@ -303,12 +410,19 @@ const SegmentButton = styled.button`
     if ($type === 'view') return '#0284c7';
     return '#334155';
   }};
-  padding: 0.2rem 0.5rem;
+  padding: 0.22rem 0.5rem;
   border-radius: 4px;
   font-size: 0.72rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
+
+  @media (max-width: 540px) {
+    flex: 1;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.78rem;
+    text-align: center;
+  }
 
   &:hover {
     color: ${({ $active }) => ($active ? 'white' : '#0369a1')};
@@ -320,12 +434,25 @@ const BottomActionBar = styled.div`
   background: white;
   border-radius: 12px;
   border: 1px solid #e0f2fe;
-  padding: 0.45rem 1rem;
+  padding: 0.5rem 1rem;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 0.75rem;
   box-shadow: 0 2px 8px rgba(14, 165, 233, 0.05);
+
+  @media (max-width: 600px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    padding: 0.75rem;
+    gap: 0.5rem;
+
+    button {
+      width: 100%;
+      justify-content: center;
+      min-height: 42px;
+    }
+  }
 `;
 
 const PrimaryBtn = styled.button`
@@ -380,6 +507,11 @@ const TableWrapper = styled.div`
   border: 1px solid #e0f2fe;
   box-shadow: 0 4px 16px rgba(14, 165, 233, 0.06);
   overflow: hidden;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    border-radius: 12px;
+  }
 `;
 
 const TableToolbar = styled.div`
@@ -390,12 +522,42 @@ const TableToolbar = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    padding: 0.85rem 1rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+`;
+
+const TableToolbarActions = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+
+    button {
+      width: 100%;
+      justify-content: center;
+      min-height: 40px;
+    }
+  }
 `;
 
 const SearchInputWrapper = styled.div`
   position: relative;
   width: 320px;
   max-width: 100%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 
   input {
     width: 100%;
@@ -421,9 +583,39 @@ const SearchInputWrapper = styled.div`
   }
 `;
 
+const TableScrollContainer = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+`;
+
+const MobileScrollHint = styled.div`
+  display: none;
+  background: #f0f9ff;
+  color: #0369a1;
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid #e0f2fe;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  min-width: 680px;
 `;
 
 const Th = styled.th`
@@ -436,6 +628,12 @@ const Th = styled.th`
   border-bottom: 2px solid #bae6fd;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.75rem;
+  }
 `;
 
 const Td = styled.td`
@@ -444,6 +642,11 @@ const Td = styled.td`
   color: #334155;
   font-size: 0.88rem;
   vertical-align: middle;
+
+  @media (max-width: 768px) {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.82rem;
+  }
 `;
 
 const StatusPill = styled.span`
@@ -457,6 +660,7 @@ const StatusPill = styled.span`
   background: ${({ $active }) => ($active ? '#ecfdf5' : '#fee2e2')};
   color: ${({ $active }) => ($active ? '#047857' : '#b91c1c')};
   border: 1px solid ${({ $active }) => ($active ? '#a7f3d0' : '#fecaca')};
+  white-space: nowrap;
 `;
 
 const ActionBtn = styled.button`
@@ -469,6 +673,7 @@ const ActionBtn = styled.button`
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
+  white-space: nowrap;
 
   &:hover {
     background: ${({ $variant }) => ($variant === 'danger' ? '#fee2e2' : '#e0f2fe')};
@@ -477,16 +682,45 @@ const ActionBtn = styled.button`
 `;
 
 // Role Configuration Grid (Tab 3)
+const RoleConfigBanner = styled.div`
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 60%, #38bdf8 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(14, 165, 233, 0.25);
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  @media (max-width: 640px) {
+    padding: 1rem 1.25rem;
+    flex-direction: column;
+    align-items: stretch;
+
+    .banner-actions {
+      width: 100%;
+      button {
+        width: 100%;
+        justify-content: center;
+        min-height: 42px;
+      }
+    }
+  }
+`;
+
 const RolesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: 1.25rem;
 
   @media (max-width: 1100px) {
     grid-template-columns: repeat(2, 1fr);
   }
-  @media (max-width: 700px) {
+  @media (max-width: 680px) {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 `;
 
@@ -494,17 +728,39 @@ const RoleConfigCard = styled.div`
   background: white;
   border-radius: 16px;
   border: 1.5px solid #e0f2fe;
-  padding: 1.5rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.85rem;
   box-shadow: 0 4px 16px rgba(14, 165, 233, 0.05);
   transition: all 0.2s ease;
+
+  @media (max-width: 640px) {
+    padding: 1rem;
+    border-radius: 12px;
+  }
 
   &:hover {
     border-color: ${({ $color }) => $color || '#0ea5e9'};
     box-shadow: 0 8px 24px rgba(14, 165, 233, 0.12);
     transform: translateY(-2px);
+  }
+`;
+
+const RoleCardActions = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f1f5f9;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    button {
+      width: 100% !important;
+      justify-content: center;
+      min-height: 40px;
+    }
   }
 `;
 
@@ -519,6 +775,10 @@ const ModalOverlay = styled.div`
   justify-content: center;
   padding: 1.5rem;
   z-index: 1000;
+
+  @media (max-width: 640px) {
+    padding: 0.5rem;
+  }
 `;
 
 const PriorityModalOverlay = styled.div`
@@ -531,6 +791,66 @@ const PriorityModalOverlay = styled.div`
   justify-content: center;
   padding: 1.5rem;
   z-index: 3000 !important;
+
+  @media (max-width: 640px) {
+    padding: 0.5rem;
+  }
+`;
+
+const ModalCard = styled.div`
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: ${({ $maxWidth }) => $maxWidth || '560px'};
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.35);
+  overflow: hidden;
+  position: relative;
+  border: ${({ $borderColor }) => ($borderColor ? `1.5px solid ${$borderColor}` : '1px solid rgba(255, 255, 255, 0.2)')};
+
+  @media (max-width: 640px) {
+    border-radius: 14px;
+    max-height: 96vh;
+    width: 100%;
+  }
+`;
+
+const ModalHeader = styled.div`
+  background: ${({ $bg }) => $bg || 'linear-gradient(135deg, #0284c7, #0ea5e9)'};
+  color: white;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  @media (max-width: 640px) {
+    padding: 0.85rem 1rem;
+  }
+`;
+
+const ModalFooter = styled.div`
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.85rem;
+
+  @media (max-width: 640px) {
+    padding: 0.75rem 1rem;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+
+    button {
+      width: 100% !important;
+      justify-content: center;
+      min-height: 42px;
+    }
+  }
 `;
 
 
@@ -547,8 +867,22 @@ const SubAdminManagement = () => {
   const [fetchingHrmsId, setFetchingHrmsId] = useState(false);
   const [showSubAdminPassword, setShowSubAdminPassword] = useState(false);
 
-  // Active view tab: 'create' | 'users' | 'roles'
-  const [activeTab, setActiveTab] = useState('create');
+  // Active view tab: 'create' | 'users' | 'roles' (persisted across page refresh)
+  const [activeTab, setActiveTabState] = useState(() => {
+    try {
+      return sessionStorage.getItem('srs_active_subadmin_tab') || 'create';
+    } catch (_) {
+      return 'create';
+    }
+  });
+
+  const setActiveTab = (tab) => {
+    try {
+      sessionStorage.setItem('srs_active_subadmin_tab', tab);
+    } catch (_) {}
+    setActiveTabState(tab);
+  };
+
   const [selectedRoleId, setSelectedRoleId] = useState('');
   const [searchFilter, setSearchFilter] = useState('');
 
@@ -576,44 +910,35 @@ const SubAdminManagement = () => {
   // Permissions View Modal
   const [viewingPermissions, setViewingPermissions] = useState(null);
 
-  // Role Presets State (Editable & Deletable with local persistence, starting empty for custom roles)
-  const [rolePresets, setRolePresets] = useState(() => {
+  // Role Presets State (Instant availability on refresh + background sync with MongoDB)
+  const [rolesLoading, setRolesLoading] = useState(false);
+  const [rolePresets, setRolePresetsState] = useState(() => {
     try {
-      const saved = localStorage.getItem('srs_custom_roles') || localStorage.getItem('srs_role_presets');
+      const saved = sessionStorage.getItem('srs_cached_roles');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          // Filter out legacy hardcoded role presets if any exist
-          const defaultIds = new Set([
-            'recruitment_head',
-            'candidate_evaluator',
-            'assessment_manager',
-            'interview_coordinator',
-            'form_workflow_admin',
-            'department_reviewer',
-            'custom_role'
-          ]);
-          return parsed.filter((r) => !defaultIds.has(r.id));
-        }
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       }
-    } catch (e) {
-      // ignore
-    }
+    } catch (_) {}
     return [];
   });
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('srs_custom_roles', JSON.stringify(rolePresets));
-      localStorage.setItem('srs_role_presets', JSON.stringify(rolePresets));
-    } catch (e) {
-      // ignore
-    }
-  }, [rolePresets]);
+  const setRolePresets = (val) => {
+    setRolePresetsState((prev) => {
+      const next = typeof val === 'function' ? val(prev) : val;
+      try {
+        if (Array.isArray(next)) {
+          sessionStorage.setItem('srs_cached_roles', JSON.stringify(next));
+        }
+      } catch (_) {}
+      return next;
+    });
+  };
 
   // Edit / Create Role Configuration Profile Modal
   const [showRoleConfigModal, setShowRoleConfigModal] = useState(false);
   const [roleConfigIsNew, setRoleConfigIsNew] = useState(false);
+  const [roleAssignedUserIds, setRoleAssignedUserIds] = useState([]);
   const [roleConfigForm, setRoleConfigForm] = useState({
     id: '',
     name: '',
@@ -639,6 +964,32 @@ const SubAdminManagement = () => {
       defaultPermissions: { ...(preset.defaultPermissions || {}) },
       hasPanelMemberAccess: Boolean(preset.hasPanelMemberAccess)
     });
+
+    // Detect which users are assigned to this role
+    let assigned = subAdmins
+      .filter(
+        (u) =>
+          u.assignedRoleId === preset.id ||
+          (preset._id && u.assignedRoleId === String(preset._id)) ||
+          (preset.name && u.assignedRoleName && u.assignedRoleName.toLowerCase() === preset.name.toLowerCase())
+      )
+      .map((u) => u._id);
+    if (assigned.length === 0) {
+      // Legacy matching: if user permissions match this role's defaultPermissions, pre-select them
+      const pKeys = Object.keys(preset.defaultPermissions || {}).filter((k) => preset.defaultPermissions[k]);
+      assigned = subAdmins
+        .filter((u) => {
+          const uPerms = u.permissions || {};
+          const uKeys = Object.keys(uPerms).filter((k) => uPerms[k]);
+          return (
+            pKeys.length > 0 &&
+            pKeys.length === uKeys.length &&
+            pKeys.every((k) => preset.defaultPermissions[k] === uPerms[k])
+          );
+        })
+        .map((u) => u._id);
+    }
+    setRoleAssignedUserIds(assigned);
     setShowRoleConfigModal(true);
   };
 
@@ -658,21 +1009,119 @@ const SubAdminManagement = () => {
       },
       hasPanelMemberAccess: false
     });
+    setRoleAssignedUserIds([]);
     setShowRoleConfigModal(true);
   };
 
-  const handleDeleteRole = (preset) => {
-    if (!window.confirm(`Are you sure you want to delete the "${preset.name}" role profile?`)) {
-      return;
+  // Delete Role with User Reassignment Modal State
+  const [showRoleDeleteModal, setShowRoleDeleteModal] = useState(false);
+  const [roleToDelete, setRoleToDelete] = useState(null);
+  const [roleDeleteAssignedUsers, setRoleDeleteAssignedUsers] = useState([]);
+  const [roleDeleteTargetRoleId, setRoleDeleteTargetRoleId] = useState('');
+  const [deletingRoleLoading, setDeletingRoleLoading] = useState(false);
+
+  const handlePromptDeleteRole = async (preset) => {
+    const targetId = preset.id;
+    const targetDbId = preset._id ? String(preset._id) : '';
+    const targetName = (preset.name || '').trim().toLowerCase();
+
+    const isAssigned = (u) => {
+      const uRoleId = u.assignedRoleId ? String(u.assignedRoleId).trim() : '';
+      const uRoleName = (u.assignedRoleName || '').trim().toLowerCase();
+      return (
+        (targetId && uRoleId === targetId) ||
+        (targetDbId && uRoleId === targetDbId) ||
+        (targetName && uRoleName && uRoleName === targetName)
+      );
+    };
+
+    // 1. Initial check from current state
+    let assigned = subAdmins.filter(isAssigned);
+    setRoleToDelete(preset);
+    setRoleDeleteAssignedUsers(assigned);
+
+    const otherRoles = rolePresets.filter(
+      (r) => r.id !== preset.id && (!preset._id || r._id !== preset._id)
+    );
+    setRoleDeleteTargetRoleId(otherRoles.length > 0 ? otherRoles[0].id : 'custom');
+    setShowRoleDeleteModal(true);
+
+    // 2. Fetch fresh sub-admins from server to guarantee 100% accuracy in real-time
+    try {
+      const { data } = await api.get('/auth/sub-admins', {
+        skipCache: true,
+        headers: { 'x-skip-cache': 'true' }
+      });
+      if (Array.isArray(data?.subAdmins)) {
+        setSubAdmins(data.subAdmins);
+        const freshAssigned = data.subAdmins.filter(isAssigned);
+        setRoleDeleteAssignedUsers(freshAssigned);
+      }
+    } catch (err) {
+      console.error('Error refreshing sub-admins on delete prompt:', err);
     }
-    setRolePresets((prev) => prev.filter((r) => r.id !== preset.id));
-    if (selectedRoleId === preset.id) {
-      setSelectedRoleId('');
-    }
-    setToast({ type: 'success', message: `✓ Role "${preset.name}" deleted successfully.` });
   };
 
-  const handleSaveRoleConfig = (e) => {
+  const handleConfirmDeleteRole = async () => {
+    if (!roleToDelete) return;
+    const deletedId = roleToDelete.id;
+    const roleDbId = roleToDelete._id;
+    const roleName = roleToDelete.name;
+
+    try {
+      setDeletingRoleLoading(true);
+      const payload = roleDeleteTargetRoleId && roleDeleteTargetRoleId !== 'custom'
+        ? { reassignToRoleId: roleDeleteTargetRoleId }
+        : { reassignToRoleId: null };
+
+      // Immediately remove from UI state so it disappears instantly
+      setRolePresets((prev) =>
+        prev.filter((r) => r.id !== deletedId && (!roleDbId || r._id !== roleDbId))
+      );
+
+      // Purge any local storage keys
+      try {
+        localStorage.removeItem('srs_custom_roles');
+        localStorage.removeItem('srs_role_presets');
+      } catch (_) {}
+
+      if (typeof clearApiCache === 'function') {
+        clearApiCache();
+      }
+
+      setShowRoleDeleteModal(false);
+
+      const targetId = deletedId || roleDbId;
+      const { data } = await api.delete(`/auth/roles/${encodeURIComponent(targetId)}`, { data: payload });
+
+      if (selectedRoleId === deletedId || (roleDbId && selectedRoleId === roleDbId)) {
+        setSelectedRoleId('');
+      }
+
+      await Promise.all([fetchRoles(), fetchSubAdmins()]);
+
+      setToast({
+        type: 'success',
+        message: data?.message || `✓ Role "${roleName}" deleted successfully.`
+      });
+      setRoleToDelete(null);
+      setRoleDeleteAssignedUsers([]);
+    } catch (err) {
+      console.error('Delete role failed', err);
+      if (typeof clearApiCache === 'function') {
+        clearApiCache();
+      }
+      setShowRoleDeleteModal(false);
+      setRoleToDelete(null);
+      setRoleDeleteAssignedUsers([]);
+      await Promise.all([fetchRoles(), fetchSubAdmins()]);
+      setToast({ type: 'danger', message: err.response?.data?.message || 'Failed to delete role' });
+    } finally {
+      setDeletingRoleLoading(false);
+    }
+  };
+
+  const handleSaveRoleConfig = async (e) => {
     e.preventDefault();
     if (!roleConfigForm.name.trim()) {
       setToast({ type: 'danger', message: 'Please provide a role name.' });
@@ -686,19 +1135,54 @@ const SubAdminManagement = () => {
     const updatedRole = {
       ...roleConfigForm,
       name: roleConfigForm.name.trim(),
-      permissionCount
+      permissionCount,
+      userIds: roleAssignedUserIds
     };
 
-    if (roleConfigIsNew) {
-      setRolePresets((prev) => [...prev, updatedRole]);
-      setToast({ type: 'success', message: `✓ Role "${updatedRole.name}" created successfully.` });
-    } else {
-      setRolePresets((prev) =>
-        prev.map((r) => (r.id === updatedRole.id ? updatedRole : r))
-      );
-      setToast({ type: 'success', message: `✓ Role "${updatedRole.name}" updated successfully.` });
+    try {
+      setSaving(true);
+      let response;
+      if (roleConfigIsNew) {
+        response = await api.post('/auth/roles', updatedRole);
+      } else {
+        response = await api.put(`/auth/roles/${updatedRole.id}`, updatedRole);
+      }
+
+      const savedRole = response?.data?.role || {
+        ...updatedRole,
+        assignedUsersCount: roleAssignedUserIds.length
+      };
+
+      // Optimistically update UI state immediately so role appears instantly
+      setRolePresets((prev) => {
+        const withoutOld = prev.filter(
+          (r) => r.id !== savedRole.id && (!savedRole._id || r._id !== savedRole._id)
+        );
+        return [...withoutOld, savedRole];
+      });
+
+      setShowRoleConfigModal(false);
+      setSaving(false);
+
+      // Background sync with database
+      Promise.all([fetchRoles(), fetchSubAdmins()]);
+
+      const count = response?.data?.updatedUsersCount;
+      const countMsg = count !== undefined && count > 0 
+        ? ` Synced permissions for ${count} assigned user(s)!` 
+        : (roleAssignedUserIds.length > 0 ? ` Synced permissions for ${roleAssignedUserIds.length} assigned user(s)!` : '');
+
+      setToast({ 
+        type: 'success', 
+        message: `✓ Role "${updatedRole.name}" ${roleConfigIsNew ? 'created' : 'updated'} successfully.${countMsg}` 
+      });
+    } catch (err) {
+      console.error('Failed to save role on backend:', err);
+      setShowRoleConfigModal(false);
+      setToast({ type: 'danger', message: err.response?.data?.message || 'Failed to save role on server' });
+    } finally {
+      setSaving(false);
     }
-    setShowRoleConfigModal(false);
   };
 
   // Role Configuration Create User Modal
@@ -767,7 +1251,9 @@ const SubAdminManagement = () => {
         courses: roleModalForm.courses && roleModalForm.courses.length > 0 ? roleModalForm.courses : undefined,
         permissions: roleModalForm.permissions,
         hasPanelMemberAccess: roleModalForm.hasPanelMemberAccess,
-        profile: roleModalForm.phone ? { phone: roleModalForm.phone } : undefined
+        profile: roleModalForm.phone ? { phone: roleModalForm.phone } : undefined,
+        assignedRoleId: roleModalPreset ? roleModalPreset.id : undefined,
+        assignedRoleName: roleModalPreset ? roleModalPreset.name : undefined
       };
 
       if (roleModalForm.password && roleModalForm.password.trim()) {
@@ -776,6 +1262,7 @@ const SubAdminManagement = () => {
 
       await api.post('/auth/sub-admins', payload);
       await fetchSubAdmins();
+      await fetchRoles();
       setShowRoleUserModal(false);
       setToast({
         type: 'success',
@@ -792,9 +1279,31 @@ const SubAdminManagement = () => {
     }
   };
 
+  const fetchRoles = async () => {
+    try {
+      setRolesLoading(true);
+      if (typeof clearApiCache === 'function') {
+        clearApiCache();
+      }
+      const { data } = await api.get('/auth/roles', {
+        skipCache: true,
+        headers: { 'x-skip-cache': 'true' }
+      });
+      if (Array.isArray(data?.roles)) {
+        setRolePresets(data.roles);
+      }
+    } catch (e) {
+      console.error('Failed to fetch roles from API', e);
+    } finally {
+      setRolesLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchSubAdmins();
     fetchCampuses();
+    fetchRoles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchSubAdmins = async () => {
@@ -955,6 +1464,7 @@ const SubAdminManagement = () => {
     e.preventDefault();
     try {
       setSaving(true);
+      const selectedPreset = rolePresets.find((r) => r.id === selectedRoleId);
       const payload = {
         name: formState.name,
         employeeId: formState.employeeId ? formState.employeeId.trim() : undefined,
@@ -963,7 +1473,9 @@ const SubAdminManagement = () => {
         courses: formState.courses && formState.courses.length > 0 ? formState.courses : undefined,
         permissions: formState.permissions,
         hasPanelMemberAccess: formState.hasPanelMemberAccess,
-        profile: formState.phone ? { phone: formState.phone } : undefined
+        profile: formState.phone ? { phone: formState.phone } : undefined,
+        assignedRoleId: selectedPreset ? selectedPreset.id : (selectedRoleId === 'custom_role' ? null : undefined),
+        assignedRoleName: selectedPreset ? selectedPreset.name : (selectedRoleId === 'custom_role' ? null : undefined)
       };
 
       if (!editingSubAdmin) {
@@ -979,6 +1491,7 @@ const SubAdminManagement = () => {
       }
 
       await fetchSubAdmins();
+      await fetchRoles();
       setToast({
         type: 'success',
         message: editingSubAdmin ? 'User updated successfully.' : 'User created successfully.'
@@ -1020,7 +1533,22 @@ const SubAdminManagement = () => {
     if (user.campus) {
       fetchCoursesForCampus(user.campus);
     }
-    setSelectedRoleId('custom_role');
+    
+    if (user.assignedRoleId) {
+      setSelectedRoleId(user.assignedRoleId);
+    } else {
+      const matchingPreset = rolePresets.find((p) => {
+        const pKeys = Object.keys(p.defaultPermissions || {}).filter((k) => p.defaultPermissions[k]);
+        const uKeys = Object.keys(perms || {}).filter((k) => perms[k]);
+        if (pKeys.length !== uKeys.length) return false;
+        return pKeys.every((k) => p.defaultPermissions[k] === perms[k]);
+      });
+      if (matchingPreset) {
+        setSelectedRoleId(matchingPreset.id);
+      } else {
+        setSelectedRoleId('custom_role');
+      }
+    }
     setActiveTab('create');
   };
 
@@ -1034,6 +1562,32 @@ const SubAdminManagement = () => {
       setToast({ type: 'success', message: 'User deleted successfully.' });
     } catch (err) {
       setToast({ type: 'danger', message: err.response?.data?.message || 'Failed to delete user' });
+    }
+  };
+
+  const handleQuickAssignRole = async (user, newRoleId) => {
+    try {
+      setLoading(true);
+      const selectedPreset = rolePresets.find((r) => r.id === newRoleId);
+      await api.put(`/auth/sub-admins/${user._id}`, {
+        assignedRoleId: newRoleId || null,
+        assignedRoleName: selectedPreset ? selectedPreset.name : null,
+        permissions: selectedPreset ? selectedPreset.defaultPermissions : undefined,
+        hasPanelMemberAccess: selectedPreset ? Boolean(selectedPreset.hasPanelMemberAccess) : undefined
+      });
+      await fetchSubAdmins();
+      await fetchRoles();
+      setToast({
+        type: 'success',
+        message: selectedPreset
+          ? `✓ Assigned "${selectedPreset.name}" role to ${user.name} (${selectedPreset.permissionCount || Object.keys(selectedPreset.defaultPermissions || {}).length} modules synced)`
+          : `✓ Removed role preset from ${user.name}`
+      });
+    } catch (err) {
+      console.error('Failed to assign role:', err);
+      setToast({ type: 'danger', message: err.response?.data?.message || 'Failed to update user role' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -1097,7 +1651,7 @@ const SubAdminManagement = () => {
         </TabGroup>
 
         {activeTab === 'create' && (
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <TabNavActions>
             <SecondaryBtn
               type="button"
               onClick={() => {
@@ -1117,7 +1671,7 @@ const SubAdminManagement = () => {
             >
               <span>{saving ? 'Saving...' : editingSubAdmin ? 'Update User' : 'Create User'}</span>
             </PrimaryBtn>
-          </div>
+          </TabNavActions>
         )}
       </TabNav>
 
@@ -1203,7 +1757,7 @@ const SubAdminManagement = () => {
                   />
                 </FormGroup>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                <ResponsiveTwoColGrid>
                   <FormGroup>
                     <Label htmlFor="col1_username">
                       <span>Employee ID (HRMS)</span>
@@ -1251,7 +1805,7 @@ const SubAdminManagement = () => {
                       onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
                     />
                   </FormGroup>
-                </div>
+                </ResponsiveTwoColGrid>
 
                 {/* Password / HRMS Authentication Box */}
                 {formState.employeeId ? (
@@ -1354,7 +1908,27 @@ const SubAdminManagement = () => {
               </ColumnHeader>
 
               <ColumnBody>
-                {rolePresets.length === 0 ? (
+                {rolesLoading && rolePresets.length === 0 ? (
+                  <div
+                    style={{
+                      padding: '2rem 1.25rem',
+                      textAlign: 'center',
+                      background: '#f8fafc',
+                      borderRadius: '12px',
+                      border: '1.5px dashed #cbd5e1',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      margin: 'auto 0'
+                    }}
+                  >
+                    <div style={{ fontSize: '1.5rem' }}>🔄</div>
+                    <div style={{ fontWeight: 600, fontSize: '0.82rem', color: '#64748b' }}>
+                      Loading roles...
+                    </div>
+                  </div>
+                ) : rolePresets.length === 0 ? (
                   <div
                     style={{
                       padding: '2rem 1.25rem',
@@ -1635,25 +2209,36 @@ const SubAdminManagement = () => {
       {activeTab === 'users' && (
         <TableWrapper>
           <TableToolbar>
-            <SearchInputWrapper>
-              <span className="search-icon">🔍</span>
-              <input
-                type="text"
-                placeholder="Search by name, email, or ID..."
-                value={searchFilter}
-                onChange={(e) => setSearchFilter(e.target.value)}
-              />
-            </SearchInputWrapper>
+            <div>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#0f172a' }}>
+                Sub-Admin Directory
+              </h3>
+              <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
+                {filteredUsers.length} registered user{filteredUsers.length !== 1 ? 's' : ''}
+              </p>
+            </div>
 
-            <PrimaryBtn
-              onClick={() => {
-                resetForm();
-                setActiveTab('create');
-              }}
-              style={{ padding: '0.6rem 1.25rem', fontSize: '0.88rem' }}
-            >
-              + Create User
-            </PrimaryBtn>
+            <TableToolbarActions>
+              <SearchInputWrapper>
+                <span className="search-icon">🔍</span>
+                <input
+                  type="text"
+                  placeholder="Search by name, email, or ID..."
+                  value={searchFilter}
+                  onChange={(e) => setSearchFilter(e.target.value)}
+                />
+              </SearchInputWrapper>
+
+              <PrimaryBtn
+                onClick={() => {
+                  resetForm();
+                  setActiveTab('create');
+                }}
+                style={{ padding: '0.6rem 1.25rem', fontSize: '0.88rem' }}
+              >
+                + Create User
+              </PrimaryBtn>
+            </TableToolbarActions>
           </TableToolbar>
 
           {loading ? (
@@ -1666,120 +2251,146 @@ const SubAdminManagement = () => {
               <p style={{ margin: 0, fontWeight: 600 }}>No users found matching your search</p>
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <Table>
-                <thead>
-                  <tr>
-                    <Th>User</Th>
-                    <Th>Campus</Th>
-                    <Th>Access Scope</Th>
-                    <Th>Status</Th>
-                    <Th>Actions</Th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredUsers.map((user) => {
-                    const permCount = user.permissions
-                      ? Array.isArray(user.permissions)
-                        ? user.permissions.length
-                        : Object.keys(user.permissions).length
-                      : 0;
+            <>
+              <MobileScrollHint>👈 Swipe horizontally to view full details and actions 👉</MobileScrollHint>
+              <TableScrollContainer>
+                <Table>
+                  <thead>
+                    <tr>
+                      <Th>User</Th>
+                      <Th>Campus</Th>
+                      <Th>Access Scope</Th>
+                      <Th>Status</Th>
+                      <Th>Actions</Th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredUsers.map((user) => {
+                      const permCount = user.permissions
+                        ? Array.isArray(user.permissions)
+                          ? user.permissions.length
+                          : Object.keys(user.permissions).length
+                        : 0;
 
-                    return (
-                      <tr key={user._id}>
-                        <Td>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <div
-                              style={{
-                                width: '38px',
-                                height: '38px',
-                                borderRadius: '10px',
-                                background: 'linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(2, 132, 199, 0.2))',
-                                color: '#0284c7',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontWeight: 800,
-                                fontSize: '1rem',
-                                flexShrink: 0
-                              }}
-                            >
-                              {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                            </div>
-                            <div>
-                              <div style={{ fontWeight: 700, color: '#0f172a' }}>{user.name}</div>
-                              <div style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                <span>{user.email}</span>
-                                {user.employeeId && (
-                                  <span style={{ background: '#e0f2fe', color: '#0284c7', padding: '1px 6px', borderRadius: '4px', fontWeight: 700, fontSize: '0.7rem' }}>
-                                    ID: {user.employeeId}
-                                  </span>
-                                )}
+                      return (
+                        <tr key={user._id}>
+                          <Td>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                              <div
+                                style={{
+                                  width: '38px',
+                                  height: '38px',
+                                  borderRadius: '10px',
+                                  background: 'linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(2, 132, 199, 0.2))',
+                                  color: '#0284c7',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  fontWeight: 800,
+                                  fontSize: '1rem',
+                                  flexShrink: 0
+                                }}
+                              >
+                                {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                              </div>
+                              <div>
+                                <div style={{ fontWeight: 700, color: '#0f172a' }}>{user.name}</div>
+                                <div style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                  <span>{user.email}</span>
+                                  {user.employeeId && (
+                                    <span style={{ background: '#e0f2fe', color: '#0284c7', padding: '1px 6px', borderRadius: '4px', fontWeight: 700, fontSize: '0.7rem' }}>
+                                      ID: {user.employeeId}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Td>
+                          </Td>
 
-                        <Td>
-                          <div style={{ fontWeight: 600 }}>{user.campus || 'All Campuses'}</div>
-                          {user.courses && user.courses.length > 0 && (
-                            <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                              {user.courses.length} course(s)
-                            </div>
-                          )}
-                        </Td>
-
-                        <Td>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ background: '#f1f5f9', color: '#334155', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, fontSize: '0.78rem' }}>
-                              {permCount} module{permCount !== 1 ? 's' : ''}
-                            </span>
-                            {user.hasPanelMemberAccess && (
-                              <span style={{ background: '#fff7ed', color: '#c2410c', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, fontSize: '0.7rem' }}>
-                                Panel
-                              </span>
+                          <Td>
+                            <div style={{ fontWeight: 600 }}>{user.campus || 'All Campuses'}</div>
+                            {user.courses && user.courses.length > 0 && (
+                              <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                                {user.courses.length} course(s)
+                              </div>
                             )}
-                            <button
-                              type="button"
-                              onClick={() => setViewingPermissions(user)}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                color: '#0284c7',
-                                fontSize: '0.75rem',
-                                fontWeight: 700,
-                                cursor: 'pointer',
-                                textDecoration: 'underline'
-                              }}
-                            >
-                              View
-                            </button>
-                          </div>
-                        </Td>
+                          </Td>
 
-                        <Td>
-                          <StatusPill $active={user.isActive}>
-                            {user.isActive ? 'Active' : 'Inactive'}
-                          </StatusPill>
-                        </Td>
+                          <Td>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
+                              <select
+                                value={user.assignedRoleId || ''}
+                                onChange={(e) => handleQuickAssignRole(user, e.target.value)}
+                                title="Assign or switch role preset for this user"
+                                style={{
+                                  fontSize: '0.74rem',
+                                  fontWeight: 700,
+                                  color: user.assignedRoleId ? '#0369a1' : '#475569',
+                                  background: user.assignedRoleId ? '#e0f2fe' : '#f8fafc',
+                                  border: `1.5px solid ${user.assignedRoleId ? '#7dd3fc' : '#cbd5e1'}`,
+                                  borderRadius: '6px',
+                                  padding: '2px 6px',
+                                  cursor: 'pointer',
+                                  outline: 'none'
+                                }}
+                              >
+                                <option value="">⚙️ Custom Access</option>
+                                {rolePresets.map((r) => (
+                                  <option key={r.id} value={r.id}>
+                                    {r.icon || '🛡️'} {r.name}
+                                  </option>
+                                ))}
+                              </select>
+                              <span style={{ background: '#f1f5f9', color: '#334155', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, fontSize: '0.78rem' }}>
+                                {permCount} module{permCount !== 1 ? 's' : ''}
+                              </span>
+                              {user.hasPanelMemberAccess && (
+                                <span style={{ background: '#fff7ed', color: '#c2410c', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, fontSize: '0.7rem' }}>
+                                  Panel
+                                </span>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => setViewingPermissions(user)}
+                                style={{
+                                  background: 'none',
+                                  border: 'none',
+                                  color: '#0284c7',
+                                  fontSize: '0.75rem',
+                                  fontWeight: 700,
+                                  cursor: 'pointer',
+                                  textDecoration: 'underline'
+                                }}
+                              >
+                                View
+                              </button>
+                            </div>
+                          </Td>
 
-                        <Td>
-                          <div style={{ display: 'flex', gap: '0.5rem' }}>
-                            <ActionBtn onClick={() => handleEditUser(user)}>Edit</ActionBtn>
-                            <ActionBtn onClick={() => handleStatusToggle(user)}>
-                              {user.isActive ? 'Deactivate' : 'Activate'}
-                            </ActionBtn>
-                            <ActionBtn $variant="danger" onClick={() => handleDeleteUser(user._id)}>
-                              Delete
-                            </ActionBtn>
-                          </div>
-                        </Td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </div>
+                          <Td>
+                            <StatusPill $active={user.isActive}>
+                              {user.isActive ? 'Active' : 'Inactive'}
+                            </StatusPill>
+                          </Td>
+
+                          <Td style={{ whiteSpace: 'nowrap' }}>
+                            <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'nowrap' }}>
+                              <ActionBtn onClick={() => handleEditUser(user)}>Edit</ActionBtn>
+                              <ActionBtn onClick={() => handleStatusToggle(user)}>
+                                {user.isActive ? 'Deactivate' : 'Activate'}
+                              </ActionBtn>
+                              <ActionBtn $variant="danger" onClick={() => handleDeleteUser(user._id)}>
+                                Delete
+                              </ActionBtn>
+                            </div>
+                          </Td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </TableScrollContainer>
+            </>
           )}
         </TableWrapper>
       )}
@@ -1788,20 +2399,7 @@ const SubAdminManagement = () => {
       {activeTab === 'roles' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {/* Banner */}
-          <div
-            style={{
-              background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 60%, #38bdf8 100%)',
-              color: 'white',
-              borderRadius: '16px',
-              padding: '1.5rem 2rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              boxShadow: '0 4px 20px rgba(14, 165, 233, 0.25)',
-              flexWrap: 'wrap',
-              gap: '1rem'
-            }}
-          >
+          <RoleConfigBanner>
             <div>
               <h3 style={{ margin: '0 0 0.35rem 0', fontSize: '1.3rem', fontWeight: 800 }}>
                 ⚙️ Role Configuration
@@ -1811,7 +2409,7 @@ const SubAdminManagement = () => {
               </p>
             </div>
 
-            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div className="banner-actions" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <button
                 type="button"
                 onClick={handleOpenNewRole}
@@ -1861,10 +2459,30 @@ const SubAdminManagement = () => {
                 <span>+ Create User with Role</span>
               </button>
             </div>
-          </div>
+          </RoleConfigBanner>
 
           {/* Grid of Role Cards */}
-          {rolePresets.length === 0 ? (
+          {rolesLoading && rolePresets.length === 0 ? (
+            <div
+              style={{
+                padding: '3.5rem 2rem',
+                textAlign: 'center',
+                background: 'white',
+                borderRadius: '16px',
+                border: '1px solid #e0f2fe',
+                boxShadow: '0 4px 16px rgba(14, 165, 233, 0.05)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '0.75rem'
+              }}
+            >
+              <div style={{ fontSize: '2.5rem' }}>🔄</div>
+              <div style={{ fontWeight: 800, color: '#0284c7', fontSize: '1.05rem' }}>
+                Loading Roles from Server...
+              </div>
+            </div>
+          ) : rolePresets.length === 0 ? (
             <div
               style={{
                 padding: '3rem 2rem',
@@ -1964,17 +2582,22 @@ const SubAdminManagement = () => {
                       fontWeight: 600,
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between'
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: '0.35rem'
                     }}
                   >
-                    <span>{permCount} permission(s) configured</span>
+                    <span>{permCount} module{permCount !== 1 ? 's' : ''}</span>
+                    <span style={{ color: '#0284c7', fontWeight: 700 }}>
+                      👥 {subAdmins.filter((u) => u.assignedRoleId === preset.id || (preset._id && u.assignedRoleId === String(preset._id)) || (preset.name && u.assignedRoleName && u.assignedRoleName.toLowerCase() === preset.name.toLowerCase())).length} user(s)
+                    </span>
                     {preset.hasPanelMemberAccess && (
-                      <span style={{ color: '#059669', fontWeight: 700 }}>🎯 Panel Member</span>
+                      <span style={{ color: '#059669', fontWeight: 700 }}>🎯 Panel</span>
                     )}
                   </div>
 
                   {/* Actions matching Image 2 */}
-                  <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.25rem' }}>
+                  <RoleCardActions>
                     <button
                       type="button"
                       onClick={() => handleOpenEditRole(preset)}
@@ -2011,7 +2634,7 @@ const SubAdminManagement = () => {
 
                     <button
                       type="button"
-                      onClick={() => handleDeleteRole(preset)}
+                      onClick={() => handlePromptDeleteRole(preset)}
                       style={{
                         background: '#fef2f2',
                         color: '#dc2626',
@@ -2038,7 +2661,7 @@ const SubAdminManagement = () => {
                       <span>🗑️</span>
                       <span>Delete</span>
                     </button>
-                  </div>
+                  </RoleCardActions>
                 </RoleConfigCard>
               );
             })}
@@ -2052,18 +2675,9 @@ const SubAdminManagement = () => {
       {/* ─── VIEW PERMISSIONS MODAL ─────────────────────────────────────── */}
       {viewingPermissions && (
         <ModalOverlay onClick={(e) => { if (e.target === e.currentTarget) setViewingPermissions(null); }}>
-          <div
-            style={{
-              background: 'white',
-              borderRadius: '20px',
-              width: '100%',
-              maxWidth: '520px',
-              padding: '1.75rem',
-              boxShadow: '0 25px 60px rgba(15, 23, 42, 0.3)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1.25rem'
-            }}
+          <ModalCard
+            $maxWidth="520px"
+            style={{ padding: '1.25rem' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
@@ -2129,38 +2743,19 @@ const SubAdminManagement = () => {
             </div>
 
             <SecondaryBtn onClick={() => setViewingPermissions(null)}>Close</SecondaryBtn>
-          </div>
+          </ModalCard>
         </ModalOverlay>
       )}
 
       {/* ─── EDIT / CONFIGURE ROLE MODAL ─────────────────────────────────── */}
       {showRoleConfigModal && (
         <ModalOverlay onClick={(e) => { if (e.target === e.currentTarget) setShowRoleConfigModal(false); }}>
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: 'white',
-              borderRadius: '20px',
-              width: '100%',
-              maxWidth: '680px',
-              maxHeight: '90vh',
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: '0 25px 60px rgba(15, 23, 42, 0.35)',
-              overflow: 'hidden',
-              border: '1px solid rgba(255,255,255,0.2)'
-            }}
+          <ModalCard
+            $maxWidth="680px"
           >
             {/* Header */}
-            <div
-              style={{
-                background: `linear-gradient(135deg, ${roleConfigForm.color || '#0284c7'}, #0369a1)`,
-                color: 'white',
-                padding: '1.25rem 1.75rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
+            <ModalHeader
+              $bg={`linear-gradient(135deg, ${roleConfigForm.color || '#0284c7'}, #0369a1)`}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
                 <div
@@ -2193,14 +2788,14 @@ const SubAdminManagement = () => {
               >
                 &times;
               </button>
-            </div>
+            </ModalHeader>
 
             {/* Form */}
             <form onSubmit={handleSaveRoleConfig} style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', flex: 1 }}>
               <div style={{ padding: '1.5rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1.25rem', flex: 1 }}>
                 
                 {/* Role Details */}
-                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '0.75rem' }}>
+                <ModalThreeColGrid>
                   <FormGroup>
                     <Label>Role Name <span className="required">*</span></Label>
                     <Input
@@ -2249,7 +2844,7 @@ const SubAdminManagement = () => {
                       <option value="🎓">🎓 Academic</option>
                     </select>
                   </FormGroup>
-                </div>
+                </ModalThreeColGrid>
 
                 <FormGroup>
                   <Label>Description</Label>
@@ -2343,30 +2938,20 @@ const SubAdminManagement = () => {
                       const currentLevel = roleConfigForm.defaultPermissions?.[perm.key] || null;
 
                       return (
-                        <div
-                          key={perm.key}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            padding: '0.6rem 0.85rem',
-                            borderRadius: '8px',
-                            background: currentLevel ? '#f8fafc' : 'white',
-                            border: '1px solid #e2e8f0'
-                          }}
-                        >
-                          <div>
-                            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1e293b' }}>
-                              {perm.label}
-                            </div>
-                            <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-                              {perm.description}
-                            </div>
-                          </div>
+                        <PermissionRowCard key={perm.key} $enabled={Boolean(currentLevel)}>
+                          <PermissionRowHeader>
+                            <span className="perm-label">{perm.label}</span>
+                            {perm.description && (
+                              <span className="perm-desc" title={perm.description}>
+                                {perm.description}
+                              </span>
+                            )}
+                          </PermissionRowHeader>
 
                           <AccessSegmentedGroup>
                             <SegmentButton
                               type="button"
+                              $type="off"
                               $active={!currentLevel}
                               onClick={() => {
                                 const copy = { ...roleConfigForm.defaultPermissions };
@@ -2378,6 +2963,7 @@ const SubAdminManagement = () => {
                             </SegmentButton>
                             <SegmentButton
                               type="button"
+                              $type="view"
                               $active={currentLevel === 'view_only'}
                               onClick={() => {
                                 setRoleConfigForm({
@@ -2390,6 +2976,7 @@ const SubAdminManagement = () => {
                             </SegmentButton>
                             <SegmentButton
                               type="button"
+                              $type="full"
                               $active={currentLevel === 'full_access'}
                               onClick={() => {
                                 setRoleConfigForm({
@@ -2401,64 +2988,365 @@ const SubAdminManagement = () => {
                               Full
                             </SegmentButton>
                           </AccessSegmentedGroup>
-                        </div>
+                        </PermissionRowCard>
                       );
                     })}
+                  </div>
+                </div>
+
+                {/* Assigned Users Section */}
+                <div style={{ marginTop: '0.25rem' }}>
+                  <div style={{ marginBottom: '0.65rem' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span>Assigned Users ({roleAssignedUserIds.length})</span>
+                      <span style={{ fontSize: '0.74rem', color: '#0284c7', background: '#e0f2fe', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
+                        🔄 Live Sync Active
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                      Users checked below will be updated with these exact permissions immediately upon saving.
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      maxHeight: '150px',
+                      overflowY: 'auto',
+                      border: '1.5px solid #e2e8f0',
+                      borderRadius: '10px',
+                      padding: '0.5rem',
+                      background: '#f8fafc',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.4rem'
+                    }}
+                  >
+                    {subAdmins.length === 0 ? (
+                      <div style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center', padding: '0.75rem' }}>
+                        No users created yet
+                      </div>
+                    ) : (
+                      subAdmins.map((user) => {
+                        const isChecked = roleAssignedUserIds.includes(user._id);
+                        return (
+                          <label
+                            key={user._id}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              padding: '0.45rem 0.65rem',
+                              borderRadius: '8px',
+                              background: isChecked ? '#f0f9ff' : 'white',
+                              border: `1px solid ${isChecked ? '#7dd3fc' : '#e2e8f0'}`,
+                              cursor: 'pointer',
+                              fontSize: '0.82rem',
+                              transition: 'all 0.15s ease'
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                              <input
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setRoleAssignedUserIds((prev) => [...prev, user._id]);
+                                  } else {
+                                    setRoleAssignedUserIds((prev) => prev.filter((id) => id !== user._id));
+                                  }
+                                }}
+                                style={{ width: '16px', height: '16px', cursor: 'pointer', accentColor: '#0284c7' }}
+                              />
+                              <div>
+                                <span style={{ fontWeight: 700, color: '#0f172a' }}>{user.name}</span>
+                                <span style={{ color: '#64748b', fontSize: '0.75rem', marginLeft: '0.4rem' }}>
+                                  ({user.email}{user.employeeId ? ` • ID: ${user.employeeId}` : ''})
+                                </span>
+                              </div>
+                            </div>
+                            {user.assignedRoleName && (
+                              <span style={{ fontSize: '0.7rem', color: '#0284c7', background: '#e0f2fe', padding: '1px 6px', borderRadius: '4px', fontWeight: 600 }}>
+                                {user.assignedRoleName}
+                              </span>
+                            )}
+                          </label>
+                        );
+                      })
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* Footer */}
-              <div
-                style={{
-                  padding: '1rem 1.5rem',
-                  borderTop: '1px solid #e2e8f0',
-                  background: '#f8fafc',
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  gap: '0.85rem'
-                }}
-              >
+              <ModalFooter>
                 <SecondaryBtn type="button" onClick={() => setShowRoleConfigModal(false)}>
                   Cancel
                 </SecondaryBtn>
                 <PrimaryBtn type="submit">
                   {roleConfigIsNew ? 'Create Role Profile' : 'Save Changes'}
                 </PrimaryBtn>
-              </div>
+              </ModalFooter>
             </form>
-          </div>
+          </ModalCard>
         </ModalOverlay>
+      )}
+
+      {/* ─── ROLE DELETION & USER REASSIGNMENT MODAL ─────────────────────── */}
+      {showRoleDeleteModal && roleToDelete && (
+        <PriorityModalOverlay onClick={(e) => { if (e.target === e.currentTarget && !deletingRoleLoading) setShowRoleDeleteModal(false); }}>
+          <ModalCard
+            $maxWidth="560px"
+            $borderColor="#fee2e2"
+          >
+            {/* Header */}
+            <ModalHeader
+              $bg="linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)"
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '10px',
+                    background: 'rgba(255, 255, 255, 0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.25rem'
+                  }}
+                >
+                  🗑️
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>
+                    Delete Role: {roleToDelete.name}
+                  </h3>
+                  <p style={{ margin: 0, fontSize: '0.78rem', opacity: 0.9 }}>
+                    {roleDeleteAssignedUsers.length > 0
+                      ? 'Reassign active users before deletion'
+                      : 'Confirm role deletion'}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                disabled={deletingRoleLoading}
+                onClick={() => setShowRoleDeleteModal(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'white',
+                  fontSize: '1.75rem',
+                  cursor: 'pointer',
+                  lineHeight: 1
+                }}
+              >
+                &times;
+              </button>
+            </ModalHeader>
+
+            {/* Modal Body */}
+            <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {roleDeleteAssignedUsers.length > 0 ? (
+                <>
+                  {/* Warning Box */}
+                  <div
+                    style={{
+                      background: '#fff1f2',
+                      border: '1.5px solid #fecdd3',
+                      borderRadius: '12px',
+                      padding: '1rem 1.15rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.35rem'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#be123c', fontWeight: 800, fontSize: '0.92rem' }}>
+                      <span>⚠️</span>
+                      <span>Switch Required for Assigned Users</span>
+                    </div>
+                    <p style={{ margin: 0, fontSize: '0.82rem', color: '#9f1239', lineHeight: 1.45 }}>
+                      <strong>{roleDeleteAssignedUsers.length} user(s)</strong> are currently assigned to this role. Please select where to switch them so their portal permissions remain active.
+                    </p>
+                  </div>
+
+                  {/* Assigned Users Preview List */}
+                  <div>
+                    <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
+                      Affected Users ({roleDeleteAssignedUsers.length}):
+                    </div>
+                    <div
+                      style={{
+                        maxHeight: '130px',
+                        overflowY: 'auto',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '8px',
+                        background: '#f8fafc',
+                        padding: '0.4rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.35rem'
+                      }}
+                    >
+                      {roleDeleteAssignedUsers.map((u) => (
+                        <div
+                          key={u._id}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '0.4rem 0.6rem',
+                            background: 'white',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '6px',
+                            fontSize: '0.8rem'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <div
+                              style={{
+                                width: '26px',
+                                height: '26px',
+                                borderRadius: '6px',
+                                background: '#e0f2fe',
+                                color: '#0284c7',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontWeight: 800,
+                                fontSize: '0.75rem'
+                              }}
+                            >
+                              {u.name ? u.name.charAt(0).toUpperCase() : 'U'}
+                            </div>
+                            <span style={{ fontWeight: 700, color: '#0f172a' }}>{u.name}</span>
+                            <span style={{ color: '#64748b', fontSize: '0.74rem' }}>({u.email})</span>
+                          </div>
+                          {u.employeeId && (
+                            <span style={{ fontSize: '0.7rem', color: '#0284c7', background: '#e0f2fe', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
+                              ID: {u.employeeId}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Reassignment Target Selector */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>
+                      Switch Assigned Users To: <span style={{ color: '#dc2626' }}>*</span>
+                    </label>
+                    <select
+                      value={roleDeleteTargetRoleId}
+                      onChange={(e) => setRoleDeleteTargetRoleId(e.target.value)}
+                      style={{
+                        padding: '0.65rem 0.85rem',
+                        borderRadius: '8px',
+                        border: '1.5px solid #cbd5e1',
+                        fontSize: '0.88rem',
+                        fontWeight: 600,
+                        background: 'white',
+                        outline: 'none',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {rolePresets
+                        .filter((r) => r.id !== roleToDelete.id && (!roleToDelete._id || r._id !== roleToDelete._id))
+                        .map((r) => (
+                          <option key={r.id} value={r.id}>
+                            🔄 Reassign to: {r.icon || '🛡️'} {r.name} ({r.permissionCount || Object.keys(r.defaultPermissions || {}).length} modules)
+                          </option>
+                        ))}
+                      <option value="custom">
+                        ⚙️ Keep Existing Permissions (Convert to Custom Standalone Access)
+                      </option>
+                    </select>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.15rem' }}>
+                      {roleDeleteTargetRoleId === 'custom'
+                        ? 'All affected users will retain their current module permissions as custom standalone access without a preset.'
+                        : `All affected users will be immediately migrated to the selected role profile with its latest module access.`}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                /* No users assigned */
+                <div
+                  style={{
+                    padding: '1.5rem',
+                    textAlign: 'center',
+                    background: '#f8fafc',
+                    borderRadius: '12px',
+                    border: '1px solid #e2e8f0',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <div style={{ fontSize: '2rem' }}>🛡️</div>
+                  <div style={{ fontWeight: 800, color: '#0f172a', fontSize: '0.95rem' }}>
+                    No Users Assigned
+                  </div>
+                  <p style={{ margin: 0, fontSize: '0.82rem', color: '#64748b', lineHeight: 1.45 }}>
+                    Are you sure you want to delete the <strong>&quot;{roleToDelete.name}&quot;</strong> role profile? This action will permanently remove this role configuration.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <ModalFooter>
+              <SecondaryBtn
+                type="button"
+                disabled={deletingRoleLoading}
+                onClick={() => setShowRoleDeleteModal(false)}
+              >
+                Cancel
+              </SecondaryBtn>
+              <button
+                type="button"
+                disabled={deletingRoleLoading}
+                onClick={handleConfirmDeleteRole}
+                style={{
+                  background: '#dc2626',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '0.6rem 1.25rem',
+                  fontWeight: 700,
+                  fontSize: '0.88rem',
+                  cursor: deletingRoleLoading ? 'not-allowed' : 'pointer',
+                  opacity: deletingRoleLoading ? 0.7 : 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  boxShadow: '0 2px 8px rgba(220, 38, 38, 0.25)'
+                }}
+              >
+                <span>🗑️</span>
+                <span>
+                  {deletingRoleLoading
+                    ? 'Processing...'
+                    : roleDeleteAssignedUsers.length > 0
+                    ? `Switch Users & Delete Role`
+                    : `Delete Role`}
+                </span>
+              </button>
+            </ModalFooter>
+          </ModalCard>
+        </PriorityModalOverlay>
       )}
 
       {/* ─── ROLE CONFIGURATION: CREATE USER MODAL (POPUP) ───────────────── */}
       {showRoleUserModal && (
         <ModalOverlay onClick={(e) => { if (e.target === e.currentTarget) setShowRoleUserModal(false); }}>
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: 'white',
-              borderRadius: '20px',
-              width: '100%',
-              maxWidth: '960px',
-              maxHeight: '92vh',
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: '0 25px 60px rgba(15, 23, 42, 0.35)',
-              overflow: 'hidden',
-              border: '1px solid rgba(255,255,255,0.2)'
-            }}
+          <ModalCard
+            $maxWidth="960px"
           >
             {/* Modal Header */}
-            <div
-              style={{
-                background: `linear-gradient(135deg, ${roleModalPreset.color}, #1e293b)`,
-                color: 'white',
-                padding: '1.25rem 1.75rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
+            <ModalHeader
+              $bg={`linear-gradient(135deg, ${roleModalPreset.color}, #1e293b)`}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
                 <div
@@ -2491,20 +3379,11 @@ const SubAdminManagement = () => {
               >
                 &times;
               </button>
-            </div>
+            </ModalHeader>
 
             {/* Modal Form */}
             <form onSubmit={handleRoleModalSubmit} style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', flex: 1 }}>
-              <div
-                style={{
-                  padding: '1.5rem',
-                  overflowY: 'auto',
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1.15fr',
-                  gap: '1.5rem',
-                  flex: 1
-                }}
-              >
+              <RoleUserModalBody>
                 {/* Left Column: Credentials */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   <div
@@ -2575,7 +3454,7 @@ const SubAdminManagement = () => {
                     />
                   </FormGroup>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                  <ResponsiveTwoColGrid>
                     <FormGroup>
                       <Label>
                         <span>Employee ID (HRMS)</span>
@@ -2615,7 +3494,7 @@ const SubAdminManagement = () => {
                         onChange={(e) => setRoleModalForm({ ...roleModalForm, phone: e.target.value })}
                       />
                     </FormGroup>
-                  </div>
+                  </ResponsiveTwoColGrid>
 
                   {roleModalForm.employeeId ? (
                     <div
@@ -2795,19 +3674,10 @@ const SubAdminManagement = () => {
                     {availablePermissions.map((perm) => {
                       const currentLevel = roleModalForm.permissions?.[perm.key] || null;
                       return (
-                        <div
-                          key={perm.key}
-                          style={{
-                            padding: '0.5rem 0.75rem',
-                            borderRadius: '8px',
-                            border: `1px solid ${currentLevel ? '#a7f3d0' : '#e2e8f0'}`,
-                            background: currentLevel ? '#f0fdf4' : '#f8fafc',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between'
-                          }}
-                        >
-                          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#0f172a' }}>{perm.label}</span>
+                        <PermissionRowCard key={perm.key} $enabled={Boolean(currentLevel)}>
+                          <PermissionRowHeader>
+                            <span className="perm-label">{perm.label}</span>
+                          </PermissionRowHeader>
                           <AccessSegmentedGroup>
                             <SegmentButton
                               type="button"
@@ -2848,33 +3718,24 @@ const SubAdminManagement = () => {
                               Full
                             </SegmentButton>
                           </AccessSegmentedGroup>
-                        </div>
+                        </PermissionRowCard>
                       );
                     })}
                   </div>
                 </div>
-              </div>
+              </RoleUserModalBody>
 
               {/* Modal Footer */}
-              <div
-                style={{
-                  padding: '1rem 1.5rem',
-                  borderTop: '1px solid #e2e8f0',
-                  background: '#f8fafc',
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  gap: '0.85rem'
-                }}
-              >
+              <ModalFooter>
                 <SecondaryBtn type="button" onClick={() => setShowRoleUserModal(false)}>
                   Cancel
                 </SecondaryBtn>
                 <PrimaryBtn type="submit" disabled={roleModalSaving}>
                   {roleModalSaving ? 'Creating...' : `Create User (${roleModalPreset.shortTitle || roleModalPreset.name})`}
                 </PrimaryBtn>
-              </div>
+              </ModalFooter>
             </form>
-          </div>
+          </ModalCard>
         </ModalOverlay>
       )}
 
@@ -2887,23 +3748,9 @@ const SubAdminManagement = () => {
             }
           }}
         >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              background: 'white',
-              borderRadius: '20px',
-              width: '100%',
-              maxWidth: '560px',
-              padding: '1.75rem',
-              boxShadow: '0 25px 60px rgba(15, 23, 42, 0.45)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1.25rem',
-              maxHeight: '90vh',
-              overflow: 'hidden',
-              position: 'relative',
-              border: '1px solid rgba(255,255,255,0.3)'
-            }}
+          <ModalCard
+            $maxWidth="560px"
+            style={{ padding: '1.25rem', gap: '1rem' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -3034,7 +3881,7 @@ const SubAdminManagement = () => {
                 ))}
               </div>
             )}
-          </div>
+          </ModalCard>
         </PriorityModalOverlay>
       )}
     </Container>

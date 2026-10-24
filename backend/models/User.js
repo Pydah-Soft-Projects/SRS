@@ -57,6 +57,16 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  assignedRoleId: {
+    type: String,
+    trim: true,
+    default: null
+  },
+  assignedRoleName: {
+    type: String,
+    trim: true,
+    default: null
+  },
   profile: {
     phone: String,
     department: String,
