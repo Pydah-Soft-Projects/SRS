@@ -5,24 +5,24 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 
 // Modern Color Palette
 const colors = {
-  primary: '#b91c1c',          // Crimson
-  primaryHover: '#991b1b',     // Dark Red
-  primaryLight: '#f97316',     // Warm Orange
-  secondary: '#b75b1f',        // Burnt Orange
-  secondaryHover: '#9a3412',   // Copper
-  accent: '#f97316',           // Warm Accent
-  success: '#16a34a',          // Emerald-600
-  warning: '#f59e0b',          // Amber-500
-  error: '#dc2626',            // Red-600
-  background: '#fff7ed',       // Peach Tint
-  surface: '#ffffff',          // White
-  surfaceLight: '#ffe4e6',     // Blush
-  textPrimary: '#1f2937',      // Slate-800
-  textSecondary: '#7c2d12',    // Chestnut
-  textMuted: '#b75b1f',        // Muted Orange
-  borderLight: 'rgba(249, 115, 22, 0.2)',
-  borderMedium: 'rgba(239, 68, 68, 0.3)',
-  overlay: 'rgba(127, 29, 29, 0.6)', // Warm overlay
+  primary: 'var(--primary)',
+  primaryHover: 'var(--primary-hover)',
+  primaryLight: 'var(--primary-light)',
+  secondary: 'var(--secondary)',
+  secondaryHover: 'var(--secondary)',
+  accent: 'var(--accent)',
+  success: 'var(--success)',
+  warning: 'var(--warning)',
+  error: 'var(--danger)',
+  background: 'var(--background)',
+  surface: 'var(--surface)',
+  surfaceLight: 'var(--primary-light)',
+  textPrimary: 'var(--text-primary)',
+  textSecondary: 'var(--text-secondary)',
+  textMuted: 'var(--text-muted)',
+  borderLight: 'var(--border)',
+  borderMedium: 'var(--border-strong)',
+  overlay: 'rgba(0, 0, 0, 0.5)',
 };
 
 // Shadow System
@@ -76,7 +76,7 @@ const float = keyframes`
 // Styled Components
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, rgba(255, 247, 237, 0.75) 0%, rgba(255, 228, 230, 0.75) 100%);
+  background: var(--background);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,7 +91,7 @@ const Container = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23${colors.primary.replace('#', '')}' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background: radial-gradient(circle, rgba(var(--primary-rgb), 0.05) 1px, transparent 1px); background-size: 24px 24px;
     opacity: 1;
   }
 
@@ -129,7 +129,7 @@ const Card = styled.div`
   }
 
   &:hover {
-    box-shadow: ${shadows['2xl']}, 0 0 40px rgba(79, 70, 229, 0.15);
+    box-shadow: ${shadows['2xl']}, 0 0 40px rgba(var(--primary-rgb), 0.15);
     transform: translateY(-2px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -275,7 +275,7 @@ const Input = styled.input`
 
   &:focus {
     border-color: ${colors.primary};
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
     transform: translateY(-1px);
   }
 
@@ -314,7 +314,7 @@ const PasswordToggle = styled.button`
 
   &:hover {
     color: ${colors.primary};
-    background: rgba(79, 70, 229, 0.1);
+    background: rgba(var(--primary-rgb), 0.1);
     transform: translateY(-50%) scale(1.1);
   }
 
@@ -381,7 +381,7 @@ const Button = styled.button`
   }
 
   &:focus {
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.25);
   }
 
   &.primary {
@@ -391,7 +391,7 @@ const Button = styled.button`
     &:hover:not(:disabled) {
       background: ${colors.primaryHover};
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
+      box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.35);
     }
 
     &:active {
@@ -509,7 +509,7 @@ const BackgroundElements = styled.div`
 const FloatingElement = styled.div`
   position: absolute;
   border-radius: 50%;
-  background: rgba(79, 70, 229, 0.1);
+  background: rgba(var(--primary-rgb), 0.1);
   animation: ${float} 6s ease-in-out infinite;
 
   &.element-1 {

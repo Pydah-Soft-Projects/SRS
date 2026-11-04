@@ -620,8 +620,8 @@ const FormsManagement = () => {
 
       <Row>
         <Col>
-          <Card style={{ border: '1px solid #fed7aa', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
-            <Card.Header style={{ background: '#fff7ed', borderBottom: '1px solid #fed7aa', padding: '0.75rem 1.25rem' }}>
+          <Card style={{ border: '1px solid var(--border)', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+            <Card.Header style={{ background: 'var(--primary-light)', borderBottom: '1px solid var(--border)', padding: '0.75rem 1.25rem' }}>
               <Tabs activeKey={activeTab} onSelect={setActiveTab} className="mb-0">
                 <Tab eventKey="teaching" title="Teaching Forms" />
                 <Tab eventKey="non_teaching" title="Non-Teaching Forms" />
@@ -635,15 +635,15 @@ const FormsManagement = () => {
               ) : (
                 <div style={{ width: '100%', overflowX: 'auto' }}>
                   <Table striped hover size="sm" style={{ marginBottom: 0, width: '100%', verticalAlign: 'middle', borderCollapse: 'collapse' }}>
-                    <thead style={{ background: '#fff7ed', borderBottom: '2px solid #fed7aa' }}>
+                    <thead style={{ background: 'var(--primary-light)', borderBottom: '2px solid var(--border)' }}>
                       <tr>
-                        <th style={{ width: '24%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Title</th>
-                        <th style={{ width: '20%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Position/Department</th>
-                        <th style={{ width: '18%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Type</th>
-                        <th style={{ width: '9%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Submissions</th>
-                        <th style={{ width: '8%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Status</th>
-                        <th style={{ width: '8%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Created</th>
-                        <th style={{ width: '13%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Actions</th>
+                        <th style={{ width: '24%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Title</th>
+                        <th style={{ width: '20%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Position/Department</th>
+                        <th style={{ width: '18%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Type</th>
+                        <th style={{ width: '9%', textAlign: 'center', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Submissions</th>
+                        <th style={{ width: '8%', textAlign: 'center', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Status</th>
+                        <th style={{ width: '8%', textAlign: 'center', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Created</th>
+                        <th style={{ width: '13%', textAlign: 'center', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -651,9 +651,9 @@ const FormsManagement = () => {
                         <tr key={form._id}>
                           <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.6rem' }}>
                             <div>
-                              <strong style={{ fontSize: '0.86rem', color: '#1e293b' }}>{form.title}</strong>
+                              <strong style={{ fontSize: '0.86rem', color: 'var(--text-primary)' }}>{form.title}</strong>
                               {form.description && (
-                                <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px' }}>
+                                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
                                   {form.description.substring(0, 50)}...
                                 </div>
                               )}
@@ -662,12 +662,12 @@ const FormsManagement = () => {
                           <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.6rem' }}>
                             {form.formType === 'candidate_profile' ? (
                               <>
-                                <div style={{ fontWeight: 500, fontSize: '0.84rem', color: '#334155' }}>{form.position}</div>
+                                <div style={{ fontWeight: 500, fontSize: '0.84rem', color: 'var(--text-primary)' }}>{form.position}</div>
                                 {form.formCategory === 'teaching' && form.department && (
-                                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{form.department}</div>
+                                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{form.department}</div>
                                 )}
                                 {form.formCategory === 'non_teaching' && (
-                                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Non-Teaching</div>
+                                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Non-Teaching</div>
                                 )}
                               </>
                             ) : (
@@ -680,13 +680,13 @@ const FormsManagement = () => {
                               {getFormTypeBadge(form.formType)}
                             </div>
                           </td>
-                          <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem', fontWeight: 600, fontSize: '0.85rem', color: '#1e293b' }}>
+                          <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem', fontWeight: 600, fontSize: '0.85rem', color: 'var(--text-primary)' }}>
                             {form.submissionCount}
                           </td>
                           <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem' }}>
                             {getStatusBadge(form.isActive)}
                           </td>
-                          <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem', fontSize: '0.82rem', color: '#475569' }}>
+                          <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                             {new Date(form.createdAt).toLocaleDateString()}
                           </td>
                           <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem' }}>
@@ -705,7 +705,7 @@ const FormsManagement = () => {
                                     height: '28px',
                                     padding: 0,
                                     borderRadius: '6px',
-                                    background: 'linear-gradient(135deg, #b91c1c 0%, #991b1b 100%)',
+                                    background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%)',
                                     border: 'none',
                                     color: '#fff'
                                   }}
@@ -726,7 +726,7 @@ const FormsManagement = () => {
                                   height: '28px',
                                   padding: 0,
                                   borderRadius: '6px',
-                                  background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
+                                  background: 'linear-gradient(135deg, #0284c7 0%, var(--secondary) 100%)',
                                   border: 'none',
                                   color: '#fff'
                                 }}
@@ -746,7 +746,7 @@ const FormsManagement = () => {
                                   height: '28px',
                                   padding: 0,
                                   borderRadius: '6px',
-                                  background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                                  background: 'linear-gradient(135deg, var(--success) 0%, var(--success) 100%)',
                                   border: 'none',
                                   color: '#fff'
                                 }}
@@ -768,8 +768,8 @@ const FormsManagement = () => {
                                       height: '28px',
                                       padding: 0,
                                       borderRadius: '6px',
-                                      background: form.isActive ? '#f59e0b' : '#10b981',
-                                      borderColor: form.isActive ? '#d97706' : '#059669',
+                                      background: form.isActive ? 'var(--warning)' : 'var(--success)',
+                                      borderColor: form.isActive ? 'var(--warning)' : 'var(--success)',
                                       color: '#fff'
                                     }}
                                   >
@@ -839,7 +839,7 @@ const FormsManagement = () => {
         <Modal.Header 
           closeButton 
           style={{ 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'var(--primary)',
             color: 'white',
             border: 'none',
             padding: '1.5rem'
@@ -853,7 +853,7 @@ const FormsManagement = () => {
           maxHeight: '80vh', 
           overflowY: 'auto',
           padding: '2rem',
-          background: '#f8f9fa'
+          background: 'var(--background)'
         }}>
           <Form onSubmit={handleCreateForm} className="form-creation-form">
                       <div style={{ 
@@ -864,18 +864,18 @@ const FormsManagement = () => {
                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                       }}>
                         <h6 style={{ 
-                          color: '#667eea', 
+                          color: 'var(--primary)', 
                           fontWeight: 600, 
                           marginBottom: '1.25rem',
                           paddingBottom: '0.75rem',
-                          borderBottom: '2px solid #e9ecef'
+                          borderBottom: '2px solid var(--border)'
                         }}>
                           📋 Basic Information
                         </h6>
                         <Row>
                           <Col md={8}>
                             <Form.Group className="mb-3">
-                              <Form.Label style={{ fontWeight: 600, color: '#495057' }}>Form Title *</Form.Label>
+                              <Form.Label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Form Title *</Form.Label>
                               <Form.Control
                                 type="text"
                                 value={formData.title}
@@ -891,7 +891,7 @@ const FormsManagement = () => {
                           </Col>
                           <Col md={4}>
                             <Form.Group className="mb-3">
-                              <Form.Label style={{ fontWeight: 600, color: '#495057' }}>Form Type *</Form.Label>
+                              <Form.Label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Form Type *</Form.Label>
                               <Form.Select
                                 value={formData.formType}
                                 onChange={(e) => setFormData(prev => ({
@@ -906,7 +906,7 @@ const FormsManagement = () => {
                                   border: '1px solid #ced4da',
                                   borderRadius: '6px',
                                   padding: '0.75rem',
-                                  backgroundColor: editingForm ? '#e9ecef' : 'white'
+                                  backgroundColor: editingForm ? 'var(--border)' : 'white'
                                 }}
                               >
                                 <option value="candidate_profile">Candidate Profile Form</option>
@@ -931,18 +931,18 @@ const FormsManagement = () => {
                           boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                         }}>
                           <h6 style={{ 
-                            color: '#667eea', 
+                            color: 'var(--primary)', 
                             fontWeight: 600, 
                             marginBottom: '1.25rem',
                             paddingBottom: '0.75rem',
-                            borderBottom: '2px solid #e9ecef'
+                            borderBottom: '2px solid var(--border)'
                           }}>
                             🎯 Candidate Profile Details
                           </h6>
                           <Row>
                             <Col md={editingForm ? 12 : 6}>
                               <Form.Group className="mb-3">
-                                <Form.Label style={{ fontWeight: 600, color: '#495057' }}>Form Category *</Form.Label>
+                                <Form.Label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Form Category *</Form.Label>
                                 <Form.Select
                                   value={formData.formCategory}
                                   onChange={(e) => setFormData(prev => ({ ...prev, formCategory: e.target.value }))}
@@ -952,7 +952,7 @@ const FormsManagement = () => {
                                     border: '1px solid #ced4da',
                                     borderRadius: '6px',
                                     padding: '0.75rem',
-                                    backgroundColor: editingForm ? '#e9ecef' : 'white'
+                                    backgroundColor: editingForm ? 'var(--border)' : 'white'
                                   }}
                                 >
                                   <option value="teaching">Teaching</option>
@@ -963,7 +963,7 @@ const FormsManagement = () => {
                             {!editingForm && (
                               <Col md={6}>
                                 <Form.Group className="mb-3">
-                                  <Form.Label style={{ fontWeight: 600, color: '#495057' }}>Quick Templates</Form.Label>
+                                  <Form.Label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Quick Templates</Form.Label>
                                   <div className="d-flex gap-2">
                                     <Button
                                       variant="outline-primary"
@@ -999,7 +999,7 @@ const FormsManagement = () => {
                           <Row>
                             <Col md={formData.formCategory === 'teaching' ? 4 : 6}>
                               <Form.Group className="mb-3">
-                                <Form.Label style={{ fontWeight: 600, color: '#495057' }}>Campus *</Form.Label>
+                                <Form.Label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Campus *</Form.Label>
                                 <Form.Select
                                   value={formData.campus}
                                   onChange={(e) => setFormData(prev => ({ ...prev, campus: e.target.value, department: '' }))}
@@ -1023,7 +1023,7 @@ const FormsManagement = () => {
                             {formData.formCategory === 'teaching' && (
                               <Col md={4}>
                                 <Form.Group className="mb-3">
-                                  <Form.Label style={{ fontWeight: 600, color: '#495057' }}>
+                                  <Form.Label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>
                                     Department *
                                   </Form.Label>
                                   {!formData.campus ? (
@@ -1036,7 +1036,7 @@ const FormsManagement = () => {
                                         border: '1px solid #ced4da',
                                         borderRadius: '6px',
                                         padding: '0.75rem',
-                                        backgroundColor: '#e9ecef'
+                                        backgroundColor: 'var(--border)'
                                       }}
                                     />
                                   ) : departmentsLoading ? (
@@ -1046,7 +1046,7 @@ const FormsManagement = () => {
                                         border: '1px solid #ced4da',
                                         borderRadius: '6px',
                                         padding: '0.75rem',
-                                        backgroundColor: '#e9ecef'
+                                        backgroundColor: 'var(--border)'
                                       }}
                                     >
                                       <option>Loading departments...</option>
@@ -1086,7 +1086,7 @@ const FormsManagement = () => {
                             )}
                             <Col md={formData.formCategory === 'teaching' ? 4 : 6}>
                               <Form.Group className="mb-3">
-                                <Form.Label style={{ fontWeight: 600, color: '#495057' }}>
+                                <Form.Label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>
                                   {formData.formCategory === 'teaching' ? 'Subject/Position' : 'Position/Designation'} *
                                 </Form.Label>
                                 <Form.Control
@@ -1107,7 +1107,7 @@ const FormsManagement = () => {
                             <Row className="mt-3">
                               <Col md={6}>
                                 <Form.Group className="mb-3">
-                                  <Form.Label style={{ fontWeight: 600, color: '#495057' }}>Closing Date *</Form.Label>
+                                  <Form.Label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Closing Date *</Form.Label>
                                   <Form.Control
                                     type="date"
                                     value={formData.closingDate}
@@ -1127,7 +1127,7 @@ const FormsManagement = () => {
                               </Col>
                               <Col md={6}>
                                 <Form.Group className="mb-3">
-                                  <Form.Label style={{ fontWeight: 600, color: '#495057' }}>Number of Vacancies *</Form.Label>
+                                  <Form.Label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Number of Vacancies *</Form.Label>
                                   <Form.Control
                                     type="number"
                                     min="1"
@@ -1158,7 +1158,7 @@ const FormsManagement = () => {
                         boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                       }}>
                         <Form.Group className="mb-3">
-                          <Form.Label style={{ fontWeight: 600, color: '#495057' }}>Description</Form.Label>
+                          <Form.Label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Description</Form.Label>
                           <Form.Control
                             as="textarea"
                             rows={3}
@@ -1189,10 +1189,10 @@ const FormsManagement = () => {
               <div style={{
                 marginBottom: '1.5rem',
                 paddingBottom: '1rem',
-                borderBottom: '2px solid #e9ecef'
+                borderBottom: '2px solid var(--border)'
               }}>
                 <h5 style={{ 
-                  color: '#667eea', 
+                  color: 'var(--primary)', 
                   fontWeight: 600, 
                   margin: 0
                 }}>
@@ -1205,7 +1205,7 @@ const FormsManagement = () => {
                   key={index} 
                   className="mb-3"
                   style={{
-                    border: '1px solid #e9ecef',
+                    border: '1px solid var(--border)',
                     borderRadius: '8px',
                     boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                     transition: 'all 0.2s ease'
@@ -1318,7 +1318,7 @@ const FormsManagement = () => {
                                               fontWeight: 600,
                                               padding: '0.75rem 2rem',
                                               boxShadow: '0 2px 8px rgba(102, 126, 234, 0.4)',
-                                              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                              background: 'var(--primary)',
                                               border: 'none',
                                               fontSize: '1rem'
                                             }}
@@ -1330,7 +1330,7 @@ const FormsManagement = () => {
 
             <div className="d-flex justify-content-end gap-2" style={{
               paddingTop: '1.5rem',
-              borderTop: '2px solid #e9ecef',
+              borderTop: '2px solid var(--border)',
               marginTop: '1.5rem',
               background: 'white',
               padding: '1.5rem',
@@ -1362,7 +1362,7 @@ const FormsManagement = () => {
                   padding: '0.75rem 1.5rem',
                   fontWeight: 500,
                   minWidth: '150px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'var(--primary)',
                   border: 'none',
                   boxShadow: '0 4px 6px rgba(102, 126, 234, 0.3)'
                 }}

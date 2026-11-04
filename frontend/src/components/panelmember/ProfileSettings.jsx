@@ -8,7 +8,7 @@ import LoadingSpinner from '../LoadingSpinner';
 const Container = styled.div`
   padding: 2rem 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #fef7ed 0%, #fed7aa 100%);
+  background: var(--background);
   width: 100%;
   box-sizing: border-box;
 
@@ -55,9 +55,9 @@ const Header = styled.div`
 const Title = styled.h1`
   font-size: 2.5rem;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #06b6d4, #22d3ee);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -75,7 +75,7 @@ const Title = styled.h1`
 
 const Subtitle = styled.p`
   font-size: 1.1rem;
-  color: #64748b;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
 
@@ -95,7 +95,7 @@ const ProfileCard = styled.div`
   border-radius: 16px;
   padding: 2.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   margin-bottom: 2rem;
 
   @media (max-width: 768px) {
@@ -122,13 +122,13 @@ const Section = styled.div`
 const SectionTitle = styled.h3`
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--border);
 
   @media (max-width: 768px) {
     font-size: 1.1rem;
@@ -175,15 +175,15 @@ const Label = styled.label`
 const Input = styled.input`
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--border);
   border-radius: 8px;
   font-size: 1rem;
-  color: #1e293b;
+  color: var(--text-primary);
   transition: all 0.2s ease;
 
   &:focus {
     outline: none;
-    border-color: #06b6d4;
+    border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
   }
 
@@ -195,7 +195,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  background: linear-gradient(135deg, #06b6d4, #22d3ee);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   color: white;
   border: none;
   padding: 0.75rem 2rem;
@@ -254,14 +254,14 @@ const InfoRow = styled.div`
 
 const InfoItem = styled.div`
   padding: 1rem;
-  background: #f8fafc;
+  background: var(--background);
   border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 `;
 
 const InfoLabel = styled.div`
   font-size: 0.875rem;
-  color: #64748b;
+  color: var(--text-secondary);
   font-weight: 600;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
@@ -270,7 +270,7 @@ const InfoLabel = styled.div`
 
 const InfoValue = styled.div`
   font-size: 1.1rem;
-  color: #1e293b;
+  color: var(--text-primary);
   font-weight: 600;
 
   @media (max-width: 768px) {
@@ -290,15 +290,15 @@ const Alert = styled.div`
   align-items: center;
   gap: 0.75rem;
   font-weight: 600;
-  background: ${props => props.type === 'success' ? '#dcfce7' : '#fef2f2'};
-  color: ${props => props.type === 'success' ? '#166534' : '#dc2626'};
-  border: 1px solid ${props => props.type === 'success' ? '#bbf7d0' : '#fecaca'};
+  background: ${props => props.type === 'success' ? 'var(--success-light)' : 'var(--danger-light)'};
+  color: ${props => props.type === 'success' ? '#166534' : 'var(--danger)'};
+  border: 1px solid ${props => props.type === 'success' ? 'var(--success-light)' : 'var(--danger-light)'};
 `;
 
 const EditButton = styled.button`
   background: transparent;
-  border: 2px solid #06b6d4;
-  color: #06b6d4;
+  border: 2px solid var(--primary);
+  color: var(--primary);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   font-weight: 600;
@@ -310,7 +310,7 @@ const EditButton = styled.button`
   gap: 0.5rem;
 
   &:hover {
-    background: #06b6d4;
+    background: var(--primary);
     color: white;
   }
 `;
@@ -484,7 +484,7 @@ const ProfileSettings = () => {
                 </InfoItem>
                 <InfoItem>
                   <InfoLabel>Account Status</InfoLabel>
-                  <InfoValue style={{ color: (userProfile || user)?.isActive !== false ? '#10b981' : '#ef4444' }}>
+                  <InfoValue style={{ color: (userProfile || user)?.isActive !== false ? 'var(--success)' : 'var(--danger)' }}>
                     {(userProfile || user)?.isActive !== false ? 'Active' : 'Inactive'}
                   </InfoValue>
                 </InfoItem>

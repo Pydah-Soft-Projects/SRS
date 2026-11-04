@@ -30,7 +30,7 @@ const glow = keyframes`
 // Main Container
 const TestContainer = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   padding: 2rem;
   display: flex;
   align-items: center;
@@ -59,7 +59,7 @@ const HeaderCard = styled(Card)`
 `;
 
 const HeaderContent = styled.div`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   color: white;
   padding: 2rem;
   display: flex;
@@ -168,7 +168,7 @@ const DurationSection = styled.div`
 `;
 
 const DurationTitle = styled.h3`
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 1.5rem;
   font-weight: 700;
   font-size: 1.5rem;
@@ -216,8 +216,8 @@ const DurationButton = styled(Button)`
   }
   
   &.active {
-    border-color: #667eea;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
     color: white;
     animation: ${glow} 2s ease-in-out infinite;
   }
@@ -229,8 +229,8 @@ const TypingArea = styled.div`
 `;
 
 const ParagraphContainer = styled.div`
-  background: #f8fafc;
-  border: 3px solid #e2e8f0;
+  background: var(--surface);
+  border: 3px solid var(--border);
   border-radius: 16px;
   padding: 2.5rem;
   margin-bottom: 2rem;
@@ -238,12 +238,12 @@ const ParagraphContainer = styled.div`
   min-height: 250px;
   font-size: 1.5rem;
   line-height: 2.2;
-  color: #64748b;
+  color: var(--text-secondary);
   overflow: hidden;
   transition: border-color 0.3s ease;
   
   &.active {
-    border-color: #667eea;
+    border-color: var(--primary);
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
   }
   
@@ -260,14 +260,14 @@ const CharacterSpan = styled.span`
   transition: all 0.1s ease;
   
   ${props => props.$isCorrect === true && css`
-    color: #10b981;
+    color: var(--success);
     background: rgba(16, 185, 129, 0.15);
     padding: 2px 0;
     border-radius: 3px;
   `}
   
   ${props => props.$isCorrect === false && css`
-    color: #ef4444;
+    color: var(--danger);
     background: rgba(239, 68, 68, 0.15);
     padding: 2px 0;
     border-radius: 3px;
@@ -276,7 +276,7 @@ const CharacterSpan = styled.span`
   `}
   
   ${props => props.$isCurrent && css`
-    background: #06b6d4;
+    background: var(--primary);
     color: white;
     padding: 2px 4px;
     border-radius: 4px;
@@ -285,7 +285,7 @@ const CharacterSpan = styled.span`
   `}
   
   ${props => props.$isPending && css`
-    color: #94a3b8;
+    color: var(--text-muted);
   `}
 `;
 
@@ -301,7 +301,7 @@ const HiddenTextarea = styled.textarea`
   border: none;
   background: transparent;
   color: transparent;
-  caret-color: #06b6d4;
+  caret-color: var(--primary);
   resize: none;
   font-family: inherit;
   z-index: 10;
@@ -359,8 +359,8 @@ const TimerDisplay = styled.div`
   font-size: 3rem;
   font-weight: 900;
   color: ${props => {
-    if (props.$timeLeft <= 10) return '#ef4444';
-    if (props.$timeLeft <= 30) return '#f59e0b';
+    if (props.$timeLeft <= 10) return 'var(--danger)';
+    if (props.$timeLeft <= 30) return 'var(--warning)';
     return '#ffffff';
   }};
   text-align: center;
@@ -384,7 +384,7 @@ const ResultsModal = styled(Modal)`
 `;
 
 const ResultsHeader = styled(Modal.Header)`
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, var(--success) 0%, var(--success) 100%);
   color: white;
   border: none;
   padding: 2rem;
@@ -403,7 +403,7 @@ const ResultsHeader = styled(Modal.Header)`
 
 const ResultsBody = styled(Modal.Body)`
   padding: 3rem;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  background: linear-gradient(135deg, var(--success-light) 0%, var(--success-light) 100%);
   
   @media (max-width: 768px) {
     padding: 2rem 1.5rem;
@@ -433,7 +433,7 @@ const ResultCard = styled.div`
 
 const ResultLabel = styled.div`
   font-size: 0.875rem;
-  color: #64748b;
+  color: var(--text-secondary);
   margin-bottom: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -443,7 +443,7 @@ const ResultLabel = styled.div`
 const ResultValue = styled.div`
   font-size: 2.5rem;
   font-weight: 900;
-  color: #1e293b;
+  color: var(--text-primary);
   
   @media (max-width: 768px) {
     font-size: 2rem;
@@ -452,7 +452,7 @@ const ResultValue = styled.div`
 
 const ResultSubtext = styled.div`
   font-size: 0.875rem;
-  color: #94a3b8;
+  color: var(--text-muted);
   margin-top: 0.5rem;
 `;
 
@@ -460,13 +460,13 @@ const ResultSubtext = styled.div`
 const InstructionsCard = styled(Card)`
   border: none;
   border-radius: 16px;
-  background: #f8fafc;
+  background: var(--surface);
   margin-bottom: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 `;
 
 const InstructionsHeader = styled(Card.Header)`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   color: white;
   border: none;
   padding: 1.5rem;
@@ -478,7 +478,7 @@ const InstructionsHeader = styled(Card.Header)`
 const InstructionsBody = styled(Card.Body)`
   padding: 2rem;
   line-height: 1.8;
-  color: #475569;
+  color: var(--text-secondary);
   
   ul {
     margin: 1rem 0;

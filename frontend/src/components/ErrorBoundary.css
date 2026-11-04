@@ -1,6 +1,7 @@
 /* ==========================================================================
    ErrorBoundary.css
    Styles for the global ErrorBoundary component
+   Styles adapted to Master Token Dictionary (UI Portal Integration Guide)
    ========================================================================== */
 
 .error-boundary-wrapper {
@@ -11,17 +12,18 @@
   padding: 1.5rem;
   width: 100%;
   box-sizing: border-box;
+  background-color: var(--background);
 }
 
 .error-boundary-card {
-  background: #ffffff;
+  background: var(--surface);
   border-radius: 16px;
   padding: clamp(1.5rem, 4vw, 2.5rem);
   max-width: 520px;
   width: 100%;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.12);
-  border: 1px solid #e0f2fe;
+  box-shadow: 0 10px 30px rgba(var(--primary-rgb), 0.1);
+  border: 1px solid var(--border);
 }
 
 .error-boundary-icon {
@@ -36,25 +38,25 @@
 }
 
 .error-boundary-icon.chunk-error {
-  background: #eff6ff;
-  color: #0ea5e9;
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 .error-boundary-icon.general-error {
-  background: #fef2f2;
-  color: #ef4444;
+  background: var(--danger-light);
+  color: var(--danger);
 }
 
 .error-boundary-title {
   font-size: 1.35rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .error-boundary-message {
   font-size: 0.9rem;
-  color: #64748b;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 1.5rem;
 }
@@ -67,7 +69,7 @@
 }
 
 .error-boundary-retry-btn {
-  background: #0ea5e9;
+  background: var(--primary);
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -78,19 +80,19 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
   transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .error-boundary-retry-btn:hover {
-  background: #0284c7;
+  background: var(--primary-hover);
   transform: translateY(-1px);
 }
 
 .error-boundary-home-btn {
-  background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #cbd5e1;
+  background: var(--background);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
   border-radius: 10px;
   padding: 0.65rem 1.25rem;
   font-size: 0.9rem;
@@ -100,5 +102,6 @@
 }
 
 .error-boundary-home-btn:hover {
-  background: #e2e8f0;
+  background: var(--surface);
+  color: var(--text-primary);
 }

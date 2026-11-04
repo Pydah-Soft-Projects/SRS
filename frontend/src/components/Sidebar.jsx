@@ -26,12 +26,12 @@ const SidebarContainer = styled.div`
   left: 0;
   height: 100vh;
   width: ${props => props.$isOpen ? '264px' : '64px'};
-  background: #ffffff;
-  color: #1f2937;
-  border-right: 1px solid #fed7aa;
+  background: var(--sidebar);
+  color: var(--sidebar-text);
+  border-right: 1px solid var(--border);
   transition: width 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1);
   z-index: 1000;
-  box-shadow: 4px 0 24px rgba(185, 28, 28, 0.06);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   overflow-x: hidden;
   overflow-y: auto;
@@ -43,18 +43,18 @@ const SidebarContainer = styled.div`
   }
 
   &::-webkit-scrollbar { width: 4px; }
-  &::-webkit-scrollbar-track { background: #ffffff; }
-  &::-webkit-scrollbar-thumb { background: #fed7aa; border-radius: 4px; }
-  &::-webkit-scrollbar-thumb:hover { background: #f97316; }
+  &::-webkit-scrollbar-track { background: var(--sidebar); }
+  &::-webkit-scrollbar-thumb { background: var(--sidebar-muted); border-radius: 4px; }
+  &::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 `;
 
 const SidebarHeader = styled.div`
   padding: ${props => props.$isOpen ? '0.75rem 1.15rem' : '0.65rem 0'};
-  border-bottom: 1px solid #fed7aa;
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: ${props => props.$isOpen ? 'space-between' : 'center'};
-  background: #ffffff;
+  background: var(--sidebar);
   transition: padding 0.3s ease;
   position: relative;
   width: 100%;
@@ -115,7 +115,7 @@ const LogoText = styled.span`
   width: ${props => props.$isOpen ? 'auto' : '0'};
   overflow: hidden;
   transition: opacity 0.3s ease, width 0.3s ease;
-  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -123,9 +123,9 @@ const LogoText = styled.span`
 `;
 
 const ToggleButton = styled.button`
-  background: #ffffff;
-  border: 1px solid #f97316;
-  color: #b91c1c;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--primary);
   font-size: 1rem;
   cursor: pointer;
   padding: 0.45rem;
@@ -137,12 +137,12 @@ const ToggleButton = styled.button`
   justify-content: center;
   width: 34px;
   height: 34px;
-  box-shadow: 0 2px 6px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background: #b91c1c;
-    color: #ffffff;
-    border-color: #b91c1c;
+    background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
   }
 
   @media (max-width: 768px) { width: 34px; height: 34px; }
@@ -187,7 +187,7 @@ const NavSection = styled.div`
 const SectionTitle = styled.h6`
   font-size: 0.68rem;
   font-weight: 800;
-  color: #9a3412;
+  color: var(--sidebar-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 0.4rem;
@@ -200,7 +200,7 @@ const SectionTitle = styled.h6`
 
 const Divider = styled.div`
   height: 1px;
-  background: #fed7aa;
+  background: var(--border);
   margin: 0.625rem 0.875rem;
   transition: margin 0.3s ease;
 `;
@@ -231,7 +231,7 @@ const NavLink = styled(Link)`
   align-items: center;
   justify-content: ${props => props.$isOpen ? 'flex-start' : 'center'};
   padding: ${props => props.$isOpen ? '0.7rem 0.875rem' : '0.7rem 0'};
-  color: #1f2937;
+  color: var(--sidebar-text);
   text-decoration: none;
   border-radius: 10px;
   transition: all 0.2s ease;
@@ -242,16 +242,16 @@ const NavLink = styled(Link)`
   font-size: 0.875rem;
 
   &:hover {
-    background: #fff7ed;
-    color: #b91c1c;
-    box-shadow: 0 2px 8px rgba(185, 28, 28, 0.08);
+    background: var(--primary-light);
+  color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
 
   &.active {
-    background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
-    color: #ffffff;
-    font-weight: 700;
-    box-shadow: 0 4px 14px rgba(185, 28, 28, 0.35);
+    background: var(--primary);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
   }
 
   svg {
@@ -262,10 +262,10 @@ const NavLink = styled(Link)`
     height: ${props => props.$isOpen ? 'auto' : '16px'};
     transition: all 0.2s ease;
     flex-shrink: 0;
-    color: #c2410c;
+    color: var(--sidebar-muted);
   }
 
-  &:hover svg { color: #b91c1c; }
+  &:hover svg { color: var(--primary); }
   &.active svg { color: #ffffff; }
 `;
 
@@ -285,7 +285,7 @@ const Tooltip = styled.div`
   left: ${props => props.$left ? `${props.$left}px` : '74px'};
   top: ${props => props.$top ? `${props.$top}px` : '50%'};
   transform: translateY(-50%);
-  background: #1f2937;
+  background: var(--sidebar);
   color: white;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
@@ -306,7 +306,7 @@ const Tooltip = styled.div`
     top: 50%;
     transform: translateY(-50%);
     border: 6px solid transparent;
-    border-right-color: #1f2937;
+    border-right-color: var(--sidebar);
   }
 
   @media (max-width: 768px) {
@@ -315,9 +315,9 @@ const Tooltip = styled.div`
 `;
 
 const UserSection = styled.div`
-  border-top: 1px solid #fed7aa;
+  border-top: 1px solid var(--border);
   padding: ${props => props.$isOpen ? '0.75rem' : '0.5rem 0.25rem'};
-  background: #ffffff;
+  background: var(--sidebar);
   transition: padding 0.3s ease;
   width: 100%;
   box-sizing: border-box;
@@ -336,8 +336,8 @@ const UserInfo = styled.div`
   margin-bottom: 0;
   padding: ${props => props.$isOpen ? '0.6rem 0.7rem' : '0'};
   border-radius: 10px;
-  background: ${props => props.$isOpen ? '#fff7ed' : 'transparent'};
-  border: ${props => props.$isOpen ? '1px solid #fed7aa' : 'none'};
+  background: ${props => props.$isOpen ? 'var(--primary-light)' : 'transparent'};
+  border: ${props => props.$isOpen ? '1px solid var(--border)' : 'none'};
   box-shadow: ${props => props.$isOpen ? '0 2px 8px rgba(185, 28, 28, 0.06)' : 'none'};
   transition: all 0.3s ease;
   width: 100%;
@@ -346,7 +346,7 @@ const UserInfo = styled.div`
   opacity: ${props => props.$isOpen ? 1 : 0};
 
   &:hover {
-    background: ${props => props.$isOpen ? '#ffedd5' : 'transparent'};
+    background: ${props => props.$isOpen ? 'var(--primary-light)' : 'transparent'};
     box-shadow: ${props => props.$isOpen ? '0 4px 12px rgba(185, 28, 28, 0.12)' : 'none'};
   }
 `;
@@ -355,8 +355,8 @@ const UserAvatar = styled.div`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
-  border: 2px solid #fed7aa;
+  background: var(--primary);
+  border: 2px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -374,8 +374,8 @@ const UserAvatar = styled.div`
     right: -2px;
     width: 9px;
     height: 9px;
-    background: #10b981;
-    border: 2px solid #ffffff;
+    background: var(--success);
+    border: 2px solid var(--surface);
     border-radius: 50%;
     transition: all 0.3s ease;
   }
@@ -395,7 +395,7 @@ const UserName = styled.div`
   font-weight: 600;
   font-size: 0.82rem;
   margin-bottom: 0.1rem;
-  color: #1f2937;
+  color: var(--sidebar-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -403,7 +403,7 @@ const UserName = styled.div`
 
 const UserRole = styled.div`
   font-size: 0.7rem;
-  color: #c2410c;
+  color: var(--sidebar-muted);
   text-transform: capitalize;
   font-weight: 500;
   display: flex;
@@ -421,9 +421,9 @@ const LogoutButton = styled.button`
   align-items: center;
   justify-content: center;
   padding: 0;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #dc2626;
+  background: var(--danger-light);
+  border: 1px solid var(--danger);
+  color: var(--danger);
   text-decoration: none;
   border-radius: 8px;
   transition: all 0.2s ease;
@@ -432,9 +432,9 @@ const LogoutButton = styled.button`
   box-sizing: border-box;
 
   &:hover {
-    background: #fee2e2;
-    color: #991b1b;
-    border-color: #fca5a5;
+    background: var(--danger);
+  color: #ffffff;
+  border-color: var(--danger);
     transform: scale(1.08);
   }
 
@@ -442,11 +442,11 @@ const LogoutButton = styled.button`
     font-size: 0.9rem;
     transition: all 0.2s ease;
     flex-shrink: 0;
-    color: #dc2626;
+    color: var(--danger);
   }
 
   &:hover svg {
-    color: #991b1b;
+    color: #ffffff;
   }
 `;
 

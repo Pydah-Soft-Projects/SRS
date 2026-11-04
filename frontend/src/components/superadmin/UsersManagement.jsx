@@ -33,7 +33,7 @@ const HeaderContent = styled.div`
 `;
 
 const Title = styled.h2`
-  color: #1e293b;
+  color: var(--text-primary);
   font-weight: 800;
   font-size: 1.75rem;
   letter-spacing: -0.02em;
@@ -42,12 +42,12 @@ const Title = styled.h2`
 
 const Subtitle = styled.p`
   margin: 0;
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 0.95rem;
 `;
 
 const AddButton = styled.button`
-  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
   color: white;
   border: none;
   padding: 0.65rem 1.35rem;
@@ -59,7 +59,7 @@ const AddButton = styled.button`
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: 0 4px 14px rgba(185, 28, 28, 0.25);
+  box-shadow: 0 4px 14px rgba(var(--primary-rgb), 0.25);
   align-self: flex-start;
 
   @media (min-width: 768px) {
@@ -67,8 +67,8 @@ const AddButton = styled.button`
   }
 
   &:hover {
-    background: linear-gradient(135deg, #991b1b 0%, #c2410c 100%);
-    box-shadow: 0 6px 18px rgba(185, 28, 28, 0.35);
+    background: linear-gradient(135deg, var(--primary-hover) 0%, var(--text-secondary) 100%);
+    box-shadow: 0 6px 18px rgba(var(--primary-rgb), 0.35);
     transform: translateY(-1px);
   }
 `;
@@ -77,8 +77,8 @@ const TableWrapper = styled.div`
   width: 100%;
   border-radius: 12px;
   background: #ffffff;
-  border: 1px solid #fed7aa;
-  box-shadow: 0 4px 20px rgba(185, 28, 28, 0.05);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.05);
   overflow: hidden;
 `;
 
@@ -95,12 +95,12 @@ const Table = styled.table`
 `;
 
 const Th = styled.th`
-  background: #fff7ed;
+  background: var(--primary-light);
   padding: 0.8rem 1rem;
   text-align: left;
   font-weight: 700;
-  color: #991b1b;
-  border-bottom: 2px solid #fed7aa;
+  color: var(--primary-hover);
+  border-bottom: 2px solid var(--border);
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -108,11 +108,11 @@ const Th = styled.th`
 `;
 
 const Tr = styled.tr`
-  border-bottom: 1px solid #fed7aa;
+  border-bottom: 1px solid var(--border);
   transition: background 0.15s ease;
 
   &:hover {
-    background: #fff7ed;
+    background: var(--primary-light);
   }
 
   &:last-child {
@@ -122,8 +122,8 @@ const Tr = styled.tr`
 
 const Td = styled.td`
   padding: 0.85rem 1rem;
-  border-bottom: 1px solid #fed7aa;
-  color: #1f2937;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
   font-size: 0.875rem;
   vertical-align: middle;
 `;
@@ -148,8 +148,8 @@ const ModalContent = styled.div`
   max-width: 520px;
   max-height: 90vh;
   overflow-y: auto;
-  border: 1px solid #fed7aa;
-  box-shadow: 0 12px 36px rgba(185, 28, 28, 0.16);
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 36px rgba(var(--primary-rgb), 0.16);
 `;
 
 const ModalHeader = styled.div`
@@ -158,12 +158,12 @@ const ModalHeader = styled.div`
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 0.85rem;
-  border-bottom: 1px solid #fed7aa;
+  border-bottom: 1px solid var(--border);
 `;
 
 const ModalTitle = styled.h3`
   margin: 0;
-  color: #991b1b;
+  color: var(--primary-hover);
   font-weight: 700;
   font-size: 1.35rem;
 `;
@@ -182,7 +182,7 @@ const CloseButton = styled.button`
   transition: background 0.2s ease;
 
   &:hover {
-    background: #fff7ed;
+    background: var(--primary-light);
   }
 `;
 
@@ -199,22 +199,22 @@ const FormGroup = styled.div`
 
 const Label = styled.label`
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   margin-bottom: 0.45rem;
   font-size: 0.88rem;
 `;
 
 const Input = styled.input`
   padding: 0.7rem 0.85rem;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border-strong);
   border-radius: 8px;
   font-size: 0.92rem;
-  color: #0f172a;
+  color: var(--text-primary);
   outline: none;
   transition: all 0.2s ease;
 
   &:focus {
-    border-color: #f97316;
+    border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
   }
 `;
@@ -227,8 +227,8 @@ const ButtonGroup = styled.div`
 
 const CancelButton = styled.button`
   background: #ffffff;
-  color: #475569;
-  border: 1px solid #cbd5e1;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
   padding: 0.7rem 1.4rem;
   border-radius: 8px;
   font-weight: 600;
@@ -238,13 +238,13 @@ const CancelButton = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    background: #f8fafc;
-    color: #1e293b;
+    background: var(--background);
+    color: var(--text-primary);
   }
 `;
 
 const SubmitButton = styled.button`
-  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%);
   color: white;
   border: none;
   padding: 0.7rem 1.4rem;
@@ -253,12 +253,12 @@ const SubmitButton = styled.button`
   font-size: 0.9rem;
   cursor: pointer;
   flex: 1;
-  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
   transition: all 0.2s ease;
 
   &:hover {
-    background: linear-gradient(135deg, #991b1b 0%, #c2410c 100%);
-    box-shadow: 0 6px 16px rgba(185, 28, 28, 0.35);
+    background: linear-gradient(135deg, var(--primary-hover) 0%, var(--text-secondary) 100%);
+    box-shadow: 0 6px 16px rgba(var(--primary-rgb), 0.35);
   }
 
   &:disabled {
@@ -498,7 +498,7 @@ const UsersManagement = () => {
               <tbody>
                 {panelMembers.length === 0 ? (
                   <tr>
-                    <Td colSpan={8} style={{ textAlign: 'center', padding: '2.5rem', color: '#64748b' }}>
+                    <Td colSpan={8} style={{ textAlign: 'center', padding: '2.5rem', color: 'var(--text-secondary)' }}>
                       No panel members found. Click "Add Panel Member" to add one.
                     </Td>
                   </tr>
@@ -506,14 +506,14 @@ const UsersManagement = () => {
                   panelMembers.map(member => (
                     <Tr key={member._id}>
                       <Td>
-                        <span style={{ fontWeight: 600, color: '#1e293b' }}>{member.name}</span>
+                        <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{member.name}</span>
                         {member.role === 'sub_admin' && (
                           <span style={{ 
                             marginLeft: '0.5rem',
                             padding: '0.18rem 0.5rem',
                             borderRadius: '6px',
-                            backgroundColor: '#ffedd5',
-                            border: '1px solid #fed7aa',
+                            backgroundColor: 'var(--primary-light)',
+                            border: '1px solid var(--border)',
                             color: '#9a3412',
                             fontSize: '0.72rem',
                             fontWeight: 700
@@ -531,9 +531,9 @@ const UsersManagement = () => {
                               <span
                                 key={typeof course === 'object' ? course._id : course}
                                 style={{
-                                  background: '#ffedd5',
+                                  background: 'var(--primary-light)',
                                   color: '#9a3412',
-                                  border: '1px solid #fed7aa',
+                                  border: '1px solid var(--border)',
                                   padding: '0.2rem 0.55rem',
                                   borderRadius: '6px',
                                   fontSize: '0.78rem',
@@ -545,7 +545,7 @@ const UsersManagement = () => {
                             ))}
                           </div>
                         ) : (
-                          <span style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '0.85rem' }}>No courses assigned</span>
+                          <span style={{ color: 'var(--text-muted)', fontStyle: 'italic', fontSize: '0.85rem' }}>No courses assigned</span>
                         )}
                       </Td>
                       <Td>{member.profile?.designation || 'N/A'}</Td>
@@ -553,9 +553,9 @@ const UsersManagement = () => {
                       <Td style={{ textAlign: 'center' }}>
                         <span
                           style={{
-                            background: member.isActive ? '#d1fae5' : '#fee2e2',
-                            color: member.isActive ? '#065f46' : '#991b1b',
-                            border: `1px solid ${member.isActive ? '#a7f3d0' : '#fecaca'}`,
+                            background: member.isActive ? '#d1fae5' : 'var(--danger-light)',
+                            color: member.isActive ? '#065f46' : 'var(--primary-hover)',
+                            border: `1px solid ${member.isActive ? '#a7f3d0' : 'var(--danger-light)'}`,
                             padding: '0.25rem 0.65rem',
                             borderRadius: '9999px',
                             fontSize: '0.75rem',
@@ -573,7 +573,7 @@ const UsersManagement = () => {
                             title="Edit Panel Member"
                             onClick={() => handleEdit(member)}
                             style={{
-                              background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                              background: 'linear-gradient(135deg, var(--success) 0%, var(--success) 100%)',
                               color: 'white',
                               border: 'none',
                               width: '28px',
@@ -595,7 +595,7 @@ const UsersManagement = () => {
                             title={member.isActive ? 'Deactivate Panel Member' : 'Activate Panel Member'}
                             onClick={() => handleStatusToggle(member._id, member.isActive)}
                             style={{
-                              background: member.isActive ? 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)' : 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                              background: member.isActive ? 'linear-gradient(135deg, var(--warning) 0%, var(--warning) 100%)' : 'linear-gradient(135deg, var(--success) 0%, var(--success) 100%)',
                               color: 'white',
                               border: 'none',
                               width: '28px',
@@ -617,7 +617,7 @@ const UsersManagement = () => {
                             title="Delete Panel Member"
                             onClick={() => handleDelete(member._id)}
                             style={{
-                              background: 'linear-gradient(135deg, #b91c1c 0%, #dc2626 100%)',
+                              background: 'linear-gradient(135deg, var(--primary) 0%, var(--danger) 100%)',
                               color: 'white',
                               border: 'none',
                               width: '28px',
@@ -628,7 +628,7 @@ const UsersManagement = () => {
                               justifyContent: 'center',
                               cursor: 'pointer',
                               padding: 0,
-                              boxShadow: '0 2px 5px rgba(185, 28, 28, 0.25)',
+                              boxShadow: '0 2px 5px rgba(var(--primary-rgb), 0.25)',
                               transition: 'all 0.15s ease'
                             }}
                           >
@@ -669,10 +669,10 @@ const UsersManagement = () => {
                   style={{
                     width: '100%',
                     padding: '0.7rem 0.85rem',
-                    border: '1px solid #cbd5e1',
+                    border: '1px solid var(--border-strong)',
                     borderRadius: '8px',
                     fontSize: '0.92rem',
-                    color: '#0f172a',
+                    color: 'var(--text-primary)',
                     outline: 'none',
                     background: '#ffffff',
                     transition: 'border-color 0.2s'
@@ -698,10 +698,10 @@ const UsersManagement = () => {
                     style={{
                       width: '100%',
                       padding: '0.7rem 0.85rem',
-                      border: '1px solid #cbd5e1',
+                      border: '1px solid var(--border-strong)',
                       borderRadius: '8px',
                       fontSize: '0.92rem',
-                      color: '#0f172a',
+                      color: 'var(--text-primary)',
                       minHeight: '120px',
                       outline: 'none',
                       background: '#ffffff',

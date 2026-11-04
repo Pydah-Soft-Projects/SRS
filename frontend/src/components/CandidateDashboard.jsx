@@ -30,7 +30,7 @@ const slideIn = keyframes`
 
 const DashboardContainer = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+  background: var(--background);
   padding: 2rem 0;
   width: 100%;
   box-sizing: border-box;
@@ -66,9 +66,9 @@ const HeaderSection = styled.div`
 const DashboardTitle = styled.h1`
   font-size: 2.5rem;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -84,7 +84,7 @@ const DashboardTitle = styled.h1`
 
 const DashboardSubtitle = styled.p`
   font-size: 1.1rem;
-  color: #64748b;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
@@ -96,7 +96,7 @@ const DashboardSubtitle = styled.p`
 `;
 
 const WelcomeCard = styled.div`
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
   color: white;
   border-radius: 16px;
   padding: 2rem;
@@ -169,7 +169,7 @@ const DashboardCard = styled.div`
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
@@ -182,7 +182,7 @@ const DashboardCard = styled.div`
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #2563eb, #3b82f6);
+    background: linear-gradient(90deg, var(--primary), var(--accent));
   }
 
   &:hover {
@@ -195,7 +195,7 @@ const DashboardCard = styled.div`
 
 const CardIcon = styled.div`
   font-size: 2.5rem;
-  color: #2563eb;
+  color: var(--primary);
   margin-bottom: 1rem;
   opacity: 0.8;
 `;
@@ -203,12 +203,12 @@ const CardIcon = styled.div`
 const CardTitle = styled.h3`
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 0.75rem;
 `;
 
 const CardDescription = styled.p`
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.6;
   margin: 0;
@@ -217,7 +217,7 @@ const CardDescription = styled.p`
 const StatusBadge = styled.span`
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background: #dcfce7;
+  background: var(--success-light);
   color: #166534;
   border-radius: 20px;
   font-size: 0.75rem;
@@ -227,7 +227,7 @@ const StatusBadge = styled.span`
 
 const TestCard = styled(Card)`
   margin-bottom: 1.5rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
@@ -240,7 +240,7 @@ const TestCard = styled(Card)`
 
 const TestCardHeader = styled(Card.Header)`
   background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
-  border-bottom: 2px solid #cbd5e1;
+  border-bottom: 2px solid var(--border-strong);
   padding: 1.25rem;
 `;
 
@@ -249,13 +249,13 @@ const TestCardBody = styled(Card.Body)`
 `;
 
 const TestTitle = styled.h5`
-  color: #1e293b;
+  color: var(--text-primary);
   font-weight: 700;
   margin-bottom: 0.5rem;
 `;
 
 const TestDescription = styled.p`
-  color: #64748b;
+  color: var(--text-secondary);
   margin-bottom: 1rem;
   font-size: 0.95rem;
 `;
@@ -274,7 +274,7 @@ const TestInfoItem = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #475569;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 `;
 
@@ -372,7 +372,7 @@ const CandidateDashboard = () => {
             {/* Pending Tests Section */}
             {pendingTests.length > 0 && (
               <div className="mb-4">
-                <h3 className="mb-3" style={{ color: '#1e293b', fontWeight: '700' }}>
+                <h3 className="mb-3" style={{ color: 'var(--text-primary)', fontWeight: '700' }}>
                   <FaClock className="me-2" />
                   Assigned Tests ({pendingTests.length})
                 </h3>
@@ -409,7 +409,7 @@ const CandidateDashboard = () => {
                       {test.instructions && (
                         <div className="mb-3">
                           <strong>Instructions:</strong>
-                          <p style={{ color: '#64748b', marginTop: '0.5rem', fontSize: '0.9rem' }}>
+                          <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem', fontSize: '0.9rem' }}>
                             {test.instructions}
                           </p>
                         </div>
@@ -431,7 +431,7 @@ const CandidateDashboard = () => {
             {/* Completed Tests Section */}
             {completedTests.length > 0 && (
               <div className="mb-4">
-                <h3 className="mb-3" style={{ color: '#1e293b', fontWeight: '700' }}>
+                <h3 className="mb-3" style={{ color: 'var(--text-primary)', fontWeight: '700' }}>
                   <FaCheckCircle className="me-2" />
                   Completed Tests ({completedTests.length})
                 </h3>
@@ -463,7 +463,7 @@ const CandidateDashboard = () => {
             {/* No Tests Message */}
             {assignedTests.length === 0 && !loading && (
               <Alert variant="info" className="text-center py-4">
-                <FaClipboardCheck size={48} className="mb-3" style={{ color: '#3b82f6' }} />
+                <FaClipboardCheck size={48} className="mb-3" style={{ color: 'var(--primary)' }} />
                 <h5>No Tests Assigned</h5>
                 <p className="mb-0">
                   You don't have any tests assigned yet. Tests will appear here once they are assigned to you by the administrator.

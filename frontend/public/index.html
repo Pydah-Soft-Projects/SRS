@@ -15,6 +15,20 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Centralized Theme Runtime Loader (UI Portal Integration Guide - Zero Local Theme Files) -->
+    <script>
+      (function () {
+        var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        var server = isLocal ? 'http://localhost:7000' : 'https://ui-theme.pydah.edu.in';
+        var poll = isLocal ? '10' : '30';
+        document.write('<script src="' + server + '/themes/theme-loader.js" data-theme-server="' + server + '" data-poll-interval="' + poll + '"><\/script>');
+      })();
+    </script>
+    <!-- Fallback if central server is offline & no local server is running -->
+    <noscript>
+      <link rel="stylesheet" href="https://ui-theme.pydah.edu.in/themes/theme.css" />
+    </noscript>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.

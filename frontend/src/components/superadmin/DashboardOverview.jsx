@@ -42,23 +42,23 @@ const spin = keyframes`
 
 const STAGE_META = {
   application_review: { label: 'Application Review', color: '#6b7280' },
-  awaiting_test_assignment: { label: 'Awaiting Test Assignment', color: '#2563eb' },
+  awaiting_test_assignment: { label: 'Awaiting Test Assignment', color: 'var(--secondary)' },
   test_assigned: { label: 'Test Assigned', color: '#6366f1' },
-  test_in_progress: { label: 'Test In Progress', color: '#f59e0b' },
-  awaiting_interview: { label: 'Awaiting Interview', color: '#0ea5e9' },
+  test_in_progress: { label: 'Test In Progress', color: 'var(--warning)' },
+  awaiting_interview: { label: 'Awaiting Interview', color: 'var(--secondary)' },
   interview_scheduled: { label: 'Interview Scheduled', color: '#14b8a6' },
-  awaiting_decision: { label: 'Awaiting Decision', color: '#06b6d4' },
+  awaiting_decision: { label: 'Awaiting Decision', color: 'var(--primary)' },
   selected: { label: 'Selected', color: '#0f766e' },
-  on_hold: { label: 'On Hold', color: '#64748b' },
-  rejected: { label: 'Rejected', color: '#dc2626' }
+  on_hold: { label: 'On Hold', color: 'var(--text-secondary)' },
+  rejected: { label: 'Rejected', color: 'var(--danger)' }
 };
 
 const CHIP_VARIANTS = {
   success: { text: '#047857', bg: 'rgba(16, 185, 129, 0.18)' },
-  info: { text: '#1d4ed8', bg: 'rgba(37, 99, 235, 0.18)' },
-  warning: { text: '#b45309', bg: 'rgba(245, 158, 11, 0.2)' },
-  danger: { text: '#b91c1c', bg: 'rgba(239, 68, 68, 0.18)' },
-  neutral: { text: '#475569', bg: 'rgba(148, 163, 184, 0.2)' }
+  info: { text: 'var(--primary-hover)', bg: 'rgba(37, 99, 235, 0.18)' },
+  warning: { text: 'var(--warning)', bg: 'rgba(245, 158, 11, 0.2)' },
+  danger: { text: 'var(--primary)', bg: 'rgba(239, 68, 68, 0.18)' },
+  neutral: { text: 'var(--text-secondary)', bg: 'rgba(148, 163, 184, 0.2)' }
 };
 
 const OverviewContainer = styled.div`
@@ -97,7 +97,7 @@ const HeaderRow = styled.div`
 const Title = styled.h1`
   font-size: 1.5rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--text-primary);
   margin: 0 0 0.25rem 0;
 
   @media (max-width: 768px) {
@@ -110,7 +110,7 @@ const Title = styled.h1`
 const Subtitle = styled.p`
   margin: 0;
   font-size: 0.875rem;
-  color: #475569;
+  color: var(--text-secondary);
 
   @media (max-width: 768px) {
     display: none !important;
@@ -140,7 +140,7 @@ const HeaderActions = styled.div`
 
 const Timestamp = styled.span`
   font-size: 0.85rem;
-  color: #64748b;
+  color: var(--text-secondary);
   font-weight: 500;
   white-space: nowrap;
   flex-shrink: 0;
@@ -155,7 +155,7 @@ const RefreshButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: #b91c1c;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -164,22 +164,22 @@ const RefreshButton = styled.button`
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
   flex-shrink: 0;
   min-width: 108px;
   height: 38px;
   white-space: nowrap;
 
   &:hover:enabled {
-    background: #991b1b;
+    background: var(--primary-hover);
     transform: translateY(-1px);
   }
 
   &:disabled {
-    background: #b91c1c;
+    background: var(--primary);
     opacity: 0.9;
     cursor: not-allowed;
-    box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
   }
 
   @media (max-width: 768px) {
@@ -226,14 +226,14 @@ const MobileActiveBar = styled.div`
     justify-content: center;
     gap: 0.45rem;
     padding: 0.4rem 0.8rem;
-    background: ${props => (props.$active ? '#0f172a' : '#ffffff')};
-    color: ${props => (props.$active ? '#ffffff' : '#64748b')};
+    background: ${props => (props.$active ? 'var(--text-primary)' : '#ffffff')};
+    color: ${props => (props.$active ? '#ffffff' : 'var(--text-secondary)')};
     border-radius: 9999px;
     font-size: 0.78rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    border: 1px solid ${props => (props.$active ? '#1e293b' : '#e2e8f0')};
+    border: 1px solid ${props => (props.$active ? 'var(--text-primary)' : 'var(--border)')};
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     min-height: 32px;
     text-align: center;
@@ -247,13 +247,13 @@ const MobileActiveBar = styled.div`
 
     .active-title {
       font-weight: 700;
-      color: ${props => (props.$active ? '#38bdf8' : '#0f172a')};
+      color: ${props => (props.$active ? 'var(--primary-hover)' : 'var(--text-primary)')};
     }
 
     .active-meta {
       opacity: 0.85;
       font-size: 0.72rem;
-      color: ${props => (props.$active ? '#cbd5e1' : '#94a3b8')};
+      color: ${props => (props.$active ? 'var(--border-strong)' : 'var(--text-muted)')};
     }
   }
 `;
@@ -270,7 +270,7 @@ const StatsTooltip = styled.div`
       if (props.$position === 'right') return 'right: 0; left: auto;';
       return 'left: 50%; transform: translateX(-50%);';
     }}
-    background: #0f172a;
+    background: var(--text-primary);
     color: #ffffff;
     padding: 0.35rem 0.65rem;
     border-radius: 6px;
@@ -294,7 +294,7 @@ const StatsTooltip = styled.div`
         return 'left: 50%; transform: translateX(-50%);';
       }}
       border: 5px solid transparent;
-      border-top-color: #0f172a;
+      border-top-color: var(--text-primary);
     }
   }
 `;
@@ -321,7 +321,7 @@ const StatsCard = styled.div`
   border-radius: 12px;
   padding: 1rem;
   box-shadow: 0 4px 16px rgba(14, 165, 233, 0.05);
-  border: 1px solid #e0f2fe;
+  border: 1px solid var(--primary-light);
   position: relative;
   overflow: visible;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -341,17 +341,17 @@ const StatsCard = styled.div`
     background: ${({ $variant }) => {
       switch ($variant) {
         case 'primary':
-          return 'linear-gradient(90deg, #b91c1c, #f97316)';
+          return 'linear-gradient(90deg, var(--primary), var(--accent))';
         case 'success':
-          return 'linear-gradient(90deg, #10b981, #059669)';
+          return 'linear-gradient(90deg, var(--success), var(--success))';
         case 'info':
-          return 'linear-gradient(90deg, #0284c7, #06b6d4)';
+          return 'linear-gradient(90deg, #0284c7, var(--primary))';
         case 'warning':
-          return 'linear-gradient(90deg, #f59e0b, #d97706)';
+          return 'linear-gradient(90deg, var(--warning), var(--warning))';
         case 'danger':
-          return 'linear-gradient(90deg, #ef4444, #dc2626)';
+          return 'linear-gradient(90deg, var(--danger), var(--danger))';
         default:
-          return '#64748b';
+          return 'var(--text-secondary)';
       }
     }};
   }
@@ -374,7 +374,7 @@ const StatsCard = styled.div`
     ${props =>
       props.$isHovered &&
       `
-      border-color: #0ea5e9 !important;
+      border-color: var(--secondary) !important;
       box-shadow: 0 0 12px rgba(14, 165, 233, 0.4) !important;
       transform: translateY(-2px) !important;
     `}
@@ -431,17 +431,17 @@ const StatsIcon = styled.div`
   color: ${({ $variant }) => {
     switch ($variant) {
       case 'primary':
-        return '#b91c1c';
+        return 'var(--primary)';
       case 'success':
-        return '#10b981';
+        return 'var(--success)';
       case 'info':
         return '#0284c7';
       case 'warning':
-        return '#b45309';
+        return 'var(--warning)';
       case 'danger':
-        return '#ef4444';
+        return 'var(--danger)';
       default:
-        return '#475569';
+        return 'var(--text-secondary)';
     }
   }};
 
@@ -462,17 +462,17 @@ const StatsCountBadge = styled.div`
   background: ${({ $variant }) => {
     switch ($variant) {
       case 'primary':
-        return '#b91c1c';
+        return 'var(--primary)';
       case 'success':
-        return '#10b981';
+        return 'var(--success)';
       case 'info':
         return '#0284c7';
       case 'warning':
-        return '#f59e0b';
+        return 'var(--warning)';
       case 'danger':
-        return '#ef4444';
+        return 'var(--danger)';
       default:
-        return '#64748b';
+        return 'var(--text-secondary)';
     }
   }};
   color: white;
@@ -502,7 +502,7 @@ const StatsCountBadge = styled.div`
 
 const StatsLabel = styled.span`
   font-size: 0.78rem;
-  color: #475569;
+  color: var(--text-secondary);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -510,7 +510,7 @@ const StatsLabel = styled.span`
 
 const StatsMeta = styled.span`
   font-size: 0.78rem;
-  color: #94a3b8;
+  color: var(--text-muted);
   font-weight: 500;
 `;
 
@@ -519,7 +519,7 @@ const SectionCard = styled.div`
   border-radius: 12px;
   padding: 1.25rem;
   box-shadow: 0 4px 16px rgba(14, 165, 233, 0.05);
-  border: 1px solid #e0f2fe;
+  border: 1px solid var(--primary-light);
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
@@ -535,19 +535,19 @@ const SectionCard = styled.div`
 const SectionTitle = styled.h2`
   font-size: 1.05rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--text-primary);
   margin: 0;
 `;
 
 const SectionSubtitle = styled.p`
   margin: -0.35rem 0 0;
   font-size: 0.82rem;
-  color: #64748b;
+  color: var(--text-secondary);
 `;
 
 const ProgressTrack = styled.div`
   height: 8px;
-  background: #f1f5f9;
+  background: var(--background);
   border-radius: 9999px;
   overflow: hidden;
 `;
@@ -555,7 +555,7 @@ const ProgressTrack = styled.div`
 const ProgressFill = styled.div`
   height: 100%;
   width: ${({ $value }) => Math.min(100, Math.max(0, $value)).toFixed(1)}%;
-  background: ${({ $color }) => $color || '#0ea5e9'};
+  background: ${({ $color }) => $color || 'var(--secondary)'};
   border-radius: inherit;
   transition: width 0.4s ease;
 `;
@@ -568,7 +568,7 @@ const StageBadge = styled.span`
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: ${({ $color }) => $color || '#1e293b'};
+  color: ${({ $color }) => $color || 'var(--text-primary)'};
   background-color: ${({ $color }) => ($color ? `${$color}20` : 'rgba(148, 163, 184, 0.2)')};
 `;
 
@@ -588,17 +588,17 @@ const Chip = styled.span`
 const EmptyState = styled.div`
   padding: 1.5rem;
   border-radius: 10px;
-  background: #f8fafc;
-  color: #64748b;
+  background: var(--background);
+  color: var(--text-secondary);
   text-align: center;
   font-weight: 500;
   font-size: 0.875rem;
 `;
 
 const ErrorBanner = styled.div`
-  background: #fee2e2;
-  border: 1px solid #fecaca;
-  color: #dc2626;
+  background: var(--danger-light);
+  border: 1px solid var(--danger-light);
+  color: var(--danger);
   padding: 0.75rem 1rem;
   border-radius: 10px;
   font-weight: 500;
@@ -798,12 +798,12 @@ const formatDateTime = (date) => {
     }, {});
 
     const statusList = [
-      { label: 'Selected', count: counts.selected || 0, color: '#10b981', icon: <FaCheckCircle /> },
+      { label: 'Selected', count: counts.selected || 0, color: 'var(--success)', icon: <FaCheckCircle /> },
       { label: 'Approved', count: counts.approved || 0, color: '#0284c7', icon: <FaCheck /> },
-      { label: 'Shortlisted', count: counts.shortlisted || 0, color: '#38bdf8', icon: <FaStar /> },
-      { label: 'Pending', count: counts.pending || 0, color: '#64748b', icon: <FaClock /> },
-      { label: 'On Hold', count: counts.on_hold || 0, color: '#f59e0b', icon: <FaHourglassHalf /> },
-      { label: 'Rejected', count: counts.rejected || 0, color: '#ef4444', icon: <FaTimesCircle /> }
+      { label: 'Shortlisted', count: counts.shortlisted || 0, color: 'var(--primary-hover)', icon: <FaStar /> },
+      { label: 'Pending', count: counts.pending || 0, color: 'var(--text-secondary)', icon: <FaClock /> },
+      { label: 'On Hold', count: counts.on_hold || 0, color: 'var(--warning)', icon: <FaHourglassHalf /> },
+      { label: 'Rejected', count: counts.rejected || 0, color: 'var(--danger)', icon: <FaTimesCircle /> }
     ];
 
     const activeItems = statusList.filter(item => item.count > 0);
@@ -814,7 +814,7 @@ const formatDateTime = (date) => {
     return (
       <div style={{
         background: '#ffffff',
-        border: '1px solid #e2e8f0',
+        border: '1px solid var(--border)',
         borderRadius: '12px',
         padding: '0.85rem',
         display: 'flex',
@@ -827,7 +827,7 @@ const formatDateTime = (date) => {
         boxSizing: 'border-box'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.35rem' }}>
-          <h6 style={{ margin: 0, fontWeight: '700', color: '#0f172a', fontSize: '0.85rem' }}>{streamTitle}</h6>
+          <h6 style={{ margin: 0, fontWeight: '700', color: 'var(--text-primary)', fontSize: '0.85rem' }}>{streamTitle}</h6>
           <StageBadge $color="#0284c7" style={{ fontSize: '0.7rem', padding: '0.15rem 0.55rem' }}>{total} Applicants</StageBadge>
         </div>
 
@@ -847,7 +847,7 @@ const formatDateTime = (date) => {
           }}>
             <div style={{ position: 'relative', width: '85px', height: '85px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, margin: '0 auto' }}>
               <svg width="85" height="85" viewBox="0 0 85 85">
-                <circle cx="42.5" cy="42.5" r={radius} fill="none" stroke="#e0f2fe" strokeWidth="10" />
+                <circle cx="42.5" cy="42.5" r={radius} fill="none" stroke="var(--primary-light)" strokeWidth="10" />
                 {activeItems.map((item, idx) => {
                   const percent = item.count / total;
                   const strokeDasharray = `${percent * circumference} ${circumference}`;
@@ -867,8 +867,8 @@ const formatDateTime = (date) => {
                 })}
               </svg>
               <div style={{ position: 'absolute', textAlign: 'center' }}>
-                <div style={{ fontSize: '1.05rem', fontWeight: '800', color: '#0f172a', lineHeight: '1' }}>{total}</div>
-                <div style={{ fontSize: '0.55rem', fontWeight: '600', color: '#64748b', textTransform: 'uppercase' }}>
+                <div style={{ fontSize: '1.05rem', fontWeight: '800', color: 'var(--text-primary)', lineHeight: '1' }}>{total}</div>
+                <div style={{ fontSize: '0.55rem', fontWeight: '600', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
                   Total
                 </div>
               </div>
@@ -903,7 +903,7 @@ const formatDateTime = (date) => {
                       <span style={{ color: item.color, display: 'inline-flex', alignItems: 'center', fontSize: '0.8rem', flexShrink: 0 }}>
                         {item.icon}
                       </span>
-                      <span className="donut-status-text" style={{ fontWeight: '500', color: '#334155', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                      <span className="donut-status-text" style={{ fontWeight: '500', color: 'var(--text-primary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
                         {item.label}
                       </span>
                     </div>
@@ -998,7 +998,7 @@ const formatDateTime = (date) => {
         <SectionCard style={{ padding: '1.25rem', width: '100%' }}>
           <div className="campus-header-row">
             <SectionTitle style={{ fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
-              <FaBuilding style={{ color: '#b91c1c' }} /> Campus Reference & Stream Analytics
+              <FaBuilding style={{ color: 'var(--primary)' }} /> Campus Reference & Stream Analytics
             </SectionTitle>
           </div>
           
@@ -1076,11 +1076,11 @@ const formatDateTime = (date) => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingTop: '0.75rem' }}>
                   {/* Total All Campuses Summary Card */}
                   <div style={{
-                    background: 'linear-gradient(135deg, #b91c1c 0%, #ea580c 100%)',
+                    background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%)',
                     color: 'white',
                     padding: '1.1rem',
                     borderRadius: '12px',
-                    boxShadow: '0 6px 20px rgba(185, 28, 28, 0.25)',
+                    boxShadow: '0 6px 20px rgba(var(--primary-rgb), 0.25)',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '0.75rem'
@@ -1120,12 +1120,12 @@ const formatDateTime = (date) => {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '1rem' }}>
                     {allCampusStats.map(cStats => {
                       const colorMap = {
-                        Btech: '#0ea5e9',
-                        Pharmacy: '#10b981',
+                        Btech: 'var(--secondary)',
+                        Pharmacy: 'var(--success)',
                         Degree: '#8b5cf6',
-                        Diploma: '#f59e0b'
+                        Diploma: 'var(--warning)'
                       };
-                      const color = colorMap[cStats.name] || '#0ea5e9';
+                      const color = colorMap[cStats.name] || 'var(--secondary)';
 
                       return (
                         <div
@@ -1133,7 +1133,7 @@ const formatDateTime = (date) => {
                           onClick={() => setSelectedCampusFilter(cStats.name)}
                           style={{
                             background: '#ffffff',
-                            border: '1px solid #e2e8f0',
+                            border: '1px solid var(--border)',
                             borderRadius: '12px',
                             padding: '1rem',
                             cursor: 'pointer',
@@ -1147,22 +1147,22 @@ const formatDateTime = (date) => {
                         >
                           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: color }} />
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontWeight: '700', fontSize: '0.95rem', color: '#0f172a' }}>{cStats.name} Stream</span>
+                            <span style={{ fontWeight: '700', fontSize: '0.95rem', color: 'var(--text-primary)' }}>{cStats.name} Stream</span>
                             <Chip $variant="info" style={{ fontSize: '0.7rem' }}>{cStats.formsCount} Forms</Chip>
                           </div>
 
                           <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
                             <span style={{ fontSize: '1.6rem', fontWeight: '800', color: color }}>{cStats.finalized}</span>
-                            <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '500' }}>finalized of {cStats.posted} posted</span>
+                            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: '500' }}>finalized of {cStats.posted} posted</span>
                           </div>
 
-                          <ProgressTrack style={{ height: '7px', background: '#e2e8f0' }}>
+                          <ProgressTrack style={{ height: '7px', background: 'var(--border)' }}>
                             <ProgressFill $value={cStats.fillRate} $color={color} />
                           </ProgressTrack>
 
-                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#64748b', fontWeight: '600' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: '600' }}>
                             <span>Fill Rate: {cStats.fillRate}%</span>
-                            <span style={{ color: '#b45309' }}>{cStats.open} Open Vacancies</span>
+                            <span style={{ color: 'var(--warning)' }}>{cStats.open} Open Vacancies</span>
                           </div>
                         </div>
                       );
@@ -1175,26 +1175,26 @@ const formatDateTime = (date) => {
             // Single Campus Detailed Analytics View
             const activeStats = getCampusStats(selectedCampusFilter);
             const colorMap = {
-              Btech: '#0ea5e9',
-              Pharmacy: '#10b981',
+              Btech: 'var(--secondary)',
+              Pharmacy: 'var(--success)',
               Degree: '#8b5cf6',
-              Diploma: '#f59e0b'
+              Diploma: 'var(--warning)'
             };
-            const accentColor = colorMap[activeStats.name] || '#0ea5e9';
+            const accentColor = colorMap[activeStats.name] || 'var(--secondary)';
 
             return (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', paddingTop: '0.75rem' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.875rem' }}>
-                  <div style={{ background: '#eff6ff', padding: '0.875rem', borderRadius: '10px', border: '1px solid #dbeafe' }}>
-                    <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#1e40af', textTransform: 'uppercase' }}>Posted Vacancies</div>
-                    <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1e3a8a', marginTop: '0.2rem' }}>{activeStats.posted}</div>
+                  <div style={{ background: 'var(--primary-light)', padding: '0.875rem', borderRadius: '10px', border: '1px solid var(--primary-light)' }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase' }}>Posted Vacancies</div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)', marginTop: '0.2rem' }}>{activeStats.posted}</div>
                   </div>
                   <div style={{ background: '#ecfdf5', padding: '0.875rem', borderRadius: '10px', border: '1px solid #a7f3d0' }}>
                     <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#047857', textTransform: 'uppercase' }}>Finalized Candidates</div>
                     <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#064e3b', marginTop: '0.2rem' }}>{activeStats.finalized}</div>
                   </div>
-                  <div style={{ background: '#fffbeb', padding: '0.875rem', borderRadius: '10px', border: '1px solid #fde68a' }}>
-                    <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#b45309', textTransform: 'uppercase' }}>Remaining Open</div>
+                  <div style={{ background: '#fffbeb', padding: '0.875rem', borderRadius: '10px', border: '1px solid var(--warning-light)' }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--warning)', textTransform: 'uppercase' }}>Remaining Open</div>
                     <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#78350f', marginTop: '0.2rem' }}>{activeStats.open}</div>
                   </div>
                   <div style={{ background: '#f3e8ff', padding: '0.875rem', borderRadius: '10px', border: '1px solid #e9d5ff' }}>
@@ -1204,7 +1204,7 @@ const formatDateTime = (date) => {
                 </div>
 
                 <div>
-                  <h4 style={{ fontSize: '0.9rem', fontWeight: '700', color: '#334155', marginBottom: '0.5rem' }}>
+                  <h4 style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
                     {activeStats.name} Departmental Vacancy Analytics:
                   </h4>
                   {activeStats.departments.length === 0 ? (
@@ -1214,14 +1214,14 @@ const formatDateTime = (date) => {
                       {activeStats.departments.map((dept, idx) => {
                         const dRate = dept.posted > 0 ? Math.min(100, Math.round((dept.finalized / dept.posted) * 100)) : 0;
                         return (
-                          <div key={idx} style={{ background: '#ffffff', border: '1px solid #e2e8f0', padding: '0.65rem 0.875rem', borderRadius: '8px' }}>
+                          <div key={idx} style={{ background: '#ffffff', border: '1px solid var(--border)', padding: '0.65rem 0.875rem', borderRadius: '8px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: '0.25rem' }}>
-                              <span style={{ fontWeight: '600', color: '#0f172a' }}>{dept.name}</span>
+                              <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{dept.name}</span>
                               <span style={{ fontWeight: '700', color: accentColor }}>
                                 {dept.finalized} / {dept.posted} filled ({dRate}%)
                               </span>
                             </div>
-                            <ProgressTrack style={{ height: '6px', background: '#f1f5f9' }}>
+                            <ProgressTrack style={{ height: '6px', background: 'var(--background)' }}>
                               <ProgressFill $value={dRate} $color={accentColor} />
                             </ProgressTrack>
                           </div>
@@ -1251,7 +1251,7 @@ const formatDateTime = (date) => {
                   <SectionTitle>Candidate Outcome Distribution</SectionTitle>
                   <SectionSubtitle>Status breakdown across BTech, Pharmacy, Degree, and Diploma streams</SectionSubtitle>
                 </div>
-                <StageBadge $color="#0ea5e9">{activeTotalCandidates} Total</StageBadge>
+                <StageBadge $color="var(--secondary)">{activeTotalCandidates} Total</StageBadge>
               </div>
 
               <div style={{
@@ -1273,7 +1273,7 @@ const formatDateTime = (date) => {
                   <SectionTitle>Candidate Outcome Distribution ({selectedCampusFilter.toUpperCase()})</SectionTitle>
                   <SectionSubtitle>Status breakdown for {selectedCampusFilter} stream</SectionSubtitle>
                 </div>
-                <StageBadge $color="#0ea5e9">{activeTotalCandidates} Candidates</StageBadge>
+                <StageBadge $color="var(--secondary)">{activeTotalCandidates} Candidates</StageBadge>
               </div>
               {renderDonutGraph(`${selectedCampusFilter.toUpperCase()} Stream`, activeCandidates)}
             </SectionCard>
@@ -1301,12 +1301,12 @@ const formatDateTime = (date) => {
                 return (
                   <div key={stageKey} style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem' }}>
-                      <span style={{ fontWeight: '600', color: '#334155' }}>{meta.label}</span>
+                      <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{meta.label}</span>
                       <span style={{ fontWeight: '700', color: meta.color }}>
                         {stageCandidatesCount} candidate{stageCandidatesCount === 1 ? '' : 's'} ({pct}%)
                       </span>
                     </div>
-                    <ProgressTrack style={{ height: '7px', background: '#f1f5f9' }}>
+                    <ProgressTrack style={{ height: '7px', background: 'var(--background)' }}>
                       <ProgressFill $value={pct > 0 ? Math.max(pct, 6) : 0} $color={meta.color} />
                     </ProgressTrack>
                   </div>

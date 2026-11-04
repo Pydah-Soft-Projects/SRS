@@ -134,7 +134,7 @@ const PushNotificationPrompt = ({ user, onSubscriptionChange }) => {
               <Card.Title className="mb-1" style={{ fontSize: '1rem' }}>
                 Push Notifications Disabled
               </Card.Title>
-              <Card.Text className="mb-0" style={{ fontSize: '0.875rem', color: '#6c757d' }}>
+              <Card.Text className="mb-0" style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
                 You have denied notification permissions. To enable notifications, please update your browser settings.
               </Card.Text>
             </div>
@@ -161,7 +161,7 @@ const PushNotificationPrompt = ({ user, onSubscriptionChange }) => {
                 <Card.Title className="mb-1" style={{ fontSize: '1rem' }}>
                   Push Notifications Enabled
                 </Card.Title>
-                <Card.Text className="mb-0" style={{ fontSize: '0.875rem', color: '#6c757d' }}>
+                <Card.Text className="mb-0" style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
                   You will receive notifications about new applications and updates.
                 </Card.Text>
               </div>
@@ -196,7 +196,7 @@ const PushNotificationPrompt = ({ user, onSubscriptionChange }) => {
               <Card.Title className="mb-1" style={{ fontSize: '1rem' }}>
                 Enable Push Notifications
               </Card.Title>
-              <Card.Text className="mb-0" style={{ fontSize: '0.875rem', color: '#6c757d' }}>
+              <Card.Text className="mb-0" style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
                 Get instant notifications when new applications are submitted.
               </Card.Text>
             </div>

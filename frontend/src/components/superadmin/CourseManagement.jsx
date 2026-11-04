@@ -26,7 +26,7 @@ const Header = styled.div`
 `;
 
 const Title = styled.h2`
-  color: #1e293b;
+  color: var(--text-primary);
   margin: 0;
   font-size: 2rem;
   font-weight: 700;
@@ -53,21 +53,21 @@ const IconButton = styled.button`
   background: ${({ $variant, variant }) => {
     switch ($variant || variant) {
       case 'primary':
-        return '#dbeafe';
+        return 'var(--primary-light)';
       case 'danger':
-        return '#fee2e2';
+        return 'var(--danger-light)';
       default:
-        return '#f1f5f9';
+        return 'var(--background)';
     }
   }};
   color: ${({ $variant, variant }) => {
     switch ($variant || variant) {
       case 'primary':
-        return '#1e40af';
+        return 'var(--primary-hover)';
       case 'danger':
-        return '#0891b2';
+        return 'var(--primary-hover)';
       default:
-        return '#475569';
+        return 'var(--text-secondary)';
     }
   }};
   
@@ -76,11 +76,11 @@ const IconButton = styled.button`
     background: ${({ $variant, variant }) => {
       switch ($variant || variant) {
         case 'primary':
-          return '#bfdbfe';
+          return 'var(--border)';
         case 'danger':
-          return '#fecaca';
+          return 'var(--danger-light)';
         default:
-          return '#e2e8f0';
+          return 'var(--border)';
       }
     }};
   }
@@ -125,7 +125,7 @@ const ModalHeader = styled.div`
 
 const ModalTitle = styled.h3`
   margin: 0;
-  color: #0f172a;
+  color: var(--text-primary);
   font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -137,10 +137,10 @@ const CloseButton = styled.button`
   font-size: 1.75rem;
   line-height: 1;
   cursor: pointer;
-  color: #94a3b8;
+  color: var(--text-muted);
   
   &:hover {
-    color: #475569;
+    color: var(--text-secondary);
   }
 `;
 
@@ -158,13 +158,13 @@ const FormGroup = styled.div`
 
 const Label = styled.label`
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   font-size: 0.875rem;
 `;
 
 const Input = styled.input`
   padding: 0.75rem 1rem;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--border);
   border-radius: 10px;
   font-size: 0.9rem;
   transition: all 0.2s ease;
@@ -172,12 +172,12 @@ const Input = styled.input`
   
   &:focus {
     outline: none;
-    border-color: #3b82f6;
+    border-color: var(--primary);
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
   }
   
   &:disabled {
-    background: #f8fafc;
+    background: var(--background);
     cursor: not-allowed;
   }
 `;
@@ -201,7 +201,7 @@ const Button = styled.button`
   ${({ $variant, variant }) => {
     if (($variant || variant) === 'primary') {
       return `
-        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
         color: white;
         &:hover:not(:disabled) {
           transform: translateY(-1px);
@@ -211,11 +211,11 @@ const Button = styled.button`
     }
     return `
       background: white;
-      color: #475569;
-      border: 2px solid #e2e8f0;
+      color: var(--text-secondary);
+      border: 2px solid var(--border);
       &:hover {
-        background: #f8fafc;
-        border-color: #cbd5e1;
+        background: var(--background);
+        border-color: var(--border-strong);
       }
     `;
   }}
@@ -234,31 +234,31 @@ const Alert = styled.div`
   background: ${({ $variant, variant }) => {
     switch ($variant || variant) {
       case 'info':
-        return '#dbeafe';
+        return 'var(--primary-light)';
       case 'warning':
-        return '#fef3c7';
+        return 'var(--warning-light)';
       default:
-        return '#f1f5f9';
+        return 'var(--background)';
     }
   }};
   color: ${({ $variant, variant }) => {
     switch ($variant || variant) {
       case 'info':
-        return '#1e40af';
+        return 'var(--primary-hover)';
       case 'warning':
         return '#92400e';
       default:
-        return '#475569';
+        return 'var(--text-secondary)';
     }
   }};
   border-left: 3px solid ${({ variant }) => {
     switch (variant) {
       case 'info':
-        return '#3b82f6';
+        return 'var(--primary)';
       case 'warning':
-        return '#f59e0b';
+        return 'var(--warning)';
       default:
-        return '#94a3b8';
+        return 'var(--text-muted)';
     }
   }};
 `;

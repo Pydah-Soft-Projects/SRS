@@ -64,9 +64,9 @@ const TabButton = styled.button`
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 1px solid ${({ $active }) => ($active ? '#0ea5e9' : '#cbd5e1')};
-  background: ${({ $active }) => ($active ? '#0ea5e9' : '#ffffff')};
-  color: ${({ $active }) => ($active ? '#ffffff' : '#475569')};
+  border: 1px solid ${({ $active }) => ($active ? 'var(--secondary)' : 'var(--border-strong)')};
+  background: ${({ $active }) => ($active ? 'var(--secondary)' : '#ffffff')};
+  color: ${({ $active }) => ($active ? '#ffffff' : 'var(--text-secondary)')};
   box-shadow: ${({ $active }) => ($active ? '0 3px 10px rgba(14, 165, 233, 0.25)' : 'none')};
   white-space: nowrap;
   flex-shrink: 0;
@@ -78,9 +78,9 @@ const TabButton = styled.button`
   }
 
   &:hover {
-    background: ${({ $active }) => ($active ? '#0284c7' : '#f8fafc')};
-    border-color: ${({ $active }) => ($active ? '#0284c7' : '#94a3b8')};
-    color: ${({ $active }) => ($active ? '#ffffff' : '#0f172a')};
+    background: ${({ $active }) => ($active ? '#0284c7' : 'var(--background)')};
+    border-color: ${({ $active }) => ($active ? '#0284c7' : 'var(--text-muted)')};
+    color: ${({ $active }) => ($active ? '#ffffff' : 'var(--text-primary)')};
   }
 
   &:active {
@@ -119,7 +119,7 @@ const ThreeColumnLayout = styled.div`
 const ColumnCard = styled.div`
   background: white;
   border-radius: 12px;
-  border: 1px solid #e0f2fe;
+  border: 1px solid var(--primary-light);
   box-shadow: 0 4px 16px rgba(14, 165, 233, 0.05);
   overflow: hidden;
   display: flex;
@@ -127,7 +127,7 @@ const ColumnCard = styled.div`
 `;
 
 const ColumnHeader = styled.div`
-  background: ${({ $gradient }) => $gradient || 'linear-gradient(135deg, #0284c7, #0ea5e9)'};
+  background: ${({ $gradient }) => $gradient || 'linear-gradient(135deg, #0284c7, var(--secondary))'};
   color: white;
   padding: 0.55rem 0.875rem;
   display: flex;
@@ -162,7 +162,7 @@ const ColumnBody = styled.div`
     width: 5px;
   }
   &::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: var(--border-strong);
     border-radius: 3px;
   }
 
@@ -222,13 +222,13 @@ const FormGroup = styled.div`
 const Label = styled.label`
   font-size: 0.78rem;
   font-weight: 700;
-  color: #334155;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   .required {
-    color: #ef4444;
+    color: var(--danger);
     margin-left: 2px;
   }
 `;
@@ -236,40 +236,40 @@ const Label = styled.label`
 const Input = styled.input`
   width: 100%;
   padding: 0.45rem 0.75rem;
-  border: 1.5px solid #e0f2fe;
+  border: 1.5px solid var(--primary-light);
   border-radius: 8px;
   font-size: 0.84rem;
-  color: #0f172a;
+  color: var(--text-primary);
   outline: none;
   transition: all 0.2s ease;
   box-sizing: border-box;
-  background: #f8fafc;
+  background: var(--background);
 
   &:focus {
-    border-color: #0ea5e9;
+    border-color: var(--secondary);
     background: white;
     box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
   }
 
   &::placeholder {
-    color: #94a3b8;
+    color: var(--text-muted);
   }
 `;
 
 const Select = styled.select`
   width: 100%;
   padding: 0.45rem 0.75rem;
-  border: 1.5px solid #e0f2fe;
+  border: 1.5px solid var(--primary-light);
   border-radius: 8px;
   font-size: 0.84rem;
-  color: #0f172a;
+  color: var(--text-primary);
   outline: none;
   transition: all 0.2s ease;
-  background: #f8fafc;
+  background: var(--background);
   box-sizing: border-box;
 
   &:focus {
-    border-color: #0ea5e9;
+    border-color: var(--secondary);
     background: white;
     box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
   }
@@ -283,8 +283,8 @@ const RoleCardsList = styled.div`
 `;
 
 const RoleOptionCard = styled.div`
-  border: 1.5px solid ${({ $selected, $color }) => ($selected ? $color || '#0ea5e9' : '#e0f2fe')};
-  background: ${({ $selected, $bgColor }) => ($selected ? $bgColor || '#f0f9ff' : 'white')};
+  border: 1.5px solid ${({ $selected, $color }) => ($selected ? $color || 'var(--secondary)' : 'var(--primary-light)')};
+  background: ${({ $selected, $bgColor }) => ($selected ? $bgColor || 'var(--primary-light)' : 'white')};
   border-radius: 10px;
   padding: 0.65rem 0.85rem;
   cursor: pointer;
@@ -294,7 +294,7 @@ const RoleOptionCard = styled.div`
   gap: 0.65rem;
 
   &:hover {
-    border-color: ${({ $color }) => $color || '#0ea5e9'};
+    border-color: ${({ $color }) => $color || 'var(--secondary)'};
     transform: translateY(-1px);
     box-shadow: 0 3px 10px rgba(14, 165, 233, 0.08);
   }
@@ -304,7 +304,7 @@ const RoleIconSquircle = styled.div`
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: ${({ $color }) => $color || '#0ea5e9'};
+  background: ${({ $color }) => $color || 'var(--secondary)'};
   color: white;
   display: flex;
   align-items: center;
@@ -321,7 +321,7 @@ const RoleInfo = styled.div`
   .role-title {
     font-size: 0.84rem;
     font-weight: 700;
-    color: #0f172a;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -330,7 +330,7 @@ const RoleInfo = styled.div`
 
   .role-desc {
     font-size: 0.72rem;
-    color: #64748b;
+    color: var(--text-secondary);
     line-height: 1.3;
     margin: 0;
   }
@@ -338,8 +338,8 @@ const RoleInfo = styled.div`
 
 // Access Scope Permissions (Column 3)
 const PermissionRowCard = styled.div`
-  border: 1px solid ${({ $enabled }) => ($enabled ? '#bae6fd' : '#e2e8f0')};
-  background: ${({ $enabled }) => ($enabled ? '#f0f9ff' : '#ffffff')};
+  border: 1px solid ${({ $enabled }) => ($enabled ? 'var(--border)' : 'var(--border)')};
+  background: ${({ $enabled }) => ($enabled ? 'var(--primary-light)' : '#ffffff')};
   border-radius: 8px;
   padding: 0.4rem 0.65rem;
   display: flex;
@@ -366,7 +366,7 @@ const PermissionRowHeader = styled.div`
   .perm-label {
     font-size: 0.8rem;
     font-weight: 700;
-    color: #0f172a;
+    color: var(--text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -374,7 +374,7 @@ const PermissionRowHeader = styled.div`
 
   .perm-desc {
     font-size: 0.68rem;
-    color: #64748b;
+    color: var(--text-secondary);
     line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
@@ -384,8 +384,8 @@ const PermissionRowHeader = styled.div`
 
 const AccessSegmentedGroup = styled.div`
   display: flex;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  background: var(--background);
+  border: 1px solid var(--border);
   border-radius: 6px;
   padding: 2px;
   gap: 2px;
@@ -400,15 +400,15 @@ const SegmentButton = styled.button`
   border: none;
   background: ${({ $active, $type }) => {
     if (!$active) return 'transparent';
-    if ($type === 'full') return '#0ea5e9';
-    if ($type === 'view') return '#e0f2fe';
-    return '#cbd5e1';
+    if ($type === 'full') return 'var(--secondary)';
+    if ($type === 'view') return 'var(--primary-light)';
+    return 'var(--border-strong)';
   }};
   color: ${({ $active, $type }) => {
-    if (!$active) return '#64748b';
+    if (!$active) return 'var(--text-secondary)';
     if ($type === 'full') return '#ffffff';
     if ($type === 'view') return '#0284c7';
-    return '#334155';
+    return 'var(--text-primary)';
   }};
   padding: 0.22rem 0.5rem;
   border-radius: 4px;
@@ -433,7 +433,7 @@ const SegmentButton = styled.button`
 const BottomActionBar = styled.div`
   background: white;
   border-radius: 12px;
-  border: 1px solid #e0f2fe;
+  border: 1px solid var(--primary-light);
   padding: 0.5rem 1rem;
   display: flex;
   justify-content: flex-end;
@@ -456,7 +456,7 @@ const BottomActionBar = styled.div`
 `;
 
 const PrimaryBtn = styled.button`
-  background: linear-gradient(135deg, #b91c1c 0%, #f97316 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -465,18 +465,18 @@ const PrimaryBtn = styled.button`
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.25);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
 
   &:hover:enabled {
-    background: linear-gradient(135deg, #991b1b 0%, #ea580c 100%);
+    background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%);
     transform: translateY(-1px);
   }
 
   &:disabled {
-    background: #94a3b8;
+    background: var(--text-muted);
     cursor: not-allowed;
     box-shadow: none;
   }
@@ -484,8 +484,8 @@ const PrimaryBtn = styled.button`
 
 const SecondaryBtn = styled.button`
   background: white;
-  color: #475569;
-  border: 1px solid #cbd5e1;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
   border-radius: 8px;
   padding: 0.45rem 1rem;
   font-weight: 600;
@@ -494,9 +494,9 @@ const SecondaryBtn = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    background: #f8fafc;
-    border-color: #94a3b8;
-    color: #0f172a;
+    background: var(--background);
+    border-color: var(--text-muted);
+    color: var(--text-primary);
   }
 `;
 
@@ -504,7 +504,7 @@ const SecondaryBtn = styled.button`
 const TableWrapper = styled.div`
   background: white;
   border-radius: 16px;
-  border: 1px solid #e0f2fe;
+  border: 1px solid var(--primary-light);
   box-shadow: 0 4px 16px rgba(14, 165, 233, 0.06);
   overflow: hidden;
   width: 100%;
@@ -516,7 +516,7 @@ const TableWrapper = styled.div`
 
 const TableToolbar = styled.div`
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #e0f2fe;
+  border-bottom: 1px solid var(--primary-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -562,14 +562,14 @@ const SearchInputWrapper = styled.div`
   input {
     width: 100%;
     padding: 0.65rem 0.875rem 0.65rem 2.25rem;
-    border: 1.5px solid #e0f2fe;
+    border: 1.5px solid var(--primary-light);
     border-radius: 10px;
     font-size: 0.88rem;
     outline: none;
     box-sizing: border-box;
 
     &:focus {
-      border-color: #0ea5e9;
+      border-color: var(--secondary);
       box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
     }
   }
@@ -592,20 +592,20 @@ const TableScrollContainer = styled.div`
     height: 6px;
   }
   &::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: var(--border-strong);
     border-radius: 3px;
   }
 `;
 
 const MobileScrollHint = styled.div`
   display: none;
-  background: #f0f9ff;
+  background: var(--primary-light);
   color: #0369a1;
   font-size: 0.74rem;
   font-weight: 600;
   text-align: center;
   padding: 0.35rem 0.5rem;
-  border-bottom: 1px solid #e0f2fe;
+  border-bottom: 1px solid var(--primary-light);
 
   @media (max-width: 768px) {
     display: block;
@@ -619,13 +619,13 @@ const Table = styled.table`
 `;
 
 const Th = styled.th`
-  background: #f0f9ff;
+  background: var(--primary-light);
   padding: 1rem 1.25rem;
   text-align: left;
   font-weight: 700;
   font-size: 0.8rem;
   color: #0369a1;
-  border-bottom: 2px solid #bae6fd;
+  border-bottom: 2px solid var(--border);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   white-space: nowrap;
@@ -638,8 +638,8 @@ const Th = styled.th`
 
 const Td = styled.td`
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid #f0f9ff;
-  color: #334155;
+  border-bottom: 1px solid var(--primary-light);
+  color: var(--text-primary);
   font-size: 0.88rem;
   vertical-align: middle;
 
@@ -657,16 +657,16 @@ const StatusPill = styled.span`
   border-radius: 9999px;
   font-weight: 700;
   font-size: 0.78rem;
-  background: ${({ $active }) => ($active ? '#ecfdf5' : '#fee2e2')};
-  color: ${({ $active }) => ($active ? '#047857' : '#b91c1c')};
-  border: 1px solid ${({ $active }) => ($active ? '#a7f3d0' : '#fecaca')};
+  background: ${({ $active }) => ($active ? '#ecfdf5' : 'var(--danger-light)')};
+  color: ${({ $active }) => ($active ? '#047857' : 'var(--primary)')};
+  border: 1px solid ${({ $active }) => ($active ? '#a7f3d0' : 'var(--danger-light)')};
   white-space: nowrap;
 `;
 
 const ActionBtn = styled.button`
-  border: 1px solid ${({ $variant }) => ($variant === 'danger' ? '#fecaca' : '#bae6fd')};
-  background: ${({ $variant }) => ($variant === 'danger' ? '#fef2f2' : '#f0f9ff')};
-  color: ${({ $variant }) => ($variant === 'danger' ? '#dc2626' : '#0284c7')};
+  border: 1px solid ${({ $variant }) => ($variant === 'danger' ? 'var(--danger-light)' : 'var(--border)')};
+  background: ${({ $variant }) => ($variant === 'danger' ? 'var(--danger-light)' : 'var(--primary-light)')};
+  color: ${({ $variant }) => ($variant === 'danger' ? 'var(--danger)' : '#0284c7')};
   padding: 0.35rem 0.75rem;
   border-radius: 8px;
   font-size: 0.8rem;
@@ -676,14 +676,14 @@ const ActionBtn = styled.button`
   white-space: nowrap;
 
   &:hover {
-    background: ${({ $variant }) => ($variant === 'danger' ? '#fee2e2' : '#e0f2fe')};
+    background: ${({ $variant }) => ($variant === 'danger' ? 'var(--danger-light)' : 'var(--primary-light)')};
     transform: translateY(-1px);
   }
 `;
 
 // Role Configuration Grid (Tab 3)
 const RoleConfigBanner = styled.div`
-  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 60%, #38bdf8 100%);
+  background: linear-gradient(135deg, #0284c7 0%, var(--secondary) 60%, var(--primary-hover) 100%);
   color: white;
   border-radius: 16px;
   padding: 1.5rem 2rem;
@@ -727,7 +727,7 @@ const RolesGrid = styled.div`
 const RoleConfigCard = styled.div`
   background: white;
   border-radius: 16px;
-  border: 1.5px solid #e0f2fe;
+  border: 1.5px solid var(--primary-light);
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -741,7 +741,7 @@ const RoleConfigCard = styled.div`
   }
 
   &:hover {
-    border-color: ${({ $color }) => $color || '#0ea5e9'};
+    border-color: ${({ $color }) => $color || 'var(--secondary)'};
     box-shadow: 0 8px 24px rgba(14, 165, 233, 0.12);
     transform: translateY(-2px);
   }
@@ -752,7 +752,7 @@ const RoleCardActions = styled.div`
   gap: 0.5rem;
   margin-top: auto;
   padding-top: 0.75rem;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--background);
 
   @media (max-width: 480px) {
     flex-direction: column;
@@ -818,7 +818,7 @@ const ModalCard = styled.div`
 `;
 
 const ModalHeader = styled.div`
-  background: ${({ $bg }) => $bg || 'linear-gradient(135deg, #0284c7, #0ea5e9)'};
+  background: ${({ $bg }) => $bg || 'linear-gradient(135deg, #0284c7, var(--secondary))'};
   color: white;
   padding: 1.25rem 1.5rem;
   display: flex;
@@ -833,8 +833,8 @@ const ModalHeader = styled.div`
 
 const ModalFooter = styled.div`
   padding: 1rem 1.5rem;
-  border-top: 1px solid #e2e8f0;
-  background: #f8fafc;
+  border-top: 1px solid var(--border);
+  background: var(--background);
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -945,7 +945,7 @@ const SubAdminManagement = () => {
     badge: 'Custom',
     icon: '🛡️',
     color: '#0284c7',
-    bgColor: '#f0f9ff',
+    bgColor: 'var(--primary-light)',
     description: '',
     defaultPermissions: {},
     hasPanelMemberAccess: false
@@ -959,7 +959,7 @@ const SubAdminManagement = () => {
       badge: preset.badge || 'Configured',
       icon: preset.icon || '🛡️',
       color: preset.color || '#0284c7',
-      bgColor: preset.bgColor || '#f0f9ff',
+      bgColor: preset.bgColor || 'var(--primary-light)',
       description: preset.description || '',
       defaultPermissions: { ...(preset.defaultPermissions || {}) },
       hasPanelMemberAccess: Boolean(preset.hasPanelMemberAccess)
@@ -1001,7 +1001,7 @@ const SubAdminManagement = () => {
       badge: 'Custom',
       icon: '🛡️',
       color: '#0284c7',
-      bgColor: '#f0f9ff',
+      bgColor: 'var(--primary-light)',
       description: '',
       defaultPermissions: {
         'forms.manage': 'view_only',
@@ -1682,7 +1682,7 @@ const SubAdminManagement = () => {
           <ThreeColumnLayout>
             {/* ─── COLUMN 1: User Information ─── */}
             <ColumnCard>
-              <ColumnHeader $gradient="linear-gradient(135deg, #0284c7, #0ea5e9)">
+              <ColumnHeader $gradient="linear-gradient(135deg, #0284c7, var(--secondary))">
                 <h3 className="col-title">
                   <span style={{
                     background: 'rgba(255,255,255,0.25)',
@@ -1779,8 +1779,8 @@ const SubAdminManagement = () => {
                         disabled={!formState.employeeId || fetchingHrmsId}
                         style={{
                           padding: '0 0.55rem',
-                          background: '#f1f5f9',
-                          border: '1.5px solid #cbd5e1',
+                          background: 'var(--background)',
+                          border: '1.5px solid var(--border-strong)',
                           borderRadius: '8px',
                           fontSize: '0.76rem',
                           fontWeight: 700,
@@ -1811,7 +1811,7 @@ const SubAdminManagement = () => {
                 {formState.employeeId ? (
                   <div
                     style={{
-                      background: '#f0fdf4',
+                      background: 'var(--success-light)',
                       border: '1.5px solid #a7f3d0',
                       borderRadius: '10px',
                       padding: '0.65rem 0.85rem',
@@ -1856,7 +1856,7 @@ const SubAdminManagement = () => {
                           border: 'none',
                           cursor: 'pointer',
                           fontSize: '0.95rem',
-                          color: '#64748b'
+                          color: 'var(--text-secondary)'
                         }}
                       >
                         {showSubAdminPassword ? '🙈' : '👁️'}
@@ -1869,7 +1869,7 @@ const SubAdminManagement = () => {
 
             {/* ─── COLUMN 2: Role Selection ─── */}
             <ColumnCard>
-              <ColumnHeader $gradient="linear-gradient(135deg, #0284c7, #0ea5e9)">
+              <ColumnHeader $gradient="linear-gradient(135deg, #0284c7, var(--secondary))">
                 <h3 className="col-title">
                   <span style={{
                     background: 'rgba(255,255,255,0.25)',
@@ -1913,9 +1913,9 @@ const SubAdminManagement = () => {
                     style={{
                       padding: '2rem 1.25rem',
                       textAlign: 'center',
-                      background: '#f8fafc',
+                      background: 'var(--background)',
                       borderRadius: '12px',
-                      border: '1.5px dashed #cbd5e1',
+                      border: '1.5px dashed var(--border-strong)',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
@@ -1924,7 +1924,7 @@ const SubAdminManagement = () => {
                     }}
                   >
                     <div style={{ fontSize: '1.5rem' }}>🔄</div>
-                    <div style={{ fontWeight: 600, fontSize: '0.82rem', color: '#64748b' }}>
+                    <div style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                       Loading roles...
                     </div>
                   </div>
@@ -1933,9 +1933,9 @@ const SubAdminManagement = () => {
                     style={{
                       padding: '2rem 1.25rem',
                       textAlign: 'center',
-                      background: '#f8fafc',
+                      background: 'var(--background)',
                       borderRadius: '12px',
-                      border: '1.5px dashed #cbd5e1',
+                      border: '1.5px dashed var(--border-strong)',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
@@ -1944,17 +1944,17 @@ const SubAdminManagement = () => {
                     }}
                   >
                     <div style={{ fontSize: '2rem' }}>🛡️</div>
-                    <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.95rem' }}>
+                    <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                       No Roles Created Yet
                     </div>
-                    <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748b', lineHeight: 1.4 }}>
+                    <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
                       Create customized roles in Role Configuration, or configure permissions directly in Access Scope.
                     </p>
                     <button
                       type="button"
                       onClick={handleOpenNewRole}
                       style={{
-                        background: '#0ea5e9',
+                        background: 'var(--secondary)',
                         color: 'white',
                         border: 'none',
                         padding: '0.45rem 1rem',
@@ -1976,18 +1976,18 @@ const SubAdminManagement = () => {
                         <RoleOptionCard
                           key={preset.id}
                           $selected={isSelected}
-                          $color={preset.color || '#0ea5e9'}
-                          $bgColor={preset.bgColor || '#f0f9ff'}
+                          $color={preset.color || 'var(--secondary)'}
+                          $bgColor={preset.bgColor || 'var(--primary-light)'}
                           onClick={() => handleSelectRolePreset(preset)}
                         >
-                          <RoleIconSquircle $color={preset.color || '#0ea5e9'}>
+                          <RoleIconSquircle $color={preset.color || 'var(--secondary)'}>
                             {preset.icon || '🛡️'}
                           </RoleIconSquircle>
                           <RoleInfo>
                             <div className="role-title">
                               <span>{preset.name}</span>
                               {isSelected && (
-                                <span style={{ color: preset.color || '#0ea5e9', fontSize: '0.8rem', fontWeight: 800 }}>✓</span>
+                                <span style={{ color: preset.color || 'var(--secondary)', fontSize: '0.8rem', fontWeight: 800 }}>✓</span>
                               )}
                             </div>
                             {preset.description && <p className="role-desc">{preset.description}</p>}
@@ -2002,7 +2002,7 @@ const SubAdminManagement = () => {
 
             {/* ─── COLUMN 3: Access Scope ─── */}
             <ColumnCard>
-              <ColumnHeader $gradient="linear-gradient(135deg, #0284c7, #0ea5e9)">
+              <ColumnHeader $gradient="linear-gradient(135deg, #0284c7, var(--secondary))">
                 <h3 className="col-title">
                   <span style={{
                     background: 'rgba(255,255,255,0.25)',
@@ -2027,7 +2027,7 @@ const SubAdminManagement = () => {
                 <FormGroup>
                   <Label htmlFor="col3_campus">
                     <span>Campus Scope</span>
-                    <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Optional (Global if unselected)</span>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Optional (Global if unselected)</span>
                   </Label>
                   <Select
                     id="col3_campus"
@@ -2061,9 +2061,9 @@ const SubAdminManagement = () => {
                         maxHeight: '90px',
                         overflowY: 'auto',
                         padding: '0.4rem',
-                        background: '#f8fafc',
+                        background: 'var(--background)',
                         borderRadius: '8px',
-                        border: '1px solid #e2e8f0'
+                        border: '1px solid var(--border)'
                       }}
                     >
                       {courses.map((course) => {
@@ -2076,8 +2076,8 @@ const SubAdminManagement = () => {
                               alignItems: 'center',
                               gap: '0.35rem',
                               fontSize: '0.75rem',
-                              background: isChecked ? '#e0f2fe' : 'white',
-                              border: `1px solid ${isChecked ? '#0ea5e9' : '#cbd5e1'}`,
+                              background: isChecked ? 'var(--primary-light)' : 'white',
+                              border: `1px solid ${isChecked ? 'var(--secondary)' : 'var(--border-strong)'}`,
                               padding: '2px 6px',
                               borderRadius: '6px',
                               cursor: 'pointer'
@@ -2109,8 +2109,8 @@ const SubAdminManagement = () => {
                   style={{
                     padding: '0.45rem 0.65rem',
                     borderRadius: '8px',
-                    border: `1.5px solid ${formState.hasPanelMemberAccess ? '#0ea5e9' : '#e2e8f0'}`,
-                    background: formState.hasPanelMemberAccess ? '#f0f9ff' : '#f8fafc',
+                    border: `1.5px solid ${formState.hasPanelMemberAccess ? 'var(--secondary)' : 'var(--border)'}`,
+                    background: formState.hasPanelMemberAccess ? 'var(--primary-light)' : 'var(--background)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -2118,10 +2118,10 @@ const SubAdminManagement = () => {
                   }}
                 >
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.8rem', color: '#0f172a' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-primary)' }}>
                       Grant Interview Panel Access
                     </div>
-                    <div style={{ fontSize: '0.7rem', color: '#64748b' }}>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
                       Allows user to evaluate candidates in interview rounds
                     </div>
                   </div>
@@ -2129,7 +2129,7 @@ const SubAdminManagement = () => {
                     type="checkbox"
                     checked={!!formState.hasPanelMemberAccess}
                     onChange={(e) => setFormState({ ...formState, hasPanelMemberAccess: e.target.checked })}
-                    style={{ width: '16px', height: '16px', accentColor: '#0ea5e9', cursor: 'pointer' }}
+                    style={{ width: '16px', height: '16px', accentColor: 'var(--secondary)', cursor: 'pointer' }}
                   />
                 </div>
 
@@ -2137,7 +2137,7 @@ const SubAdminManagement = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginTop: '0.2rem' }}>
                   <Label>
                     <span>Role Module Permissions</span>
-                    <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Fine-tune access</span>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Fine-tune access</span>
                   </Label>
 
                   {availablePermissions.map((perm) => {
@@ -2210,10 +2210,10 @@ const SubAdminManagement = () => {
         <TableWrapper>
           <TableToolbar>
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#0f172a' }}>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                 Sub-Admin Directory
               </h3>
-              <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
+              <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                 {filteredUsers.length} registered user{filteredUsers.length !== 1 ? 's' : ''}
               </p>
             </div>
@@ -2246,7 +2246,7 @@ const SubAdminManagement = () => {
               <SkeletonLoader rows={6} />
             </div>
           ) : filteredUsers.length === 0 ? (
-            <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8' }}>
+            <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
               <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>👥</div>
               <p style={{ margin: 0, fontWeight: 600 }}>No users found matching your search</p>
             </div>
@@ -2294,11 +2294,11 @@ const SubAdminManagement = () => {
                                 {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
                               </div>
                               <div>
-                                <div style={{ fontWeight: 700, color: '#0f172a' }}>{user.name}</div>
-                                <div style={{ fontSize: '0.78rem', color: '#64748b', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{user.name}</div>
+                                <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                                   <span>{user.email}</span>
                                   {user.employeeId && (
-                                    <span style={{ background: '#e0f2fe', color: '#0284c7', padding: '1px 6px', borderRadius: '4px', fontWeight: 700, fontSize: '0.7rem' }}>
+                                    <span style={{ background: 'var(--primary-light)', color: '#0284c7', padding: '1px 6px', borderRadius: '4px', fontWeight: 700, fontSize: '0.7rem' }}>
                                       ID: {user.employeeId}
                                     </span>
                                   )}
@@ -2310,7 +2310,7 @@ const SubAdminManagement = () => {
                           <Td>
                             <div style={{ fontWeight: 600 }}>{user.campus || 'All Campuses'}</div>
                             {user.courses && user.courses.length > 0 && (
-                              <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                                 {user.courses.length} course(s)
                               </div>
                             )}
@@ -2325,9 +2325,9 @@ const SubAdminManagement = () => {
                                 style={{
                                   fontSize: '0.74rem',
                                   fontWeight: 700,
-                                  color: user.assignedRoleId ? '#0369a1' : '#475569',
-                                  background: user.assignedRoleId ? '#e0f2fe' : '#f8fafc',
-                                  border: `1.5px solid ${user.assignedRoleId ? '#7dd3fc' : '#cbd5e1'}`,
+                                  color: user.assignedRoleId ? '#0369a1' : 'var(--text-secondary)',
+                                  background: user.assignedRoleId ? 'var(--primary-light)' : 'var(--background)',
+                                  border: `1.5px solid ${user.assignedRoleId ? '#7dd3fc' : 'var(--border-strong)'}`,
                                   borderRadius: '6px',
                                   padding: '2px 6px',
                                   cursor: 'pointer',
@@ -2341,11 +2341,11 @@ const SubAdminManagement = () => {
                                   </option>
                                 ))}
                               </select>
-                              <span style={{ background: '#f1f5f9', color: '#334155', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, fontSize: '0.78rem' }}>
+                              <span style={{ background: 'var(--background)', color: 'var(--text-primary)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, fontSize: '0.78rem' }}>
                                 {permCount} module{permCount !== 1 ? 's' : ''}
                               </span>
                               {user.hasPanelMemberAccess && (
-                                <span style={{ background: '#fff7ed', color: '#c2410c', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, fontSize: '0.7rem' }}>
+                                <span style={{ background: 'var(--primary-light)', color: 'var(--text-secondary)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, fontSize: '0.7rem' }}>
                                   Panel
                                 </span>
                               )}
@@ -2469,7 +2469,7 @@ const SubAdminManagement = () => {
                 textAlign: 'center',
                 background: 'white',
                 borderRadius: '16px',
-                border: '1px solid #e0f2fe',
+                border: '1px solid var(--primary-light)',
                 boxShadow: '0 4px 16px rgba(14, 165, 233, 0.05)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -2489,7 +2489,7 @@ const SubAdminManagement = () => {
                 textAlign: 'center',
                 background: 'white',
                 borderRadius: '16px',
-                border: '1px solid #e0f2fe',
+                border: '1px solid var(--primary-light)',
                 boxShadow: '0 4px 16px rgba(14, 165, 233, 0.05)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -2498,10 +2498,10 @@ const SubAdminManagement = () => {
               }}
             >
               <div style={{ fontSize: '2.5rem' }}>⚙️</div>
-              <div style={{ fontWeight: 800, color: '#0f172a', fontSize: '1.1rem' }}>
+              <div style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '1.1rem' }}>
                 No Custom Roles Created Yet
               </div>
-              <p style={{ margin: 0, fontSize: '0.88rem', color: '#64748b', maxWidth: '420px', lineHeight: 1.5 }}>
+              <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--text-secondary)', maxWidth: '420px', lineHeight: 1.5 }}>
                 You have not created any roles yet. Click &quot;Add new role&quot; to configure role templates with pre-defined module permissions.
               </p>
               <button
@@ -2509,7 +2509,7 @@ const SubAdminManagement = () => {
                 onClick={handleOpenNewRole}
                 style={{
                   marginTop: '0.5rem',
-                  background: '#0ea5e9',
+                  background: 'var(--secondary)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
@@ -2536,7 +2536,7 @@ const SubAdminManagement = () => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                       <RoleIconSquircle $color={preset.color}>{preset.icon || '🛡️'}</RoleIconSquircle>
                       <div>
-                        <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#0f172a' }}>
+                        <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                           {preset.name}
                         </h4>
                         <span style={{ fontSize: '0.75rem', color: preset.color, fontWeight: 700 }}>
@@ -2550,7 +2550,7 @@ const SubAdminManagement = () => {
                       title="Quick assign this role"
                       onClick={() => openRoleCreateModal(preset)}
                       style={{
-                        background: preset.bgColor || '#f0f9ff',
+                        background: preset.bgColor || 'var(--primary-light)',
                         color: preset.color || '#0284c7',
                         border: `1px solid ${preset.color || '#0284c7'}`,
                         borderRadius: '6px',
@@ -2568,17 +2568,17 @@ const SubAdminManagement = () => {
                     </button>
                   </div>
 
-                  <p style={{ margin: 0, fontSize: '0.82rem', color: '#64748b', lineHeight: 1.4, flex: 1, minHeight: '36px' }}>
+                  <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.4, flex: 1, minHeight: '36px' }}>
                     {preset.description || 'Standard access profile configured for portal operations.'}
                   </p>
 
                   <div
                     style={{
-                      background: '#f8fafc',
+                      background: 'var(--background)',
                       borderRadius: '8px',
                       padding: '0.5rem 0.75rem',
                       fontSize: '0.78rem',
-                      color: '#334155',
+                      color: 'var(--text-primary)',
                       fontWeight: 600,
                       display: 'flex',
                       alignItems: 'center',
@@ -2592,7 +2592,7 @@ const SubAdminManagement = () => {
                       👥 {subAdmins.filter((u) => u.assignedRoleId === preset.id || (preset._id && u.assignedRoleId === String(preset._id)) || (preset.name && u.assignedRoleName && u.assignedRoleName.toLowerCase() === preset.name.toLowerCase())).length} user(s)
                     </span>
                     {preset.hasPanelMemberAccess && (
-                      <span style={{ color: '#059669', fontWeight: 700 }}>🎯 Panel</span>
+                      <span style={{ color: 'var(--success)', fontWeight: 700 }}>🎯 Panel</span>
                     )}
                   </div>
 
@@ -2604,8 +2604,8 @@ const SubAdminManagement = () => {
                       style={{
                         flex: 1,
                         background: 'white',
-                        color: '#334155',
-                        border: '1.5px solid #cbd5e1',
+                        color: 'var(--text-primary)',
+                        border: '1.5px solid var(--border-strong)',
                         borderRadius: '8px',
                         padding: '0.55rem 0.75rem',
                         fontWeight: 700,
@@ -2618,13 +2618,13 @@ const SubAdminManagement = () => {
                         transition: 'all 0.15s ease'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = '#0ea5e9';
+                        e.currentTarget.style.borderColor = 'var(--secondary)';
                         e.currentTarget.style.color = '#0284c7';
-                        e.currentTarget.style.background = '#f0f9ff';
+                        e.currentTarget.style.background = 'var(--primary-light)';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.borderColor = '#cbd5e1';
-                        e.currentTarget.style.color = '#334155';
+                        e.currentTarget.style.borderColor = 'var(--border-strong)';
+                        e.currentTarget.style.color = 'var(--text-primary)';
                         e.currentTarget.style.background = 'white';
                       }}
                     >
@@ -2636,9 +2636,9 @@ const SubAdminManagement = () => {
                       type="button"
                       onClick={() => handlePromptDeleteRole(preset)}
                       style={{
-                        background: '#fef2f2',
-                        color: '#dc2626',
-                        border: '1.5px solid #fecaca',
+                        background: 'var(--danger-light)',
+                        color: 'var(--danger)',
+                        border: '1.5px solid var(--danger-light)',
                         borderRadius: '8px',
                         padding: '0.55rem 0.85rem',
                         fontWeight: 700,
@@ -2650,12 +2650,12 @@ const SubAdminManagement = () => {
                         transition: 'all 0.15s ease'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.background = '#fee2e2';
+                        e.currentTarget.style.background = 'var(--danger-light)';
                         e.currentTarget.style.borderColor = '#f87171';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.background = '#fef2f2';
-                        e.currentTarget.style.borderColor = '#fecaca';
+                        e.currentTarget.style.background = 'var(--danger-light)';
+                        e.currentTarget.style.borderColor = 'var(--danger-light)';
                       }}
                     >
                       <span>🗑️</span>
@@ -2681,14 +2681,14 @@ const SubAdminManagement = () => {
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: '#0f172a' }}>
+                <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                   {viewingPermissions.name}
                 </h3>
-                <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>Configured Module Permissions</p>
+                <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Configured Module Permissions</p>
               </div>
               <button
                 onClick={() => setViewingPermissions(null)}
-                style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#94a3b8' }}
+                style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: 'var(--text-muted)' }}
               >
                 &times;
               </button>
@@ -2709,19 +2709,19 @@ const SubAdminManagement = () => {
                     style={{
                       padding: '0.75rem',
                       borderRadius: '8px',
-                      background: access ? '#f0fdf4' : '#f8fafc',
-                      border: `1px solid ${access ? '#a7f3d0' : '#e2e8f0'}`,
+                      background: access ? 'var(--success-light)' : 'var(--background)',
+                      border: `1px solid ${access ? '#a7f3d0' : 'var(--border)'}`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between'
                     }}
                   >
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: '0.85rem', color: access ? '#065f46' : '#64748b' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.85rem', color: access ? '#065f46' : 'var(--text-secondary)' }}>
                         {p.label}
                       </div>
                       {p.description && (
-                        <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>{p.description}</div>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{p.description}</div>
                       )}
                     </div>
 
@@ -2731,8 +2731,8 @@ const SubAdminManagement = () => {
                         fontWeight: 800,
                         padding: '2px 8px',
                         borderRadius: '6px',
-                        background: access === 'full_access' ? '#dcfce7' : access === 'view_only' ? '#e0f2fe' : '#f1f5f9',
-                        color: access === 'full_access' ? '#15803d' : access === 'view_only' ? '#0369a1' : '#94a3b8'
+                        background: access === 'full_access' ? 'var(--success-light)' : access === 'view_only' ? 'var(--primary-light)' : 'var(--background)',
+                        color: access === 'full_access' ? 'var(--success)' : access === 'view_only' ? '#0369a1' : 'var(--text-muted)'
                       }}
                     >
                       {access === 'full_access' ? 'Full Access' : access === 'view_only' ? 'View Only' : 'Disabled'}
@@ -2825,7 +2825,7 @@ const SubAdminManagement = () => {
                       style={{
                         width: '100%',
                         padding: '0.65rem 0.75rem',
-                        border: '1.5px solid #cbd5e1',
+                        border: '1.5px solid var(--border-strong)',
                         borderRadius: '8px',
                         fontSize: '1rem',
                         outline: 'none',
@@ -2863,15 +2863,15 @@ const SubAdminManagement = () => {
                   <Label>Card Accent Color</Label>
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
                     {[
-                      { hex: '#0284c7', bg: '#f0f9ff' },
-                      { hex: '#0ea5e9', bg: '#e0f2fe' },
-                      { hex: '#059669', bg: '#f0fdf4' },
-                      { hex: '#0891b2', bg: '#ecfeff' },
-                      { hex: '#d97706', bg: '#fffbeb' },
+                      { hex: '#0284c7', bg: 'var(--primary-light)' },
+                      { hex: 'var(--secondary)', bg: 'var(--primary-light)' },
+                      { hex: 'var(--success)', bg: 'var(--success-light)' },
+                      { hex: 'var(--primary-hover)', bg: '#ecfeff' },
+                      { hex: 'var(--warning)', bg: '#fffbeb' },
                       { hex: '#7c3aed', bg: '#faf5ff' },
-                      { hex: '#475569', bg: '#f8fafc' },
-                      { hex: '#dc2626', bg: '#fef2f2' },
-                      { hex: '#2563eb', bg: '#eff6ff' }
+                      { hex: 'var(--text-secondary)', bg: 'var(--background)' },
+                      { hex: 'var(--danger)', bg: 'var(--danger-light)' },
+                      { hex: 'var(--secondary)', bg: 'var(--primary-light)' }
                     ].map((c) => (
                       <div
                         key={c.hex}
@@ -2882,7 +2882,7 @@ const SubAdminManagement = () => {
                           borderRadius: '50%',
                           background: c.hex,
                           cursor: 'pointer',
-                          border: roleConfigForm.color === c.hex ? '3px solid #0f172a' : '2px solid white',
+                          border: roleConfigForm.color === c.hex ? '3px solid var(--text-primary)' : '2px solid white',
                           boxShadow: '0 2px 4px rgba(0,0,0,0.15)',
                           transform: roleConfigForm.color === c.hex ? 'scale(1.15)' : 'none',
                           transition: 'all 0.15s ease'
@@ -2895,8 +2895,8 @@ const SubAdminManagement = () => {
                 {/* Panel Member Access */}
                 <div
                   style={{
-                    background: '#f8fafc',
-                    border: '1.5px solid #e2e8f0',
+                    background: 'var(--background)',
+                    border: '1.5px solid var(--border)',
                     borderRadius: '10px',
                     padding: '0.75rem 1rem',
                     display: 'flex',
@@ -2905,10 +2905,10 @@ const SubAdminManagement = () => {
                   }}
                 >
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#0f172a' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--text-primary)' }}>
                       🎯 Interview Panel Member Access
                     </div>
-                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                       Allow users with this role to participate in interviews and submit candidate evaluation scores
                     </div>
                   </div>
@@ -2925,10 +2925,10 @@ const SubAdminManagement = () => {
                 {/* Module Permissions Matrix */}
                 <div>
                   <div style={{ marginBottom: '0.65rem' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#0f172a' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)' }}>
                       Default Module Permissions
                     </div>
-                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                       Set the default permission level granted for each portal module
                     </div>
                   </div>
@@ -2997,13 +2997,13 @@ const SubAdminManagement = () => {
                 {/* Assigned Users Section */}
                 <div style={{ marginTop: '0.25rem' }}>
                   <div style={{ marginBottom: '0.65rem' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <span>Assigned Users ({roleAssignedUserIds.length})</span>
-                      <span style={{ fontSize: '0.74rem', color: '#0284c7', background: '#e0f2fe', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
+                      <span style={{ fontSize: '0.74rem', color: '#0284c7', background: 'var(--primary-light)', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
                         🔄 Live Sync Active
                       </span>
                     </div>
-                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                       Users checked below will be updated with these exact permissions immediately upon saving.
                     </div>
                   </div>
@@ -3012,17 +3012,17 @@ const SubAdminManagement = () => {
                     style={{
                       maxHeight: '150px',
                       overflowY: 'auto',
-                      border: '1.5px solid #e2e8f0',
+                      border: '1.5px solid var(--border)',
                       borderRadius: '10px',
                       padding: '0.5rem',
-                      background: '#f8fafc',
+                      background: 'var(--background)',
                       display: 'flex',
                       flexDirection: 'column',
                       gap: '0.4rem'
                     }}
                   >
                     {subAdmins.length === 0 ? (
-                      <div style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center', padding: '0.75rem' }}>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textAlign: 'center', padding: '0.75rem' }}>
                         No users created yet
                       </div>
                     ) : (
@@ -3037,8 +3037,8 @@ const SubAdminManagement = () => {
                               justifyContent: 'space-between',
                               padding: '0.45rem 0.65rem',
                               borderRadius: '8px',
-                              background: isChecked ? '#f0f9ff' : 'white',
-                              border: `1px solid ${isChecked ? '#7dd3fc' : '#e2e8f0'}`,
+                              background: isChecked ? 'var(--primary-light)' : 'white',
+                              border: `1px solid ${isChecked ? '#7dd3fc' : 'var(--border)'}`,
                               cursor: 'pointer',
                               fontSize: '0.82rem',
                               transition: 'all 0.15s ease'
@@ -3058,14 +3058,14 @@ const SubAdminManagement = () => {
                                 style={{ width: '16px', height: '16px', cursor: 'pointer', accentColor: '#0284c7' }}
                               />
                               <div>
-                                <span style={{ fontWeight: 700, color: '#0f172a' }}>{user.name}</span>
-                                <span style={{ color: '#64748b', fontSize: '0.75rem', marginLeft: '0.4rem' }}>
+                                <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{user.name}</span>
+                                <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginLeft: '0.4rem' }}>
                                   ({user.email}{user.employeeId ? ` • ID: ${user.employeeId}` : ''})
                                 </span>
                               </div>
                             </div>
                             {user.assignedRoleName && (
-                              <span style={{ fontSize: '0.7rem', color: '#0284c7', background: '#e0f2fe', padding: '1px 6px', borderRadius: '4px', fontWeight: 600 }}>
+                              <span style={{ fontSize: '0.7rem', color: '#0284c7', background: 'var(--primary-light)', padding: '1px 6px', borderRadius: '4px', fontWeight: 600 }}>
                                 {user.assignedRoleName}
                               </span>
                             )}
@@ -3096,11 +3096,11 @@ const SubAdminManagement = () => {
         <PriorityModalOverlay onClick={(e) => { if (e.target === e.currentTarget && !deletingRoleLoading) setShowRoleDeleteModal(false); }}>
           <ModalCard
             $maxWidth="560px"
-            $borderColor="#fee2e2"
+            $borderColor="var(--danger-light)"
           >
             {/* Header */}
             <ModalHeader
-              $bg="linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)"
+              $bg="linear-gradient(135deg, var(--danger) 0%, var(--primary) 100%)"
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <div
@@ -3172,16 +3172,16 @@ const SubAdminManagement = () => {
 
                   {/* Assigned Users Preview List */}
                   <div>
-                    <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
+                    <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
                       Affected Users ({roleDeleteAssignedUsers.length}):
                     </div>
                     <div
                       style={{
                         maxHeight: '130px',
                         overflowY: 'auto',
-                        border: '1px solid #e2e8f0',
+                        border: '1px solid var(--border)',
                         borderRadius: '8px',
-                        background: '#f8fafc',
+                        background: 'var(--background)',
                         padding: '0.4rem',
                         display: 'flex',
                         flexDirection: 'column',
@@ -3197,7 +3197,7 @@ const SubAdminManagement = () => {
                             justifyContent: 'space-between',
                             padding: '0.4rem 0.6rem',
                             background: 'white',
-                            border: '1px solid #e2e8f0',
+                            border: '1px solid var(--border)',
                             borderRadius: '6px',
                             fontSize: '0.8rem'
                           }}
@@ -3208,7 +3208,7 @@ const SubAdminManagement = () => {
                                 width: '26px',
                                 height: '26px',
                                 borderRadius: '6px',
-                                background: '#e0f2fe',
+                                background: 'var(--primary-light)',
                                 color: '#0284c7',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -3219,11 +3219,11 @@ const SubAdminManagement = () => {
                             >
                               {u.name ? u.name.charAt(0).toUpperCase() : 'U'}
                             </div>
-                            <span style={{ fontWeight: 700, color: '#0f172a' }}>{u.name}</span>
-                            <span style={{ color: '#64748b', fontSize: '0.74rem' }}>({u.email})</span>
+                            <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{u.name}</span>
+                            <span style={{ color: 'var(--text-secondary)', fontSize: '0.74rem' }}>({u.email})</span>
                           </div>
                           {u.employeeId && (
-                            <span style={{ fontSize: '0.7rem', color: '#0284c7', background: '#e0f2fe', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
+                            <span style={{ fontSize: '0.7rem', color: '#0284c7', background: 'var(--primary-light)', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
                               ID: {u.employeeId}
                             </span>
                           )}
@@ -3234,8 +3234,8 @@ const SubAdminManagement = () => {
 
                   {/* Reassignment Target Selector */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                    <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>
-                      Switch Assigned Users To: <span style={{ color: '#dc2626' }}>*</span>
+                    <label style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                      Switch Assigned Users To: <span style={{ color: 'var(--danger)' }}>*</span>
                     </label>
                     <select
                       value={roleDeleteTargetRoleId}
@@ -3243,7 +3243,7 @@ const SubAdminManagement = () => {
                       style={{
                         padding: '0.65rem 0.85rem',
                         borderRadius: '8px',
-                        border: '1.5px solid #cbd5e1',
+                        border: '1.5px solid var(--border-strong)',
                         fontSize: '0.88rem',
                         fontWeight: 600,
                         background: 'white',
@@ -3262,7 +3262,7 @@ const SubAdminManagement = () => {
                         ⚙️ Keep Existing Permissions (Convert to Custom Standalone Access)
                       </option>
                     </select>
-                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.15rem' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.15rem' }}>
                       {roleDeleteTargetRoleId === 'custom'
                         ? 'All affected users will retain their current module permissions as custom standalone access without a preset.'
                         : `All affected users will be immediately migrated to the selected role profile with its latest module access.`}
@@ -3275,9 +3275,9 @@ const SubAdminManagement = () => {
                   style={{
                     padding: '1.5rem',
                     textAlign: 'center',
-                    background: '#f8fafc',
+                    background: 'var(--background)',
                     borderRadius: '12px',
-                    border: '1px solid #e2e8f0',
+                    border: '1px solid var(--border)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -3285,10 +3285,10 @@ const SubAdminManagement = () => {
                   }}
                 >
                   <div style={{ fontSize: '2rem' }}>🛡️</div>
-                  <div style={{ fontWeight: 800, color: '#0f172a', fontSize: '0.95rem' }}>
+                  <div style={{ fontWeight: 800, color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                     No Users Assigned
                   </div>
-                  <p style={{ margin: 0, fontSize: '0.82rem', color: '#64748b', lineHeight: 1.45 }}>
+                  <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.45 }}>
                     Are you sure you want to delete the <strong>&quot;{roleToDelete.name}&quot;</strong> role profile? This action will permanently remove this role configuration.
                   </p>
                 </div>
@@ -3309,7 +3309,7 @@ const SubAdminManagement = () => {
                 disabled={deletingRoleLoading}
                 onClick={handleConfirmDeleteRole}
                 style={{
-                  background: '#dc2626',
+                  background: 'var(--danger)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
@@ -3346,7 +3346,7 @@ const SubAdminManagement = () => {
           >
             {/* Modal Header */}
             <ModalHeader
-              $bg={`linear-gradient(135deg, ${roleModalPreset.color}, #1e293b)`}
+              $bg={`linear-gradient(135deg, ${roleModalPreset.color}, var(--text-primary))`}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
                 <div
@@ -3392,10 +3392,10 @@ const SubAdminManagement = () => {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       paddingBottom: '0.5rem',
-                      borderBottom: '2px solid #e2e8f0'
+                      borderBottom: '2px solid var(--border)'
                     }}
                   >
-                    <h4 style={{ margin: 0, color: '#0f172a', fontSize: '0.95rem', fontWeight: 700 }}>
+                    <h4 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '0.95rem', fontWeight: 700 }}>
                       👤 User Credentials
                     </h4>
                     <button
@@ -3408,7 +3408,7 @@ const SubAdminManagement = () => {
                         setShowHrmsModal(true);
                       }}
                       style={{
-                        background: 'linear-gradient(135deg, #0284c7, #0ea5e9)',
+                        background: 'linear-gradient(135deg, #0284c7, var(--secondary))',
                         color: 'white',
                         border: 'none',
                         padding: '0.35rem 0.75rem',
@@ -3472,8 +3472,8 @@ const SubAdminManagement = () => {
                           disabled={!roleModalForm.employeeId || fetchingHrmsId}
                           style={{
                             padding: '0 0.5rem',
-                            background: '#f1f5f9',
-                            border: '1.5px solid #cbd5e1',
+                            background: 'var(--background)',
+                            border: '1.5px solid var(--border-strong)',
                             borderRadius: '8px',
                             fontSize: '0.75rem',
                             fontWeight: 700,
@@ -3499,7 +3499,7 @@ const SubAdminManagement = () => {
                   {roleModalForm.employeeId ? (
                     <div
                       style={{
-                        background: '#f0fdf4',
+                        background: 'var(--success-light)',
                         border: '1.5px solid #a7f3d0',
                         borderRadius: '10px',
                         padding: '0.75rem',
@@ -3516,9 +3516,9 @@ const SubAdminManagement = () => {
                           type="button"
                           onClick={() => setRoleModalForm({ ...roleModalForm, employeeId: '', password: '' })}
                           style={{
-                            background: '#fee2e2',
-                            color: '#b91c1c',
-                            border: '1px solid #fecaca',
+                            background: 'var(--danger-light)',
+                            color: 'var(--primary)',
+                            border: '1px solid var(--danger-light)',
                             borderRadius: '4px',
                             padding: '1px 6px',
                             fontSize: '0.72rem',
@@ -3556,10 +3556,10 @@ const SubAdminManagement = () => {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       paddingBottom: '0.5rem',
-                      borderBottom: '2px solid #e2e8f0'
+                      borderBottom: '2px solid var(--border)'
                     }}
                   >
-                    <h4 style={{ margin: 0, color: '#0f172a', fontSize: '0.95rem', fontWeight: 700 }}>
+                    <h4 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '0.95rem', fontWeight: 700 }}>
                       🌐 Access Scope & Modules
                     </h4>
                     <span
@@ -3604,9 +3604,9 @@ const SubAdminManagement = () => {
                           maxHeight: '90px',
                           overflowY: 'auto',
                           padding: '0.4rem',
-                          background: '#f8fafc',
+                          background: 'var(--background)',
                           borderRadius: '6px',
-                          border: '1px solid #e2e8f0'
+                          border: '1px solid var(--border)'
                         }}
                       >
                         {roleModalCourses.map((crs) => {
@@ -3619,8 +3619,8 @@ const SubAdminManagement = () => {
                                 alignItems: 'center',
                                 gap: '0.3rem',
                                 fontSize: '0.75rem',
-                                background: isChecked ? '#e0f2fe' : 'white',
-                                border: `1px solid ${isChecked ? '#0284c7' : '#cbd5e1'}`,
+                                background: isChecked ? 'var(--primary-light)' : 'white',
+                                border: `1px solid ${isChecked ? '#0284c7' : 'var(--border-strong)'}`,
                                 padding: '1px 6px',
                                 borderRadius: '4px',
                                 cursor: 'pointer'
@@ -3651,21 +3651,21 @@ const SubAdminManagement = () => {
                     style={{
                       padding: '0.6rem 0.75rem',
                       borderRadius: '8px',
-                      border: `1.5px solid ${roleModalForm.hasPanelMemberAccess ? '#f97316' : '#e2e8f0'}`,
-                      background: roleModalForm.hasPanelMemberAccess ? '#fff7ed' : '#f8fafc',
+                      border: `1.5px solid ${roleModalForm.hasPanelMemberAccess ? 'var(--accent)' : 'var(--border)'}`,
+                      background: roleModalForm.hasPanelMemberAccess ? 'var(--primary-light)' : 'var(--background)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between'
                     }}
                   >
-                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#1e293b' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                       Grant Interview Panel Access
                     </span>
                     <input
                       type="checkbox"
                       checked={!!roleModalForm.hasPanelMemberAccess}
                       onChange={(e) => setRoleModalForm({ ...roleModalForm, hasPanelMemberAccess: e.target.checked })}
-                      style={{ width: '16px', height: '16px', accentColor: '#f97316', cursor: 'pointer' }}
+                      style={{ width: '16px', height: '16px', accentColor: 'var(--accent)', cursor: 'pointer' }}
                     />
                   </div>
 
@@ -3758,7 +3758,7 @@ const SubAdminManagement = () => {
                   style={{
                     width: '42px',
                     height: '42px',
-                    background: 'linear-gradient(135deg, #0284c7, #0ea5e9)',
+                    background: 'linear-gradient(135deg, #0284c7, var(--secondary))',
                     borderRadius: '10px',
                     display: 'flex',
                     alignItems: 'center',
@@ -3769,10 +3769,10 @@ const SubAdminManagement = () => {
                   🏢
                 </div>
                 <div>
-                  <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: '#0f172a' }}>
+                  <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                     Search HRMS Employee
                   </h3>
-                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>
+                  <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                     {hrmsTargetForm === 'roleModal'
                       ? `Select an employee for ${roleModalPreset.name}`
                       : 'Search by Employee ID or Name'}
@@ -3782,7 +3782,7 @@ const SubAdminManagement = () => {
               <button
                 type="button"
                 onClick={() => setShowHrmsModal(false)}
-                style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: '#94a3b8' }}
+                style={{ background: 'none', border: 'none', fontSize: '1.75rem', cursor: 'pointer', color: 'var(--text-muted)' }}
               >
                 &times;
               </button>
@@ -3798,14 +3798,14 @@ const SubAdminManagement = () => {
                 style={{
                   width: '100%',
                   padding: '0.75rem 0.875rem 0.75rem 2.5rem',
-                  border: '2px solid #e2e8f0',
+                  border: '2px solid var(--border)',
                   borderRadius: '10px',
                   fontSize: '0.92rem',
                   outline: 'none',
                   boxSizing: 'border-box'
                 }}
               />
-              <span style={{ position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }}>
+              <span style={{ position: 'absolute', left: '0.875rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }}>
                 🔍
               </span>
               {hrmsSearching && (
@@ -3816,7 +3816,7 @@ const SubAdminManagement = () => {
             </div>
 
             {hrmsError && !hrmsSearching && (
-              <div style={{ padding: '0.75rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', color: '#dc2626', fontSize: '0.85rem', textAlign: 'center' }}>
+              <div style={{ padding: '0.75rem', background: 'var(--danger-light)', border: '1px solid var(--danger-light)', borderRadius: '8px', color: 'var(--danger)', fontSize: '0.85rem', textAlign: 'center' }}>
                 {hrmsError}
               </div>
             )}
@@ -3829,7 +3829,7 @@ const SubAdminManagement = () => {
                     onClick={() => selectHrmsEmployee(emp)}
                     style={{
                       padding: '0.875rem 1rem',
-                      border: '1.5px solid #e0f2fe',
+                      border: '1.5px solid var(--primary-light)',
                       borderRadius: '10px',
                       cursor: 'pointer',
                       display: 'flex',
@@ -3838,11 +3838,11 @@ const SubAdminManagement = () => {
                       transition: 'all 0.15s ease'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = '#0ea5e9';
-                      e.currentTarget.style.background = '#f0f9ff';
+                      e.currentTarget.style.borderColor = 'var(--secondary)';
+                      e.currentTarget.style.background = 'var(--primary-light)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = '#e0f2fe';
+                      e.currentTarget.style.borderColor = 'var(--primary-light)';
                       e.currentTarget.style.background = 'white';
                     }}
                   >
@@ -3851,7 +3851,7 @@ const SubAdminManagement = () => {
                         width: '38px',
                         height: '38px',
                         borderRadius: '8px',
-                        background: '#e0f2fe',
+                        background: 'var(--primary-light)',
                         color: '#0284c7',
                         display: 'flex',
                         alignItems: 'center',
@@ -3863,10 +3863,10 @@ const SubAdminManagement = () => {
                     </div>
 
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.9rem' }}>
+                      <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.9rem' }}>
                         {emp.employee_name}
                       </div>
-                      <div style={{ fontSize: '0.76rem', color: '#64748b', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.2rem' }}>
+                      <div style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.2rem' }}>
                         <span>🆔 {emp.emp_no}</span>
                         {emp.email && <span>📧 {emp.email}</span>}
                         {emp.designation && <span>💼 {emp.designation}</span>}

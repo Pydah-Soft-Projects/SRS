@@ -23,20 +23,21 @@ const LoadingContainer = styled.div`
 const LoadingWrapper = styled.div`
   text-align: center;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--surface);
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(var(--primary-rgb), 0.1);
+  border: 1px solid var(--border);
 `;
 
 const SpinnerIcon = styled(FaSpinner)`
   font-size: 2.5rem;
-  color: #2563eb;
+  color: var(--primary);
   animation: ${spin} 1s linear infinite;
   margin-bottom: 1rem;
 `;
 
 const LoadingText = styled.p`
-  color: #64748b;
+  color: var(--text-secondary);
   font-weight: 500;
   font-size: 1rem;
   margin: 0;

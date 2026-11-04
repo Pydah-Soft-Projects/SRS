@@ -524,14 +524,14 @@ const CandidatesManagement = () => {
                             width: '40px',
                             height: '40px',
                             borderRadius: '50%',
-                            background: '#e2e8f0',
+                            background: 'var(--border)',
                             display: candidate.passportPhotoUrl ? 'none' : 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             margin: '0 auto'
                           }}
                         >
-                          <FaUser style={{ color: '#64748b' }} />
+                          <FaUser style={{ color: 'var(--text-secondary)' }} />
                         </div>
                       </td>
                       <td>{candidate.user.name}</td>

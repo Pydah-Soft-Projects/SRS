@@ -1163,7 +1163,7 @@ const CandidateManagement = () => {
         {/* Typing Test Results Section */}
         {typingTestResultsForCandidate.length > 0 && (
           <Card className="mt-3">
-            <Card.Header style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderBottom: 'none' }}>
+            <Card.Header style={{ background: 'var(--primary)', color: 'white', borderBottom: 'none' }}>
               <h6 className="mb-0" style={{ color: 'white', fontWeight: '600' }}>
                 <FaKeyboard className="me-2" />
                 Typing Test Results
@@ -1171,16 +1171,16 @@ const CandidateManagement = () => {
             </Card.Header>
             <Card.Body style={{ padding: '1.5rem', background: '#ffffff' }}>
               <Table striped bordered hover responsive style={{ marginBottom: 0 }}>
-                <thead style={{ background: '#f8f9fa' }}>
+                <thead style={{ background: 'var(--background)' }}>
                   <tr>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Test Title</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>WPM</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Accuracy</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Errors</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Time Taken</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Duration</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Submitted At</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Actions</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Test Title</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>WPM</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Accuracy</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Errors</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Time Taken</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Duration</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Submitted At</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1462,14 +1462,14 @@ const CandidateManagement = () => {
           const count = stageStats[stage] || 0;
           
           const variantColors = {
-            primary: '#b91c1c',
-            secondary: '#64748b',
-            info: '#f97316',
-            warning: '#f59e0b',
-            success: '#10b981',
-            danger: '#ef4444'
+            primary: 'var(--primary)',
+            secondary: 'var(--text-secondary)',
+            info: 'var(--accent)',
+            warning: 'var(--warning)',
+            success: 'var(--success)',
+            danger: 'var(--danger)'
           };
-          const accentColor = variantColors[meta.variant] || '#b91c1c';
+          const accentColor = variantColors[meta.variant] || 'var(--primary)';
 
           return (
             <Card
@@ -1478,9 +1478,9 @@ const CandidateManagement = () => {
               style={{
                 cursor: 'pointer',
                 background: '#ffffff',
-                border: '1px solid #fed7aa',
+                border: '1px solid var(--border)',
                 borderRadius: '12px',
-                boxShadow: '0 2px 8px rgba(185, 28, 28, 0.05)',
+                boxShadow: '0 2px 8px rgba(var(--primary-rgb), 0.05)',
                 transition: 'all 0.2s ease',
                 padding: '0.875rem 0.6rem',
                 minWidth: '110px',
@@ -1491,13 +1491,13 @@ const CandidateManagement = () => {
               onClick={() => openStageDrawer(stage)}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 6px 16px rgba(185, 28, 28, 0.12)';
+                e.currentTarget.style.boxShadow = '0 6px 16px rgba(var(--primary-rgb), 0.12)';
                 e.currentTarget.style.borderColor = accentColor;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'none';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(185, 28, 28, 0.05)';
-                e.currentTarget.style.borderColor = '#fed7aa';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(var(--primary-rgb), 0.05)';
+                e.currentTarget.style.borderColor = 'var(--border)';
               }}
             >
               <div style={{
@@ -1511,7 +1511,7 @@ const CandidateManagement = () => {
               <div style={{
                 fontSize: '1.6rem',
                 fontWeight: '800',
-                color: count > 0 ? accentColor : '#94a3b8',
+                color: count > 0 ? accentColor : 'var(--text-muted)',
                 lineHeight: '1.2',
                 marginBottom: '0.25rem'
               }}>
@@ -1520,7 +1520,7 @@ const CandidateManagement = () => {
               <div style={{
                 fontSize: '0.72rem',
                 fontWeight: '700',
-                color: '#475569',
+                color: 'var(--text-secondary)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.03em',
                 lineHeight: '1.25',
@@ -1538,7 +1538,7 @@ const CandidateManagement = () => {
       <Row className="mb-3">
         <Col xs={12}>
           <InputGroup style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)', borderRadius: '10px', overflow: 'hidden' }}>
-            <InputGroup.Text style={{ background: '#ffffff', borderRight: 'none', color: '#94a3b8' }}>
+            <InputGroup.Text style={{ background: '#ffffff', borderRight: 'none', color: 'var(--text-muted)' }}>
               <FaSearch />
             </InputGroup.Text>
             <Form.Control
@@ -1556,7 +1556,7 @@ const CandidateManagement = () => {
               variant="primary"
               onClick={() => setSearchTerm(searchInput)}
               style={{
-                background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                background: 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
                 border: 'none',
                 fontWeight: '600',
                 padding: '0 1.25rem'
@@ -1571,7 +1571,7 @@ const CandidateManagement = () => {
                   setSearchInput('');
                   setSearchTerm('');
                 }}
-                style={{ borderLeft: '1px solid #cbd5e1' }}
+                style={{ borderLeft: '1px solid var(--border-strong)' }}
               >
                 Reset
               </Button>
@@ -1583,42 +1583,42 @@ const CandidateManagement = () => {
       {/* ── Top Summary Stat Badges (Total Candidates & Profiles Done) ──── */}
       <Row className="mb-3 g-3">
         <Col md={6}>
-          <Card style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+          <Card style={{ background: '#ffffff', border: '1px solid var(--border)', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   TOTAL CANDIDATES
                 </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#b91c1c', marginTop: '0.2rem' }}>
+                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--primary)', marginTop: '0.2rem' }}>
                   {filteredCandidates.length.toLocaleString()}
                 </div>
                 <div style={{ fontSize: '0.75rem', color: '#9a3412', fontWeight: '500', marginTop: '0.1rem' }}>
                   {statusFilter !== 'all' ? statusFilter.toUpperCase() : 'Regular'}
                 </div>
               </div>
-              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#fff7ed', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #fed7aa' }}>
-                <FaUsers style={{ color: '#b91c1c', fontSize: '1.2rem' }} />
+              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
+                <FaUsers style={{ color: 'var(--primary)', fontSize: '1.2rem' }} />
               </div>
             </div>
           </Card>
         </Col>
 
         <Col md={6}>
-          <Card style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+          <Card style={{ background: '#ffffff', border: '1px solid var(--border)', borderRadius: '12px', padding: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#9a3412', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   PROFILES DONE
                 </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#ea580c', marginTop: '0.2rem' }}>
+                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--primary)', marginTop: '0.2rem' }}>
                   {completedProfilesCount.toLocaleString()}
                 </div>
                 <div style={{ fontSize: '0.75rem', color: '#9a3412', fontWeight: '500', marginTop: '0.1rem' }}>
                   {completionPercentage}% completion
                 </div>
               </div>
-              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#fff7ed', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #fed7aa' }}>
-                <FaCheckCircle style={{ color: '#ea580c', fontSize: '1.2rem' }} />
+              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
+                <FaCheckCircle style={{ color: 'var(--primary)', fontSize: '1.2rem' }} />
               </div>
             </div>
           </Card>
@@ -1626,11 +1626,11 @@ const CandidateManagement = () => {
       </Row>
 
       {/* ── Expandable Filter Box Matching User Screenshot ───────────────── */}
-      <Card style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', marginBottom: '1.5rem', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+      <Card style={{ background: '#ffffff', border: '1px solid var(--border)', borderRadius: '12px', marginBottom: '1.5rem', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
         <div style={{
           padding: '0.875rem 1.25rem',
-          background: '#fff7ed',
-          borderBottom: filtersOpen ? '1px solid #fed7aa' : 'none',
+          background: 'var(--primary-light)',
+          borderBottom: filtersOpen ? '1px solid var(--border)' : 'none',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -1639,9 +1639,9 @@ const CandidateManagement = () => {
         }}>
           <div
             onClick={() => setFiltersOpen(!filtersOpen)}
-            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '700', fontSize: '0.85rem', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em' }}
+            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '700', fontSize: '0.85rem', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}
           >
-            <FaFilter style={{ color: '#b91c1c' }} /> FILTERS {filtersOpen ? <FaChevronUp /> : <FaChevronDown />}
+            <FaFilter style={{ color: 'var(--primary)' }} /> FILTERS {filtersOpen ? <FaChevronUp /> : <FaChevronDown />}
           </div>
 
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -1658,7 +1658,7 @@ const CandidateManagement = () => {
                 variant="light"
                 size="sm"
                 onClick={resetAllFilters}
-                style={{ fontWeight: '600', color: '#991b1b', background: '#fee2e2', border: '1px solid #fecaca', borderRadius: '6px' }}
+                style={{ fontWeight: '600', color: 'var(--primary-hover)', background: 'var(--danger-light)', border: '1px solid var(--danger-light)', borderRadius: '6px' }}
               >
                 Reset Filters
               </Button>
@@ -1672,14 +1672,14 @@ const CandidateManagement = () => {
               {/* 1. CAMPUS / STREAM */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     CAMPUS / STREAM
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={campusFilter}
                     onChange={(e) => setCampusFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Campuses ({candidates.length})</option>
                     {availableCampuses.map(c => {
@@ -1693,14 +1693,14 @@ const CandidateManagement = () => {
               {/* 2. CATEGORY (Teaching vs Non-Teaching) */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     RECRUITMENT CATEGORY
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Categories ({candidatesAfterCampus.length})</option>
                     {availableCategories.map(cat => {
@@ -1715,14 +1715,14 @@ const CandidateManagement = () => {
               {/* 3. DEPARTMENT */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     DEPARTMENT
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={departmentFilter}
                     onChange={(e) => setDepartmentFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Departments ({candidatesAfterCategory.length})</option>
                     {availableDepartments.map(d => {
@@ -1736,14 +1736,14 @@ const CandidateManagement = () => {
               {/* 4. POSITION */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     POSITION / DESIGNATION
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={positionFilter}
                     onChange={(e) => setPositionFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Positions ({candidatesAfterDept.length})</option>
                     {availablePositions.map(p => {
@@ -1757,14 +1757,14 @@ const CandidateManagement = () => {
               {/* 5. CANDIDATE STATUS */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     CANDIDATE STATUS
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Statuses</option>
                     <option value="pending">Pending Review</option>
@@ -1780,14 +1780,14 @@ const CandidateManagement = () => {
               {/* 6. WORKFLOW STAGE */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     WORKFLOW STAGE
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={stageFilter}
                     onChange={(e) => setStageFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Workflow Stages</option>
                     {Object.entries(WORKFLOW_STAGE_META).map(([stageKey, meta]) => (
@@ -1800,14 +1800,14 @@ const CandidateManagement = () => {
               {/* 7. TEST ASSESSMENT STATUS */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     TEST ASSESSMENT
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={testStatusFilter}
                     onChange={(e) => setTestStatusFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Test Statuses</option>
                     <option value="passed">Test Passed</option>
@@ -1822,14 +1822,14 @@ const CandidateManagement = () => {
               {/* 8. INTERVIEW STATUS */}
               <Col xs={12} sm={6} md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     INTERVIEW STATUS
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={interviewStatusFilter}
                     onChange={(e) => setInterviewStatusFilter(e.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Interview Statuses</option>
                     <option value="scheduled">Interview Scheduled</option>
@@ -1845,10 +1845,10 @@ const CandidateManagement = () => {
 
       <Row>
         <Col>
-          <Card style={{ border: '1px solid #fed7aa', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
-            <Card.Header style={{ background: '#fff7ed', borderBottom: '1px solid #fed7aa', padding: '0.85rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h5 className="mb-0" style={{ color: '#991b1b', fontWeight: '700', fontSize: '1.05rem' }}>Candidate Pipeline</h5>
-              <Badge bg="light" text="dark" style={{ border: '1px solid #fed7aa', color: '#991b1b', fontWeight: '600', padding: '0.35rem 0.75rem', borderRadius: '20px' }}>
+          <Card style={{ border: '1px solid var(--border)', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+            <Card.Header style={{ background: 'var(--primary-light)', borderBottom: '1px solid var(--border)', padding: '0.85rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h5 className="mb-0" style={{ color: 'var(--primary-hover)', fontWeight: '700', fontSize: '1.05rem' }}>Candidate Pipeline</h5>
+              <Badge bg="light" text="dark" style={{ border: '1px solid var(--border)', color: 'var(--primary-hover)', fontWeight: '600', padding: '0.35rem 0.75rem', borderRadius: '20px' }}>
                 {filteredCandidates.length} Candidates
               </Badge>
             </Card.Header>
@@ -1860,18 +1860,18 @@ const CandidateManagement = () => {
               ) : (
                 <div style={{ width: '100%', overflowX: 'auto' }}>
                   <Table striped hover size="sm" style={{ marginBottom: 0, width: '100%', verticalAlign: 'middle', borderCollapse: 'collapse' }}>
-                    <thead style={{ background: '#fff7ed', borderBottom: '2px solid #fed7aa' }}>
+                    <thead style={{ background: 'var(--primary-light)', borderBottom: '2px solid var(--border)' }}>
                       <tr>
-                        <th style={{ width: '50px', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.35rem' }}>Photo</th>
-                        <th style={{ width: '13%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Name</th>
-                        <th style={{ width: '16%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Email</th>
-                        <th style={{ width: '14%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Position</th>
-                        <th style={{ width: '8%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Department</th>
-                        <th style={{ width: '8%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.35rem' }}>Status</th>
-                        <th style={{ width: '13%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Workflow</th>
-                        <th style={{ width: '10%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Tests</th>
-                        <th style={{ width: '9%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Interviews</th>
-                        <th style={{ width: '9%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.35rem' }}>Actions</th>
+                        <th style={{ width: '50px', textAlign: 'center', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.35rem' }}>Photo</th>
+                        <th style={{ width: '13%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Name</th>
+                        <th style={{ width: '16%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Email</th>
+                        <th style={{ width: '14%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Position</th>
+                        <th style={{ width: '8%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Department</th>
+                        <th style={{ width: '8%', textAlign: 'center', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.35rem' }}>Status</th>
+                        <th style={{ width: '13%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Workflow</th>
+                        <th style={{ width: '10%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Tests</th>
+                        <th style={{ width: '9%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.5rem' }}>Interviews</th>
+                        <th style={{ width: '9%', textAlign: 'center', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.35rem' }}>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1887,7 +1887,7 @@ const CandidateManagement = () => {
                                   width: '32px',
                                   height: '32px',
                                   objectFit: 'cover',
-                                  border: '2px solid #fed7aa',
+                                  border: '2px solid var(--border)',
                                   display: 'block',
                                   margin: '0 auto'
                                 }}
@@ -1905,34 +1905,34 @@ const CandidateManagement = () => {
                                 width: '32px',
                                 height: '32px',
                                 borderRadius: '50%',
-                                background: '#fff7ed',
+                                background: 'var(--primary-light)',
                                 display: candidate.passportPhotoUrl ? 'none' : 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 margin: '0 auto',
-                                border: '1px solid #fed7aa'
+                                border: '1px solid var(--border)'
                               }}
                             >
-                              <FaUser style={{ color: '#ea580c', fontSize: '13px' }} />
+                              <FaUser style={{ color: 'var(--primary)', fontSize: '13px' }} />
                             </div>
                           </td>
                           <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
-                            <div style={{ fontWeight: 600, fontSize: '0.84rem', color: '#1e293b', textTransform: 'uppercase' }}>
+                            <div style={{ fontWeight: 600, fontSize: '0.84rem', color: 'var(--text-primary)', textTransform: 'uppercase' }}>
                               {candidate.user?.name || 'N/A'}
                             </div>
                           </td>
                           <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
-                            <div style={{ fontSize: '0.82rem', color: '#475569', wordBreak: 'break-all' }}>
+                            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', wordBreak: 'break-all' }}>
                               {candidate.user?.email || 'N/A'}
                             </div>
                           </td>
                           <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
-                            <div style={{ fontSize: '0.84rem', color: '#334155', fontWeight: 500 }}>
+                            <div style={{ fontSize: '0.84rem', color: 'var(--text-primary)', fontWeight: 500 }}>
                               {candidate.form?.position || 'N/A'}
                             </div>
                           </td>
                           <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
-                            <div style={{ fontSize: '0.82rem', color: '#64748b' }}>
+                            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                               {candidate.form?.department || 'N/A'}
                             </div>
                           </td>
@@ -1952,18 +1952,18 @@ const CandidateManagement = () => {
                             />
                           </td>
                           <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
-                            <div style={{ fontWeight: 600, fontSize: '0.82rem', color: '#1e293b' }}>
+                            <div style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--text-primary)' }}>
                               {candidate.workflow?.tests?.assigned || 0} assigned
                             </div>
-                            <div style={{ fontSize: '0.72rem', color: '#64748b', whiteSpace: 'nowrap' }}>
+                            <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
                               {candidate.workflow?.tests?.completed || 0} completed · {candidate.workflow?.tests?.passed || 0} passed
                             </div>
                           </td>
                           <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.5rem' }}>
-                            <div style={{ fontWeight: 600, fontSize: '0.82rem', color: '#1e293b' }}>
+                            <div style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--text-primary)' }}>
                               {candidate.workflow?.interviews?.scheduled || 0} scheduled
                             </div>
-                            <div style={{ fontSize: '0.72rem', color: '#64748b', whiteSpace: 'nowrap' }}>
+                            <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
                               {candidate.workflow?.interviews?.completed || 0} completed
                             </div>
                           </td>
@@ -1983,7 +1983,7 @@ const CandidateManagement = () => {
                                   height: '28px',
                                   padding: 0,
                                   borderRadius: '6px',
-                                  background: 'linear-gradient(135deg, #b91c1c 0%, #991b1b 100%)',
+                                  background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%)',
                                   border: 'none',
                                   color: '#fff'
                                 }}
@@ -2033,8 +2033,8 @@ const CandidateManagement = () => {
                                       height: '28px',
                                       padding: 0,
                                       borderRadius: '6px',
-                                      background: '#f59e0b',
-                                      borderColor: '#d97706',
+                                      background: 'var(--warning)',
+                                      borderColor: 'var(--warning)',
                                       color: '#fff'
                                     }}
                                   >
@@ -2139,7 +2139,7 @@ const CandidateManagement = () => {
                         </Badge>
                       </div>
 
-                      <div className="d-flex flex-wrap gap-3 mt-3" style={{ fontSize: '0.85rem', color: '#475569' }}>
+                      <div className="d-flex flex-wrap gap-3 mt-3" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                         <span><strong>Tests:</strong> {candidate.workflow?.tests?.completed || 0} / {candidate.workflow?.tests?.assigned || 0}</span>
                         <span><strong>Interviews:</strong> {candidate.workflow?.interviews?.completed || 0} / {candidate.workflow?.interviews?.scheduled || 0}</span>
                         <span><strong>Status:</strong> {candidate.finalDecision?.decision === 'selected' ? 'finalized' : candidate.status}</span>
@@ -2228,12 +2228,12 @@ const CandidateManagement = () => {
         <Modal.Header
           closeButton
           style={{
-            backgroundColor: '#f8f9fa',
-            borderBottom: '2px solid #dee2e6',
+            backgroundColor: 'var(--background)',
+            borderBottom: '2px solid var(--border)',
             padding: '1.25rem 1.5rem'
           }}
         >
-          <Modal.Title style={{ color: '#212529', fontWeight: '700', fontSize: '1.5rem' }}>
+          <Modal.Title style={{ color: 'var(--text-primary)', fontWeight: '700', fontSize: '1.5rem' }}>
             Candidate Profile - {selectedCandidate?.personalDetails?.name}
           </Modal.Title>
         </Modal.Header>
@@ -2241,7 +2241,7 @@ const CandidateManagement = () => {
           style={{
             maxHeight: '70vh',
             overflowY: 'auto',
-            backgroundColor: '#f8fafc',
+            backgroundColor: 'var(--background)',
             padding: '1.5rem'
           }}
         >
@@ -2249,7 +2249,7 @@ const CandidateManagement = () => {
             <Tabs
               defaultActiveKey="personal"
               className="mb-3"
-              style={{ borderBottom: '2px solid #dee2e6' }}
+              style={{ borderBottom: '2px solid var(--border)' }}
             >
               <Tab
                 eventKey="personal"
@@ -2267,7 +2267,7 @@ const CandidateManagement = () => {
             </Tabs>
           )}
         </Modal.Body>
-        <Modal.Footer style={{ backgroundColor: '#f8f9fa', borderTop: '2px solid #dee2e6' }}>
+        <Modal.Footer style={{ backgroundColor: 'var(--background)', borderTop: '2px solid var(--border)' }}>
           {selectedCandidate && (
             <Button
               variant="outline-primary"
@@ -2490,7 +2490,7 @@ const CandidateManagement = () => {
         <Modal.Header
           closeButton
           style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'var(--primary)',
             color: 'white',
             borderBottom: 'none'
           }}
@@ -2500,28 +2500,28 @@ const CandidateManagement = () => {
             Typing Test Result Details
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ padding: '1.5rem', background: '#f8f9fa', maxHeight: '85vh', overflowY: 'auto' }}>
+        <Modal.Body style={{ padding: '1.5rem', background: 'var(--background)', maxHeight: '85vh', overflowY: 'auto' }}>
           {selectedTypingResult ? (
             <div>
               <Row className="mb-3 g-3">
                 <Col md={6}>
-                  <Card className="h-100 border-0 shadow-sm" style={{ background: 'linear-gradient(135deg, #667eea15 0%, #764ba215 100%)' }}>
+                  <Card className="h-100 border-0 shadow-sm" style={{ background: 'var(--primary-light)' }}>
                     <Card.Body style={{ padding: '1.25rem' }}>
                       <h6 className="text-muted mb-3 text-uppercase" style={{ fontSize: '0.75rem', letterSpacing: '0.5px', fontWeight: '600' }}>
                         Candidate Information
                       </h6>
                       <div style={{ lineHeight: '1.8' }}>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Name:</strong>
-                          <span style={{ color: '#212529' }}> {selectedCandidate?.personalDetails?.name || selectedCandidate?.user?.name || 'N/A'}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Name:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {selectedCandidate?.personalDetails?.name || selectedCandidate?.user?.name || 'N/A'}</span>
                         </p>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Email:</strong>
-                          <span style={{ color: '#212529' }}> {selectedCandidate?.personalDetails?.email || selectedCandidate?.user?.email || 'N/A'}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Email:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {selectedCandidate?.personalDetails?.email || selectedCandidate?.user?.email || 'N/A'}</span>
                         </p>
                         <p className="mb-0">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Candidate Number:</strong>
-                          <span style={{ color: '#212529' }}> {selectedCandidate?.candidateNumber || 'N/A'}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Candidate Number:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {selectedCandidate?.candidateNumber || 'N/A'}</span>
                         </p>
                       </div>
                     </Card.Body>
@@ -2535,20 +2535,20 @@ const CandidateManagement = () => {
                       </h6>
                       <div style={{ lineHeight: '1.8' }}>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Test Title:</strong>
-                          <span style={{ color: '#212529' }}> {selectedTypingResult.typingTest?.title || 'N/A'}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Test Title:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {selectedTypingResult.typingTest?.title || 'N/A'}</span>
                         </p>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Duration:</strong>
-                          <span style={{ color: '#212529' }}> {selectedTypingResult.duration || 0} minute(s)</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Duration:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {selectedTypingResult.duration || 0} minute(s)</span>
                         </p>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Started At:</strong>
-                          <span style={{ color: '#212529' }}> {selectedTypingResult.startedAt ? new Date(selectedTypingResult.startedAt).toLocaleString() : 'N/A'}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Started At:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {selectedTypingResult.startedAt ? new Date(selectedTypingResult.startedAt).toLocaleString() : 'N/A'}</span>
                         </p>
                         <p className="mb-0">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Submitted At:</strong>
-                          <span style={{ color: '#212529' }}> {selectedTypingResult.submittedAt ? new Date(selectedTypingResult.submittedAt).toLocaleString() : 'N/A'}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Submitted At:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {selectedTypingResult.submittedAt ? new Date(selectedTypingResult.submittedAt).toLocaleString() : 'N/A'}</span>
                         </p>
                       </div>
                     </Card.Body>
@@ -2558,7 +2558,7 @@ const CandidateManagement = () => {
               <Row>
                 <Col>
                   <Card className="border-0 shadow-sm">
-                    <Card.Header style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderBottom: 'none' }}>
+                    <Card.Header style={{ background: 'var(--primary)', color: 'white', borderBottom: 'none' }}>
                       <h5 className="mb-0" style={{ color: 'white', fontWeight: '600' }}>
                         Performance Metrics
                       </h5>
@@ -2606,7 +2606,7 @@ const CandidateManagement = () => {
             <Alert variant="warning">No typing test result details available.</Alert>
           )}
         </Modal.Body>
-        <Modal.Footer style={{ borderTop: '1px solid #dee2e6', background: '#ffffff' }}>
+        <Modal.Footer style={{ borderTop: '1px solid var(--border)', background: '#ffffff' }}>
           <Button
             variant="secondary"
             onClick={() => {
@@ -2646,7 +2646,7 @@ const CandidateManagement = () => {
         <Modal.Header
           closeButton
           style={{
-            background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
+            background: 'linear-gradient(135deg, #0284c7 0%, var(--secondary) 100%)',
             color: 'white',
             borderBottom: 'none',
             padding: '1.25rem 1.5rem'
@@ -2657,12 +2657,12 @@ const CandidateManagement = () => {
           </Modal.Title>
         </Modal.Header>
 
-        <Modal.Body style={{ padding: '1.5rem', background: '#f8fafc', maxHeight: '80vh', overflowY: 'auto' }}>
+        <Modal.Body style={{ padding: '1.5rem', background: 'var(--background)', maxHeight: '80vh', overflowY: 'auto' }}>
           {/* Top Search Input inside Modal */}
           <Row className="mb-3">
             <Col xs={12}>
               <InputGroup style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.04)', borderRadius: '10px', overflow: 'hidden' }}>
-                <InputGroup.Text style={{ background: '#ffffff', borderRight: 'none', color: '#94a3b8' }}>
+                <InputGroup.Text style={{ background: '#ffffff', borderRight: 'none', color: 'var(--text-muted)' }}>
                   <FaSearch />
                 </InputGroup.Text>
                 <Form.Control
@@ -2680,7 +2680,7 @@ const CandidateManagement = () => {
                   variant="primary"
                   onClick={() => setSearchTerm(searchInput)}
                   style={{
-                    background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
+                    background: 'linear-gradient(135deg, #0284c7 0%, var(--secondary) 100%)',
                     border: 'none',
                     fontWeight: '600',
                     padding: '0 1.25rem'
@@ -2695,7 +2695,7 @@ const CandidateManagement = () => {
                       setSearchInput('');
                       setSearchTerm('');
                     }}
-                    style={{ borderLeft: '1px solid #cbd5e1' }}
+                    style={{ borderLeft: '1px solid var(--border-strong)' }}
                   >
                     Reset
                   </Button>
@@ -2705,12 +2705,12 @@ const CandidateManagement = () => {
           </Row>
 
           {/* Full Grid Filters Panel inside Modal */}
-          <Card style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-            <div style={{ padding: '0.875rem 1.25rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ fontWeight: '700', fontSize: '0.85rem', color: '#334155', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <FaFilter style={{ color: '#0ea5e9' }} /> Filter Options
+          <Card style={{ background: '#ffffff', border: '1px solid var(--border)', borderRadius: '12px', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+            <div style={{ padding: '0.875rem 1.25rem', background: 'var(--background)', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ fontWeight: '700', fontSize: '0.85rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <FaFilter style={{ color: 'var(--secondary)' }} /> Filter Options
               </div>
-              <Button variant="light" size="sm" onClick={resetAllFilters} style={{ fontWeight: '600', color: '#64748b' }}>
+              <Button variant="light" size="sm" onClick={resetAllFilters} style={{ fontWeight: '600', color: 'var(--text-secondary)' }}>
                 Reset All Filters
               </Button>
             </div>
@@ -2719,7 +2719,7 @@ const CandidateManagement = () => {
                 {/* 1. CAMPUS / STREAM */}
                 <Col xs={12} sm={6} md={3}>
                   <Form.Group>
-                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>CAMPUS / STREAM</Form.Label>
+                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>CAMPUS / STREAM</Form.Label>
                     <Form.Select size="sm" value={campusFilter} onChange={(e) => setCampusFilter(e.target.value)}>
                       <option value="all">All Campuses ({candidates.length})</option>
                       {availableCampuses.map(c => {
@@ -2733,7 +2733,7 @@ const CandidateManagement = () => {
                 {/* 2. CATEGORY (Teaching vs Non-Teaching) */}
                 <Col xs={12} sm={6} md={3}>
                   <Form.Group>
-                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>CATEGORY</Form.Label>
+                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>CATEGORY</Form.Label>
                     <Form.Select size="sm" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
                       <option value="all">All Categories ({candidatesAfterCampus.length})</option>
                       {availableCategories.map(cat => {
@@ -2748,7 +2748,7 @@ const CandidateManagement = () => {
                 {/* 3. DEPARTMENT */}
                 <Col xs={12} sm={6} md={3}>
                   <Form.Group>
-                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>DEPARTMENT</Form.Label>
+                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>DEPARTMENT</Form.Label>
                     <Form.Select size="sm" value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
                       <option value="all">All Departments ({candidatesAfterCategory.length})</option>
                       {availableDepartments.map(d => {
@@ -2762,7 +2762,7 @@ const CandidateManagement = () => {
                 {/* 4. POSITION */}
                 <Col xs={12} sm={6} md={3}>
                   <Form.Group>
-                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>POSITION</Form.Label>
+                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>POSITION</Form.Label>
                     <Form.Select size="sm" value={positionFilter} onChange={(e) => setPositionFilter(e.target.value)}>
                       <option value="all">All Positions ({candidatesAfterDept.length})</option>
                       {availablePositions.map(p => {
@@ -2776,7 +2776,7 @@ const CandidateManagement = () => {
                 {/* 5. CANDIDATE STATUS */}
                 <Col xs={12} sm={6} md={3}>
                   <Form.Group>
-                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>STATUS</Form.Label>
+                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>STATUS</Form.Label>
                     <Form.Select size="sm" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
                       <option value="all">All Statuses</option>
                       <option value="pending">Pending Review</option>
@@ -2792,7 +2792,7 @@ const CandidateManagement = () => {
                 {/* 6. WORKFLOW STAGE */}
                 <Col xs={12} sm={6} md={3}>
                   <Form.Group>
-                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>WORKFLOW STAGE</Form.Label>
+                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>WORKFLOW STAGE</Form.Label>
                     <Form.Select size="sm" value={stageFilter} onChange={(e) => setStageFilter(e.target.value)}>
                       <option value="all">All Stages</option>
                       {Object.entries(WORKFLOW_STAGE_META).map(([stageKey, meta]) => (
@@ -2805,7 +2805,7 @@ const CandidateManagement = () => {
                 {/* 7. TEST ASSESSMENT STATUS */}
                 <Col xs={12} sm={6} md={3}>
                   <Form.Group>
-                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>TEST ASSESSMENT</Form.Label>
+                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>TEST ASSESSMENT</Form.Label>
                     <Form.Select size="sm" value={testStatusFilter} onChange={(e) => setTestStatusFilter(e.target.value)}>
                       <option value="all">All Test Statuses</option>
                       <option value="passed">Test Passed</option>
@@ -2820,7 +2820,7 @@ const CandidateManagement = () => {
                 {/* 8. INTERVIEW STATUS */}
                 <Col xs={12} sm={6} md={3}>
                   <Form.Group>
-                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>INTERVIEW STATUS</Form.Label>
+                    <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>INTERVIEW STATUS</Form.Label>
                     <Form.Select size="sm" value={interviewStatusFilter} onChange={(e) => setInterviewStatusFilter(e.target.value)}>
                       <option value="all">All Interview Statuses</option>
                       <option value="scheduled">Interview Scheduled</option>
@@ -2834,8 +2834,8 @@ const CandidateManagement = () => {
           </Card>
 
           {/* Filtered Candidates Preview Table inside Modal */}
-          <Card style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-            <Card.Header style={{ background: '#f8fafc', padding: '0.875rem 1.25rem', fontWeight: '700', fontSize: '0.85rem', color: '#334155' }}>
+          <Card style={{ background: '#ffffff', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
+            <Card.Header style={{ background: 'var(--background)', padding: '0.875rem 1.25rem', fontWeight: '700', fontSize: '0.85rem', color: 'var(--text-primary)' }}>
               Preview Matching Candidates ({filteredCandidates.length})
             </Card.Header>
             <Card.Body style={{ padding: 0 }}>
@@ -2857,7 +2857,7 @@ const CandidateManagement = () => {
                   <tbody>
                     {filteredCandidates.slice(0, 15).map((candidate) => (
                       <tr key={candidate._id}>
-                        <td style={{ fontWeight: '700', color: '#0ea5e9' }}>{candidate.candidateNumber || '—'}</td>
+                        <td style={{ fontWeight: '700', color: 'var(--secondary)' }}>{candidate.candidateNumber || '—'}</td>
                         <td style={{ fontWeight: '600' }}>{candidate.user?.name || candidate.personalDetails?.name || '—'}</td>
                         <td>{candidate.user?.email || '—'}</td>
                         <td>{candidate.form?.position || '—'}</td>
@@ -2899,7 +2899,7 @@ const CandidateManagement = () => {
                 </Table>
               )}
               {filteredCandidates.length > 15 && (
-                <div style={{ padding: '0.5rem 1rem', background: '#f8fafc', fontSize: '0.78rem', color: '#64748b', textAlign: 'center' }}>
+                <div style={{ padding: '0.5rem 1rem', background: 'var(--background)', fontSize: '0.78rem', color: 'var(--text-secondary)', textAlign: 'center' }}>
                   Showing first 15 of {filteredCandidates.length} candidates.
                 </div>
               )}
@@ -2907,7 +2907,7 @@ const CandidateManagement = () => {
           </Card>
         </Modal.Body>
 
-        <Modal.Footer style={{ background: '#ffffff', borderTop: '1px solid #e2e8f0', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <Modal.Footer style={{ background: '#ffffff', borderTop: '1px solid var(--border)', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
           <Button
             variant="secondary"
             onClick={() => setShowDownloadDialog(false)}

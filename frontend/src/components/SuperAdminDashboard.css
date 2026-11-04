@@ -1,5 +1,6 @@
 /* ================================================================
-   SUPER ADMIN DASHBOARD — White & Sky Blue Theme
+   SUPER ADMIN DASHBOARD — Dynamic Centralized Theme Integration
+   Styles adapted to Master Token Dictionary (UI Portal Integration Guide)
    ================================================================ */
 
 .dashboard-container {
@@ -8,6 +9,7 @@
   max-width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+  background-color: var(--background);
 }
 
 /* ── Header ───────────────────────────────────────────────────── */
@@ -19,9 +21,9 @@
 .dashboard-title {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #991b1b;
+  color: var(--primary);
   margin-bottom: 0.75rem;
-  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 60%, #f97316 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -31,7 +33,7 @@
 
 .dashboard-subtitle {
   font-size: 1.05rem;
-  color: #64748b;
+  color: var(--text-secondary);
   max-width: 580px;
   margin: 0 auto;
   line-height: 1.7;
@@ -39,7 +41,7 @@
 }
 
 .dashboard-user-info {
-  color: #991b1b;
+  color: var(--primary);
   font-weight: 600;
 }
 
@@ -52,10 +54,10 @@
 }
 
 .stats-card {
-  background: #ffffff;
-  border: 1px solid #fed7aa;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(185, 28, 28, 0.06);
+  box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.06);
   transition: all 0.25s ease;
   text-align: center;
   padding: 2rem 1.5rem;
@@ -69,13 +71,13 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #b91c1c, #f97316);
+  background: linear-gradient(90deg, var(--primary), var(--accent));
 }
 
 .stats-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(185, 28, 28, 0.12);
-  border-color: #fdba74;
+  box-shadow: 0 12px 28px rgba(var(--primary-rgb), 0.12);
+  border-color: var(--border-strong);
 }
 
 .stats-card-icon {
@@ -85,11 +87,11 @@
   z-index: 1;
 }
 
-.stats-card-primary .stats-card-icon  { color: #b91c1c; }
-.stats-card-success .stats-card-icon  { color: #10b981; }
-.stats-card-info .stats-card-icon     { color: #ea580c; }
-.stats-card-warning .stats-card-icon  { color: #f59e0b; }
-.stats-card-danger .stats-card-icon   { color: #ef4444; }
+.stats-card-primary .stats-card-icon  { color: var(--primary); }
+.stats-card-success .stats-card-icon  { color: var(--success); }
+.stats-card-info .stats-card-icon     { color: var(--info); }
+.stats-card-warning .stats-card-icon  { color: var(--warning); }
+.stats-card-danger .stats-card-icon   { color: var(--danger); }
 
 .stats-number {
   font-size: 2.5rem;
@@ -98,12 +100,12 @@
   display: block;
   position: relative;
   z-index: 1;
-  color: #991b1b;
+  color: var(--primary);
 }
 
 .stats-label {
   font-size: 0.8rem;
-  color: #7c2d12;
+  color: var(--text-secondary);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -113,16 +115,16 @@
 
 /* ── Create New Card ─────────────────────────────────────────── */
 .create-card {
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
-  box-shadow: 0 4px 16px rgba(185, 28, 28, 0.08);
+  background: var(--primary-light);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.08);
   position: relative;
   overflow: hidden;
 }
 
 .create-button {
-  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 100%);
-  border: 1px solid #991b1b;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border: 1px solid var(--primary-hover);
   color: white;
   width: 100%; height: 100%;
   min-height: 130px;
@@ -138,10 +140,10 @@
 }
 
 .create-button:hover {
-  background: linear-gradient(135deg, #991b1b 0%, #c2410c 100%);
-  border-color: #7f1d1d;
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
   transform: scale(1.03);
-  box-shadow: 0 12px 32px rgba(185, 28, 28, 0.25);
+  box-shadow: 0 12px 32px rgba(var(--primary-rgb), 0.25);
   color: white;
 }
 
@@ -150,12 +152,12 @@
 
 /* ── Content Area ────────────────────────────────────────────── */
 .dashboard-content {
-  background: rgba(255,255,255,0.06);
+  background: var(--surface);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid var(--border);
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  box-shadow: var(--shadow);
   padding: 2rem;
   margin-top: 2rem;
   position: relative;
@@ -167,7 +169,7 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
 }
 
 /* ── Animations ──────────────────────────────────────────────── */

@@ -9,7 +9,7 @@ import SkeletonLoader from '../SkeletonLoader';
 const Container = styled.div`
   padding: 2rem 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #fef7ed 0%, #fed7aa 100%);
+  background: var(--background);
   width: 100%;
   box-sizing: border-box;
 
@@ -56,9 +56,9 @@ const Header = styled.div`
 const Title = styled.h1`
   font-size: 2.5rem;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #06b6d4, #22d3ee);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -76,7 +76,7 @@ const Title = styled.h1`
 
 const Subtitle = styled.p`
   font-size: 1.1rem;
-  color: #64748b;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
 
@@ -98,11 +98,11 @@ const ErrorState = styled.div`
   text-align: center;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
-  border: 1px solid #fecaca;
+  border: 1px solid var(--danger-light);
 `;
 
 const ErrorMessage = styled.div`
-  color: #dc2626;
+  color: var(--danger);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -111,7 +111,7 @@ const ErrorMessage = styled.div`
 `;
 
 const RetryButton = styled.button`
-  background: #06b6d4;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -124,7 +124,7 @@ const RetryButton = styled.button`
   gap: 0.5rem;
 
   &:hover {
-    background: #dc2626;
+    background: var(--danger);
     transform: translateY(-2px);
   }
 `;
@@ -141,7 +141,7 @@ const EmptyState = styled.div`
 
 const EmptyIcon = styled.div`
   font-size: 4rem;
-  color: #cbd5e1;
+  color: var(--border-strong);
   margin-bottom: 1rem;
 `;
 
@@ -152,14 +152,14 @@ const EmptyTitle = styled.h3`
 `;
 
 const EmptyText = styled.p`
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 1rem;
 `;
 
 const ActionButton = styled.button`
   background: ${props => {
-    if (props.$submitted) return '#10b981';
-    return props.$variant === 'primary' ? '#06b6d4' : '#3b82f6';
+    if (props.$submitted) return 'var(--success)';
+    return props.$variant === 'primary' ? 'var(--primary)' : 'var(--primary)';
   }};
   color: white;
   border: none;
@@ -178,8 +178,8 @@ const ActionButton = styled.button`
 
   &:hover {
     background: ${props => {
-      if (props.$submitted) return '#059669';
-      return props.$variant === 'primary' ? '#dc2626' : '#2563eb';
+      if (props.$submitted) return 'var(--success)';
+      return props.$variant === 'primary' ? 'var(--danger)' : 'var(--secondary)';
     }};
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

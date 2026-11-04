@@ -2,6 +2,7 @@
  * Push Notification Inline Component
  * 
  * Compact inline version of push notification status for header placement
+ * Styles adapted to Master Token Dictionary (UI Portal Integration Guide)
  */
 
 import React, { useState, useEffect } from 'react';
@@ -16,21 +17,21 @@ const NotificationStatus = styled.div`
   padding: 0.4rem 0.875rem;
   border-radius: 6px;
   background: ${props => {
-    if (props.$status === 'enabled') return 'rgba(16, 185, 129, 0.1)';
-    if (props.$status === 'disabled') return 'rgba(245, 158, 11, 0.1)';
-    return 'rgba(37, 99, 235, 0.1)';
+    if (props.$status === 'enabled') return 'var(--success-light)';
+    if (props.$status === 'disabled') return 'var(--warning-light)';
+    return 'var(--primary-light)';
   }};
   border: 1px solid ${props => {
-    if (props.$status === 'enabled') return 'rgba(16, 185, 129, 0.3)';
-    if (props.$status === 'disabled') return 'rgba(245, 158, 11, 0.3)';
-    return 'rgba(37, 99, 235, 0.3)';
+    if (props.$status === 'enabled') return 'var(--success)';
+    if (props.$status === 'disabled') return 'var(--warning)';
+    return 'var(--border)';
   }};
   cursor: ${props => props.$clickable ? 'pointer' : 'default'};
   transition: all 0.2s ease;
   
   &:hover {
     ${props => props.$clickable ? `
-      background: ${props.$status === 'enabled' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(37, 99, 235, 0.15)'};
+      background: ${props.$status === 'enabled' ? 'var(--success-light)' : 'var(--primary-light)'};
       transform: translateY(-1px);
     ` : ''}
   }
@@ -43,7 +44,7 @@ const NotificationStatus = styled.div`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
 
     .status-content-wrap {
       display: none !important;
@@ -65,9 +66,9 @@ const StatusTitle = styled.span`
   font-size: 0.8rem;
   font-weight: 600;
   color: ${props => {
-    if (props.$status === 'enabled') return '#047857';
-    if (props.$status === 'disabled') return '#b45309';
-    return '#1d4ed8';
+    if (props.$status === 'enabled') return 'var(--success)';
+    if (props.$status === 'disabled') return 'var(--warning)';
+    return 'var(--primary)';
   }};
   white-space: nowrap;
   line-height: 1.2;
@@ -79,7 +80,7 @@ const StatusTitle = styled.span`
 
 const StatusSubtitle = styled.span`
   font-size: 0.7rem;
-  color: #64748b;
+  color: var(--text-secondary);
   white-space: nowrap;
   line-height: 1.2;
 
@@ -94,8 +95,8 @@ const NotificationButton = styled.button`
   gap: 0.4rem;
   padding: 0.4rem 0.875rem;
   border-radius: 6px;
-  border: 1px solid #2563eb;
-  background: #2563eb;
+  border: 1px solid var(--primary);
+  background: var(--primary);
   color: white;
   font-size: 0.8rem;
   font-weight: 600;
@@ -103,7 +104,7 @@ const NotificationButton = styled.button`
   transition: all 0.2s ease;
   
   &:hover:enabled {
-    background: #1d4ed8;
+    background: var(--primary-hover);
     transform: translateY(-1px);
   }
   
@@ -120,7 +121,7 @@ const NotificationButton = styled.button`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.35);
 
     .notif-btn-text {
       display: none !important;
@@ -207,7 +208,7 @@ const PushNotificationInline = ({ user, onSubscriptionChange }) => {
   if (permission === 'denied') {
     return (
       <NotificationStatus $status="disabled" title="Notifications disabled in browser settings">
-        <FaBellSlash size={16} color="#b45309" />
+        <FaBellSlash size={16} color="var(--warning)" />
         <StatusContent className="status-content-wrap">
           <StatusTitle $status="disabled">Notifications Disabled</StatusTitle>
           <StatusSubtitle>Update browser settings to enable</StatusSubtitle>
@@ -225,7 +226,7 @@ const PushNotificationInline = ({ user, onSubscriptionChange }) => {
         onClick={handleUnsubscribe}
         title="Notifications active (click to disable)"
       >
-        <FaCheckCircle size={16} color="#047857" />
+        <FaCheckCircle size={16} color="var(--success)" />
         <StatusContent className="status-content-wrap">
           <StatusTitle $status="enabled">Push Notifications Enabled</StatusTitle>
           <StatusSubtitle>You will receive notifications about new applications and updates.</StatusSubtitle>
@@ -250,4 +251,3 @@ const PushNotificationInline = ({ user, onSubscriptionChange }) => {
 };
 
 export default PushNotificationInline;
-

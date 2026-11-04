@@ -109,8 +109,8 @@ const TimeInput12Hour = ({ value, onChange, style }) => {
           borderRadius: '4px',
           fontSize: '1rem',
           fontWeight: '600',
-          background: ampm === 'AM' ? '#eff6ff' : '#fef3c7',
-          color: ampm === 'AM' ? '#1e40af' : '#92400e'
+          background: ampm === 'AM' ? 'var(--primary-light)' : 'var(--warning-light)',
+          color: ampm === 'AM' ? 'var(--primary-hover)' : '#92400e'
         }}
       >
         <option value="AM">AM</option>
@@ -750,7 +750,7 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
         style={{ maxWidth: '98vw', width: '98vw' }}
         dialogClassName="test-results-modal"
       >
-        <Modal.Header closeButton style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderBottom: 'none' }}>
+        <Modal.Header closeButton style={{ background: 'var(--primary)', color: 'white', borderBottom: 'none' }}>
           <Modal.Title style={{ color: 'white', fontWeight: '600' }}>
             <FaEye className="me-2" />
             Detailed Test Results
@@ -761,7 +761,7 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
             )}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ padding: '1.5rem', background: '#f8f9fa', maxHeight: '85vh', overflowY: 'auto' }}>
+        <Modal.Body style={{ padding: '1.5rem', background: 'var(--background)', maxHeight: '85vh', overflowY: 'auto' }}>
           {loadingDetailed ? (
             <div className="text-center py-5">
               <Spinner animation="border" variant="primary" />
@@ -772,7 +772,7 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
               {/* Test and Candidate Info */}
               <Row className="mb-4 g-3">
                 <Col md={6}>
-                  <Card className="h-100 border-0 shadow-sm" style={{ background: 'linear-gradient(135deg, #667eea15 0%, #764ba215 100%)' }}>
+                  <Card className="h-100 border-0 shadow-sm" style={{ background: 'var(--primary-light)' }}>
                     <Card.Body style={{ padding: '1.25rem' }}>
                       <h6 className="text-muted mb-3 text-uppercase" style={{ fontSize: '0.75rem', letterSpacing: '0.5px', fontWeight: '600' }}>
                         <FaClipboardCheck className="me-2" />
@@ -780,20 +780,20 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
                       </h6>
                       <div style={{ lineHeight: '1.8' }}>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Title:</strong>
-                          <span style={{ color: '#212529' }}> {detailedResult.test?.title}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Title:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {detailedResult.test?.title}</span>
                         </p>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Duration:</strong>
-                          <span style={{ color: '#212529' }}> {detailedResult.test?.duration} minutes</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Duration:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {detailedResult.test?.duration} minutes</span>
                         </p>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Total Marks:</strong>
-                          <span style={{ color: '#212529' }}> {detailedResult.test?.totalMarks}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Total Marks:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {detailedResult.test?.totalMarks}</span>
                         </p>
                         <p className="mb-0">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Passing %:</strong>
-                          <span style={{ color: '#212529' }}> {detailedResult.test?.passingPercentage}%</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Passing %:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {detailedResult.test?.passingPercentage}%</span>
                         </p>
                       </div>
                     </Card.Body>
@@ -808,27 +808,27 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
                       </h6>
                       <div style={{ lineHeight: '1.8' }}>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Name:</strong>
-                          <span style={{ color: '#212529' }}> {detailedResult.candidate?.name}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Name:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {detailedResult.candidate?.name}</span>
                         </p>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Email:</strong>
-                          <span style={{ color: '#212529' }}> {detailedResult.candidate?.email}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Email:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {detailedResult.candidate?.email}</span>
                         </p>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Score:</strong>
-                          <span style={{ color: '#212529', fontWeight: '600' }}>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Score:</strong>
+                          <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
                             {detailedResult.result?.score || 0}/{detailedResult.result?.totalScore || 0}
                           </span>
                         </p>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Percentage:</strong>
-                          <span style={{ color: '#212529', fontWeight: '600', fontSize: '1.1rem' }}>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Percentage:</strong>
+                          <span style={{ color: 'var(--text-primary)', fontWeight: '600', fontSize: '1.1rem' }}>
                             {detailedResult.result?.percentage?.toFixed(1) || 0}%
                           </span>
                         </p>
                         <p className="mb-0">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Status:</strong>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Status:</strong>
                           <Badge 
                             bg={detailedResult.result?.passed ? 'success' : 'danger'} 
                             className="ms-2"
@@ -845,7 +845,7 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
 
               {/* Answers Summary */}
               <Card className="mb-4 border-0 shadow-sm">
-                <Card.Header style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderBottom: 'none' }}>
+                <Card.Header style={{ background: 'var(--primary)', color: 'white', borderBottom: 'none' }}>
                   <h5 className="mb-0" style={{ color: 'white', fontWeight: '600' }}>
                     <FaListUl className="me-2" />
                     Question-wise Answers
@@ -859,7 +859,7 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
                           key={index} 
                           className="mb-3 border-0 shadow-sm" 
                           style={{ 
-                            borderLeft: `5px solid ${answer.isCorrect ? '#10b981' : answer.isCorrect === false ? '#ef4444' : '#f59e0b'}`,
+                            borderLeft: `5px solid ${answer.isCorrect ? 'var(--success)' : answer.isCorrect === false ? 'var(--danger)' : 'var(--warning)'}`,
                             transition: 'transform 0.2s, box-shadow 0.2s',
                             width: '100%'
                           }}
@@ -874,7 +874,7 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
                         >
                           <Card.Body style={{ padding: '1.25rem' }}>
                             <div className="d-flex justify-content-between align-items-start mb-3">
-                              <h6 className="mb-0" style={{ color: '#212529', fontWeight: '600' }}>
+                              <h6 className="mb-0" style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
                                 Question {index + 1}
                               </h6>
                               <Badge 
@@ -884,14 +884,14 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
                                 {answer.isCorrect ? 'Correct' : answer.isCorrect === false ? 'Incorrect' : 'Pending'}
                               </Badge>
                             </div>
-                            <p className="mb-3" style={{ lineHeight: '1.6', color: '#495057' }}>
-                              <strong style={{ color: '#212529' }}>Question:</strong> {answer.questionText}
+                            <p className="mb-3" style={{ lineHeight: '1.6', color: 'var(--text-secondary)' }}>
+                              <strong style={{ color: 'var(--text-primary)' }}>Question:</strong> {answer.questionText}
                             </p>
                             
                             {/* Options */}
                             {answer.options && answer.options.length > 0 && (
-                              <div className="mb-3" style={{ background: '#f8f9fa', padding: '1rem', borderRadius: '8px' }}>
-                                <strong style={{ color: '#212529', display: 'block', marginBottom: '0.75rem' }}>Options:</strong>
+                              <div className="mb-3" style={{ background: 'var(--background)', padding: '1rem', borderRadius: '8px' }}>
+                                <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.75rem' }}>Options:</strong>
                                 <ul className="mb-0" style={{ listStyle: 'none', paddingLeft: 0 }}>
                                   {answer.options.map((option, optIdx) => {
                                     const isCandidateAnswer = answer.candidateAnswerFormatted?.index === optIdx || 
@@ -908,8 +908,8 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
                                           marginBottom: '0.5rem',
                                           borderRadius: '6px',
                                           background: isCandidateAnswer ? '#e7f3ff' : isCorrectAnswer ? '#d1f2eb' : '#ffffff',
-                                          border: isCandidateAnswer ? '1px solid #0d6efd' : isCorrectAnswer ? '1px solid #198754' : '1px solid #dee2e6',
-                                          color: isCandidateAnswer ? '#0d6efd' : isCorrectAnswer ? '#198754' : '#495057',
+                                          border: isCandidateAnswer ? '1px solid var(--primary)' : isCorrectAnswer ? '1px solid var(--success)' : '1px solid var(--border)',
+                                          color: isCandidateAnswer ? 'var(--primary)' : isCorrectAnswer ? 'var(--success)' : 'var(--text-secondary)',
                                           fontWeight: isCandidateAnswer || isCorrectAnswer ? '500' : '400'
                                         }}
                                       >
@@ -933,7 +933,7 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
                             {/* Answers Display */}
                             <Row className="mb-3 g-3">
                               <Col md={6}>
-                                <div style={{ background: '#fff3cd', padding: '0.75rem', borderRadius: '6px', border: '1px solid #ffc107' }}>
+                                <div style={{ background: '#fff3cd', padding: '0.75rem', borderRadius: '6px', border: '1px solid var(--warning)' }}>
                                   <p className="mb-0">
                                     <strong style={{ color: '#856404' }}>Your Answer:</strong>{' '}
                                     <span style={{ color: '#856404' }}>
@@ -946,7 +946,7 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
                                 </div>
                               </Col>
                               <Col md={6}>
-                                <div style={{ background: '#d1f2eb', padding: '0.75rem', borderRadius: '6px', border: '1px solid #198754' }}>
+                                <div style={{ background: '#d1f2eb', padding: '0.75rem', borderRadius: '6px', border: '1px solid var(--success)' }}>
                                   <p className="mb-0">
                                     <strong style={{ color: '#0f5132' }}>Correct Answer:</strong>{' '}
                                     <span style={{ color: '#0f5132' }}>
@@ -963,20 +963,20 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
                             {/* Marks and Time */}
                             <Row className="g-3">
                               <Col md={6}>
-                                <div style={{ background: '#f8f9fa', padding: '0.75rem', borderRadius: '6px' }}>
+                                <div style={{ background: 'var(--background)', padding: '0.75rem', borderRadius: '6px' }}>
                                   <p className="mb-0 text-muted">
                                     <strong>Marks:</strong>{' '}
-                                    <span style={{ color: '#212529', fontWeight: '600' }}>
+                                    <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
                                       {answer.marks || 0}/{answer.questionMarks || 0}
                                     </span>
                                   </p>
                                 </div>
                               </Col>
                               <Col md={6}>
-                                <div style={{ background: '#f8f9fa', padding: '0.75rem', borderRadius: '6px' }}>
+                                <div style={{ background: 'var(--background)', padding: '0.75rem', borderRadius: '6px' }}>
                                   <p className="mb-0 text-muted">
                                     <strong>Time Taken:</strong>{' '}
-                                    <span style={{ color: '#212529', fontWeight: '600' }}>
+                                    <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
                                       {answer.timeTaken || 0} seconds
                                     </span>
                                   </p>
@@ -996,7 +996,7 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
               {/* Candidate Photos if available */}
               {detailedResult.result?.candidatePhotos && detailedResult.result.candidatePhotos.length > 0 && (
                 <Card className="mb-4 border-0 shadow-sm">
-                  <Card.Header style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderBottom: 'none' }}>
+                  <Card.Header style={{ background: 'var(--primary)', color: 'white', borderBottom: 'none' }}>
                     <h5 className="mb-0" style={{ color: 'white', fontWeight: '600' }}>
                       <FaCamera className="me-2" />
                       Candidate Photos ({detailedResult.result.candidatePhotos.length})
@@ -1015,8 +1015,8 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
                                 <div style={{ 
                                   borderRadius: '8px', 
                                   overflow: 'hidden',
-                                  border: '1px solid #e9ecef',
-                                  background: '#f8f9fa',
+                                  border: '1px solid var(--border)',
+                                  background: 'var(--background)',
                                   display: 'flex',
                                   justifyContent: 'center',
                                   alignItems: 'center',
@@ -1051,7 +1051,7 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
               {/* Legacy Screenshots if available (for backward compatibility) */}
               {detailedResult.result?.screenshots && detailedResult.result.screenshots.length > 0 && (
                 <Card className="mb-4 border-0 shadow-sm">
-                  <Card.Header style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderBottom: 'none' }}>
+                  <Card.Header style={{ background: 'var(--primary)', color: 'white', borderBottom: 'none' }}>
                     <h5 className="mb-0" style={{ color: 'white', fontWeight: '600' }}>
                       <FaCamera className="me-2" />
                       Screenshots ({detailedResult.result.screenshots.length})
@@ -1070,8 +1070,8 @@ const TestResults = ({ embedded = false, refreshToken = 0 }) => {
                                 <div style={{ 
                                   borderRadius: '8px', 
                                   overflow: 'hidden',
-                                  border: '1px solid #e9ecef',
-                                  background: '#f8f9fa',
+                                  border: '1px solid var(--border)',
+                                  background: 'var(--background)',
                                   display: 'flex',
                                   justifyContent: 'center',
                                   alignItems: 'center',

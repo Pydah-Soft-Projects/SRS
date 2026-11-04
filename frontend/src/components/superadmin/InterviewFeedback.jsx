@@ -115,15 +115,15 @@ const InterviewFeedback = () => {
       {/* Re-arranged Dedicated Filter Card */}
       <div style={{
         background: '#ffffff',
-        border: '1px solid #fed7aa',
+        border: '1px solid var(--border)',
         borderRadius: '12px',
         padding: '1rem',
         marginBottom: '1.25rem',
-        boxShadow: '0 2px 8px rgba(185, 28, 28, 0.04)'
+        boxShadow: '0 2px 8px rgba(var(--primary-rgb), 0.04)'
       }}>
         {/* Row 1: Category Selection */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.75rem', paddingBottom: '0.75rem', borderBottom: '1px solid #fed7aa' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.75rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border)' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Category:
           </span>
           <ButtonGroup size="sm">
@@ -168,14 +168,14 @@ const InterviewFeedback = () => {
 
         {/* Row 2: Job Role Filter */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-          <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
+          <label style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
             Job Role:
           </label>
           <Form.Select
             size="sm"
             value={selectedRole}
             onChange={(event) => setSelectedRole(event.target.value)}
-            style={{ maxWidth: '320px', borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+            style={{ maxWidth: '320px', borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
           >
             <option value="all">All Job Roles</option>
             {roleOptions.map(role => (

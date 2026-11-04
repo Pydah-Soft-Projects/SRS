@@ -156,8 +156,8 @@ const TimeInput12Hour = ({ value, onChange, style }) => {
           borderRadius: '4px',
           fontSize: '1rem',
           fontWeight: '600',
-          background: ampm === 'AM' ? '#eff6ff' : '#fef3c7',
-          color: ampm === 'AM' ? '#1e40af' : '#92400e'
+          background: ampm === 'AM' ? 'var(--primary-light)' : 'var(--warning-light)',
+          color: ampm === 'AM' ? 'var(--primary-hover)' : '#92400e'
         }}
       >
         <option value="AM">AM</option>
@@ -197,14 +197,14 @@ const TabContainer = styled.div`
   padding: 1.5rem;
   margin-bottom: 2rem;
   box-shadow: 0 4px 16px rgba(14, 165, 233, 0.06);
-  border: 1px solid #e0f2fe;
+  border: 1px solid var(--primary-light);
 `;
 
 const TabButtons = styled.div`
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1.25rem;
-  border-bottom: 2px solid #fed7aa;
+  border-bottom: 2px solid var(--border);
 `;
 
 const TabButton = styled.button`
@@ -213,20 +213,20 @@ const TabButton = styled.button`
   padding: 0.75rem 1.5rem;
   font-size: 0.95rem;
   font-weight: 600;
-  color: ${props => props.$active ? '#b91c1c' : '#6b7280'};
-  border-bottom: 3px solid ${props => props.$active ? '#b91c1c' : 'transparent'};
+  color: ${props => props.$active ? 'var(--primary)' : '#6b7280'};
+  border-bottom: 3px solid ${props => props.$active ? 'var(--primary)' : 'transparent'};
   cursor: pointer;
   transition: all 0.2s ease;
   margin-bottom: -2px;
 
   &:hover {
-    color: #b91c1c;
+    color: var(--primary);
   }
 `;
 
 const FilterSelect = styled.select`
   padding: 0.5rem 1rem;
-  border: 1px solid #fed7aa;
+  border: 1px solid var(--border);
   border-radius: 6px;
   font-size: 0.875rem;
   background: white;
@@ -235,14 +235,14 @@ const FilterSelect = styled.select`
 `;
 
 const Title = styled.h2`
-  color: #1e293b;
+  color: var(--text-primary);
   margin: 0;
 `;
 
 
 
 const AssignButton = styled.button`
-  background: ${props => ((props.$assigned ?? props.assigned)) ? '#059669' : '#10b981'};
+  background: ${props => ((props.$assigned ?? props.assigned)) ? 'var(--success)' : 'var(--success)'};
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -255,15 +255,15 @@ const AssignButton = styled.button`
   gap: 0.5rem;
 
   &:hover {
-    background: ${props => ((props.$assigned ?? props.assigned)) ? '#047857' : '#059669'};
+    background: ${props => ((props.$assigned ?? props.assigned)) ? '#047857' : 'var(--success)'};
   }
 `;
 
 const StyledButton = styled.button`
   background: ${props => 
-    ((props.$danger ?? props.danger)) ? '#ef4444' : 
-    ((props.$configured ?? props.configured)) ? '#059669' :
-    ((props.$variant || props.variant) === 'info') ? '#3b82f6' : '#6b7280'};
+    ((props.$danger ?? props.danger)) ? 'var(--danger)' : 
+    ((props.$configured ?? props.configured)) ? 'var(--success)' :
+    ((props.$variant || props.variant) === 'info') ? 'var(--primary)' : '#6b7280'};
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -277,9 +277,9 @@ const StyledButton = styled.button`
 
   &:hover {
     background: ${props => 
-      ((props.$danger ?? props.danger)) ? '#dc2626' : 
+      ((props.$danger ?? props.danger)) ? 'var(--danger)' : 
       ((props.$configured ?? props.configured)) ? '#047857' :
-      ((props.$variant || props.variant) === 'info') ? '#2563eb' : '#4b5563'};
+      ((props.$variant || props.variant) === 'info') ? 'var(--secondary)' : '#4b5563'};
   }
 `;
 
@@ -315,7 +315,7 @@ const ModalHeader = styled.div`
 
 const ModalTitle = styled.h3`
   margin: 0;
-  color: #1e293b;
+  color: var(--text-primary);
 `;
 
 const CloseButton = styled.button`
@@ -334,22 +334,22 @@ const PanelMemberGrid = styled.div`
 `;
 
 const PanelMemberCard = styled.div`
-  border: 2px solid ${props => ((props.$selected ?? props.selected)) ? '#3b82f6' : '#e5e7eb'};
+  border: 2px solid ${props => ((props.$selected ?? props.selected)) ? 'var(--primary)' : '#e5e7eb'};
   border-radius: 8px;
   padding: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: ${props => ((props.$selected ?? props.selected)) ? '#eff6ff' : 'white'};
+  background: ${props => ((props.$selected ?? props.selected)) ? 'var(--primary-light)' : 'white'};
 
   &:hover {
-    border-color: #3b82f6;
-    background: #eff6ff;
+    border-color: var(--primary);
+    background: var(--primary-light);
   }
 `;
 
 const PanelMemberName = styled.div`
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 0.25rem;
 `;
 
@@ -382,7 +382,7 @@ const CancelButton = styled.button`
 `;
 
 const SubmitButton = styled.button`
-  background: #3b82f6;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -390,7 +390,7 @@ const SubmitButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: #2563eb;
+    background: var(--secondary);
   }
 
   &:disabled {
@@ -785,7 +785,7 @@ const InterviewsManagement = () => {
       </Header>
 
       {/* Unified Interview Workspace Container (One Block) */}
-      <TabContainer style={{ padding: '1.5rem', marginBottom: '1.5rem', border: '1px solid #fed7aa', borderRadius: '12px' }}>
+      <TabContainer style={{ padding: '1.5rem', marginBottom: '1.5rem', border: '1px solid var(--border)', borderRadius: '12px' }}>
         {/* Row 1: Position Tabs */}
         <TabButtons style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.25rem' }}>
           <TabButton
@@ -820,8 +820,8 @@ const InterviewsManagement = () => {
         {/* Row 2: Dedicated Filter & Count Bar */}
         <div style={{
           padding: '0.875rem 1.25rem',
-          background: '#fff7ed',
-          border: '1px solid #fed7aa',
+          background: 'var(--primary-light)',
+          border: '1px solid var(--border)',
           borderRadius: '8px',
           display: 'flex',
           justifyContent: 'space-between',
@@ -831,7 +831,7 @@ const InterviewsManagement = () => {
           marginBottom: '1.5rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <label style={{ fontWeight: '700', color: '#991b1b', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
+            <label style={{ fontWeight: '700', color: 'var(--primary-hover)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
               Job Role:
             </label>
             <FilterSelect
@@ -853,22 +853,22 @@ const InterviewsManagement = () => {
             alignItems: 'center',
             gap: '0.35rem'
           }}>
-            Showing <strong style={{ color: '#b91c1c' }}>{filteredInterviews.length}</strong> interview(s) for {activeTab === 'teaching' ? 'Teaching' : activeTab === 'non_teaching' ? 'Non-Teaching' : 'All'} positions
-            {selectedJobRole !== 'all' && <> - <span style={{ color: '#991b1b' }}>{selectedJobRole}</span></>}
+            Showing <strong style={{ color: 'var(--primary)' }}>{filteredInterviews.length}</strong> interview(s) for {activeTab === 'teaching' ? 'Teaching' : activeTab === 'non_teaching' ? 'Non-Teaching' : 'All'} positions
+            {selectedJobRole !== 'all' && <> - <span style={{ color: 'var(--primary-hover)' }}>{selectedJobRole}</span></>}
           </div>
         </div>
 
         {loading ? (
-          <div style={{ background: '#ffffff', borderRadius: '8px', padding: '1rem', border: '1px solid #e2e8f0' }}>
+          <div style={{ background: '#ffffff', borderRadius: '8px', padding: '1rem', border: '1px solid var(--border)' }}>
             <SkeletonLoader loading={true} variant="table" rows={6} columns="1.5fr 1.5fr 1.5fr 1.2fr 1.5fr 1fr 1.2fr" />
           </div>
         ) : filteredInterviews.length === 0 ? (
           <div style={{
             textAlign: 'center',
             padding: '2.5rem 1rem',
-            background: '#f8fafc',
+            background: 'var(--background)',
             borderRadius: '8px',
-            border: '1px dashed #cbd5e1'
+            border: '1px dashed var(--border-strong)'
           }}>
             <h4 style={{ color: '#6b7280', marginBottom: '0.5rem' }}>No Interviews Found</h4>
             <p style={{ color: '#9ca3af', margin: 0 }}>
@@ -912,7 +912,7 @@ const InterviewsManagement = () => {
                               type="button"
                               title={isConfigured ? 'Feedback Form Configured' : 'Configure Feedback Form'}
                               style={{
-                                background: isConfigured ? '#059669' : '#0284c7',
+                                background: isConfigured ? 'var(--success)' : '#0284c7',
                                 color: 'white',
                                 border: 'none',
                                 width: '28px',
@@ -935,7 +935,7 @@ const InterviewsManagement = () => {
                               type="button"
                               title="Delete Interview"
                               style={{
-                                background: '#ef4444',
+                                background: 'var(--danger)',
                                 color: 'white',
                                 border: 'none',
                                 width: '28px',
@@ -1031,7 +1031,7 @@ const InterviewsManagement = () => {
                               type="button"
                               title="Edit Schedule & Notes"
                               style={{
-                                background: '#3b82f6',
+                                background: 'var(--primary)',
                                 color: 'white',
                                 border: 'none',
                                 width: '28px',
@@ -1102,7 +1102,7 @@ const InterviewsManagement = () => {
                               type="button"
                               title={isConfigured ? 'Feedback Form Configured' : 'Configure Feedback Form'}
                               style={{
-                                background: isConfigured ? '#059669' : '#f97316',
+                                background: isConfigured ? 'var(--success)' : 'var(--accent)',
                                 color: 'white',
                                 border: 'none',
                                 width: '28px',
@@ -1125,7 +1125,7 @@ const InterviewsManagement = () => {
                               type="button"
                               title="Remove Candidate from Interview"
                               style={{
-                                background: '#ef4444',
+                                background: 'var(--danger)',
                                 color: 'white',
                                 border: 'none',
                                 width: '28px',
@@ -1384,7 +1384,7 @@ const InterviewsManagement = () => {
                                     <td style={{ padding: '0.75rem' }}>{candidateForm?.department || 'N/A'}</td>
                                     <td style={{ padding: '0.75rem' }}>
                                       {candidateEntry.scheduledDate ? (
-                                        <div style={{ color: '#3b82f6', fontWeight: '500' }}>
+                                        <div style={{ color: 'var(--primary)', fontWeight: '500' }}>
                                           {formatISTDateTime(candidateEntry.scheduledDate, candidateEntry.scheduledTime)}
                                         </div>
                                       ) : (
@@ -1489,7 +1489,7 @@ const InterviewsManagement = () => {
                                 borderBottom: '2px solid #e5e7eb'
                               }}>
                                 <div>
-                                  <h4 style={{ margin: '0 0 0.25rem 0', color: '#1e293b', fontSize: '1.25rem' }}>
+                                  <h4 style={{ margin: '0 0 0.25rem 0', color: 'var(--text-primary)', fontSize: '1.25rem' }}>
                                     {candidateData.candidate.name || 'Unknown Candidate'}
                                   </h4>
                                   {candidateData.candidate.candidateNumber && (
@@ -1511,7 +1511,7 @@ const InterviewsManagement = () => {
                                 </div>
                                 {candidateData.averageRating > 0 && (
                                   <div style={{
-                                    background: '#f0f9ff',
+                                    background: 'var(--primary-light)',
                                     padding: '0.5rem 1rem',
                                     borderRadius: '8px',
                                     textAlign: 'center'
@@ -1519,7 +1519,7 @@ const InterviewsManagement = () => {
                                     <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem' }}>
                                       Average Rating
                                     </div>
-                                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1e40af' }}>
+                                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--primary-hover)' }}>
                                       {candidateData.averageRating.toFixed(1)}/5
                                     </div>
                                   </div>
@@ -1530,7 +1530,7 @@ const InterviewsManagement = () => {
                                 <div>
                                   {candidateData.feedbacks.map((feedback, fbIndex) => (
                                     <div key={fbIndex} style={{
-                                      background: '#f8fafc',
+                                      background: 'var(--background)',
                                       padding: '0.75rem',
                                       borderRadius: '6px',
                                       marginBottom: '0.5rem'
@@ -1544,7 +1544,7 @@ const InterviewsManagement = () => {
                                         borderBottom: '2px solid #e5e7eb'
                                       }}>
                                         <div>
-                                          <strong style={{ fontSize: '1rem', color: '#1e293b' }}>
+                                          <strong style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>
                                             {feedback.panelMember?.name || 'Unknown Panel Member'}
                                           </strong>
                                           {feedback.panelMember?.email && (
@@ -1617,14 +1617,14 @@ const InterviewsManagement = () => {
                                             fontSize: '0.875rem',
                                             fontWeight: '600',
                                             background: feedback.recommendation === 'strong_accept' || feedback.recommendation === 'accept' 
-                                              ? '#dcfce7' 
+                                              ? 'var(--success-light)' 
                                               : feedback.recommendation === 'reject' || feedback.recommendation === 'strong_reject'
-                                              ? '#fee2e2'
-                                              : '#fef3c7',
+                                              ? 'var(--danger-light)'
+                                              : 'var(--warning-light)',
                                             color: feedback.recommendation === 'strong_accept' || feedback.recommendation === 'accept'
                                               ? '#166534'
                                               : feedback.recommendation === 'reject' || feedback.recommendation === 'strong_reject'
-                                              ? '#991b1b'
+                                              ? 'var(--primary-hover)'
                                               : '#92400e'
                                           }}>
                                             {feedback.recommendation === 'strong_accept' ? 'Strong Accept' :
@@ -1711,7 +1711,7 @@ const InterviewsManagement = () => {
                                 background: '#f9fafb'
                               }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                                  <strong style={{ color: '#1e293b' }}>Question {index + 1}</strong>
+                                  <strong style={{ color: 'var(--text-primary)' }}>Question {index + 1}</strong>
                                   <StyledButton
                                     $danger={true}
                                     onClick={() => handleRemoveFeedbackQuestion(index)}

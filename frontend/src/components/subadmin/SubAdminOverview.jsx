@@ -16,7 +16,7 @@ const EmptyState = styled.div`
   padding: clamp(2rem, 3vw, 2.75rem);
   border-radius: 18px;
   text-align: center;
-  color: #0891b2;
+  color: var(--primary-hover);
   font-weight: 600;
   max-width: 760px;
   margin: 0 auto;

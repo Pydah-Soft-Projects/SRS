@@ -9,7 +9,7 @@ import SkeletonLoader from '../SkeletonLoader';
 const Container = styled.div`
   padding: 2rem 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #fef7ed 0%, #fed7aa 100%);
+  background: var(--background);
   width: 100%;
   box-sizing: border-box;
 
@@ -56,9 +56,9 @@ const Header = styled.div`
 const Title = styled.h1`
   font-size: 2.5rem;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #06b6d4, #22d3ee);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -76,7 +76,7 @@ const Title = styled.h1`
 
 const Subtitle = styled.p`
   font-size: 1.1rem;
-  color: #64748b;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
 
@@ -98,11 +98,11 @@ const ErrorState = styled.div`
   text-align: center;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
-  border: 1px solid #fecaca;
+  border: 1px solid var(--danger-light);
 `;
 
 const ErrorMessage = styled.div`
-  color: #dc2626;
+  color: var(--danger);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -111,7 +111,7 @@ const ErrorMessage = styled.div`
 `;
 
 const RetryButton = styled.button`
-  background: #06b6d4;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -124,7 +124,7 @@ const RetryButton = styled.button`
   gap: 0.5rem;
 
   &:hover {
-    background: #dc2626;
+    background: var(--danger);
     transform: translateY(-2px);
   }
 `;
@@ -141,7 +141,7 @@ const EmptyState = styled.div`
 
 const EmptyIcon = styled.div`
   font-size: 4rem;
-  color: #cbd5e1;
+  color: var(--border-strong);
   margin-bottom: 1rem;
 `;
 
@@ -152,7 +152,7 @@ const EmptyTitle = styled.h3`
 `;
 
 const EmptyText = styled.p`
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 1rem;
 `;
 
@@ -210,7 +210,7 @@ const ModalHeader = styled.div`
 
 const ModalTitle = styled.h3`
   margin: 0;
-  color: #1e293b;
+  color: var(--text-primary);
   font-size: 1.5rem;
   font-weight: 600;
 
@@ -235,7 +235,7 @@ const CloseButton = styled.button`
 
   &:hover {
     background: #f3f4f6;
-    color: #1e293b;
+    color: var(--text-primary);
   }
 `;
 
@@ -282,7 +282,7 @@ const TextArea = styled.textarea`
 
   &:focus {
     outline: none;
-    border-color: #3b82f6;
+    border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
 
@@ -310,7 +310,7 @@ const Select = styled.select`
 
   &:focus {
     outline: none;
-    border-color: #3b82f6;
+    border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
 
@@ -370,17 +370,17 @@ const RadioOption = styled.label`
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: #3b82f6;
-    background: #eff6ff;
+    border-color: var(--primary);
+    background: var(--primary-light);
   }
 
   &:has(input[type="radio"]:checked) {
-    border-color: #3b82f6;
-    background: #eff6ff;
+    border-color: var(--primary);
+    background: var(--primary-light);
   }
 
   &:has(input[type="radio"]:checked) span {
-    color: #3b82f6;
+    color: var(--primary);
     font-weight: 600;
   }
 
@@ -395,7 +395,7 @@ const RadioOption = styled.label`
 `;
 
 const SubmitButton = styled.button`
-  background: #06b6d4;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -408,7 +408,7 @@ const SubmitButton = styled.button`
   gap: 0.5rem;
 
   &:hover {
-    background: #dc2626;
+    background: var(--danger);
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
@@ -482,7 +482,7 @@ const ModalActions = styled.div`
 `;
 
 const FeedbackButton = styled.button`
-  background: #06b6d4;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -498,7 +498,7 @@ const FeedbackButton = styled.button`
   justify-content: center;
 
   &:hover {
-    background: #dc2626;
+    background: var(--danger);
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
@@ -908,8 +908,8 @@ const FeedbackEvaluations = () => {
               <div style={{ padding: '1.5rem' }} className="modal-body-content">
                 {error && (
                   <div style={{ 
-                    background: '#fee2e2', 
-                    color: '#dc2626', 
+                    background: 'var(--danger-light)', 
+                    color: 'var(--danger)', 
                     padding: '0.75rem', 
                     borderRadius: '6px', 
                     marginBottom: '1rem',
@@ -954,7 +954,7 @@ const FeedbackEvaluations = () => {
                       <FormGroup key={index}>
                         <Label>
                           {question.question || `Question ${index + 1}`}
-                          {question.required && <span style={{ color: '#dc2626' }}> *</span>}
+                          {question.required && <span style={{ color: 'var(--danger)' }}> *</span>}
                         </Label>
 
                         {questionType === 'rating' && (
@@ -1022,7 +1022,7 @@ const FeedbackEvaluations = () => {
                   <>
                     <div style={{ 
                       padding: '1rem', 
-                      background: '#fef3c7', 
+                      background: 'var(--warning-light)', 
                       borderRadius: '6px', 
                       marginBottom: '1rem',
                       border: '1px solid #fbbf24'

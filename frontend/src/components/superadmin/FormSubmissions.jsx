@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Container, Row, Col, Card, Button, Badge, Modal, Tabs, Tab, Alert, Spinner, Image, FormCheck, Form, InputGroup, Pagination, Table } from 'react-bootstrap';
-import { FaFilePdf, FaFileImage, FaUser, FaCheckCircle, FaTimes, FaSearch, FaDownload, FaClipboardList, FaEye, FaCheck, FaArrowRight } from 'react-icons/fa';
+import { FaFilePdf, FaFileImage, FaCheckCircle, FaTimes, FaSearch, FaDownload, FaClipboardList, FaEye, FaCheck, FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import SkeletonLoader from '../SkeletonLoader';
@@ -279,14 +279,14 @@ const FormSubmissions = () => {
 
   const getStatusBadge = (status) => {
     const statusMap = {
-      pending: { bg: '#fff7ed', color: '#c2410c', border: '#fed7aa', label: 'Pending' },
+      pending: { bg: 'var(--primary-light)', color: 'var(--text-secondary)', border: 'var(--border)', label: 'Pending' },
       approved: { bg: '#ecfdf5', color: '#047857', border: '#a7f3d0', label: 'Approved' },
-      rejected: { bg: '#fef2f2', color: '#b91c1c', border: '#fecaca', label: 'Rejected' },
-      shortlisted: { bg: '#eff6ff', color: '#1d4ed8', border: '#bfdbfe', label: 'Shortlisted' },
-      selected: { bg: '#f0fdf4', color: '#15803d', border: '#86efac', label: 'Selected' },
+      rejected: { bg: 'var(--danger-light)', color: 'var(--primary)', border: 'var(--danger-light)', label: 'Rejected' },
+      shortlisted: { bg: 'var(--primary-light)', color: 'var(--primary-hover)', border: 'var(--border)', label: 'Shortlisted' },
+      selected: { bg: 'var(--success-light)', color: 'var(--success)', border: '#86efac', label: 'Selected' },
       on_hold: { bg: '#fefce8', color: '#a16207', border: '#fef08a', label: 'On Hold' }
     };
-    const s = statusMap[status] || { bg: '#f8fafc', color: '#64748b', border: '#e2e8f0', label: status };
+    const s = statusMap[status] || { bg: 'var(--background)', color: 'var(--text-secondary)', border: 'var(--border)', label: status };
     return (
       <span
         style={{
@@ -371,7 +371,7 @@ const FormSubmissions = () => {
                     src={passportPhoto}
                     alt="Candidate"
                     rounded
-                    style={{ width: '100%', maxHeight: '260px', objectFit: 'cover', border: '2px solid #e2e8f0' }}
+                    style={{ width: '100%', maxHeight: '260px', objectFit: 'cover', border: '2px solid var(--border)' }}
                     onError={(e) => { e.target.style.display = 'none'; }}
                   />
                 </Card.Body>
@@ -494,11 +494,11 @@ const FormSubmissions = () => {
       </Row>
 
       {/* ── Dedicated Filter & Search Section ────────────────────────── */}
-      <Card className="mb-4 border shadow-sm" style={{ borderColor: '#fed7aa', borderRadius: '12px' }}>
-        <Card.Body className="p-3" style={{ background: '#fff7ed' }}>
+      <Card className="mb-4 border shadow-sm" style={{ borderColor: 'var(--border)', borderRadius: '12px' }}>
+        <Card.Body className="p-3" style={{ background: 'var(--primary-light)' }}>
           {/* Row 1: Category Filter Buttons */}
-          <div className="d-flex flex-wrap align-items-center gap-2 mb-3 pb-2 border-bottom" style={{ borderColor: '#fed7aa' }}>
-            <span className="fw-bold me-2" style={{ fontSize: '0.8rem', color: '#7c2d12', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <div className="d-flex flex-wrap align-items-center gap-2 mb-3 pb-2 border-bottom" style={{ borderColor: 'var(--border)' }}>
+            <span className="fw-bold me-2" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Category:
             </span>
             <Button
@@ -508,7 +508,7 @@ const FormSubmissions = () => {
               style={{
                 borderRadius: '8px',
                 fontWeight: 600,
-                ...(activeTab === 'teaching' ? { background: '#b91c1c', borderColor: '#991b1b', color: '#ffffff' } : { borderColor: '#fed7aa', color: '#b91c1c', background: '#ffffff' })
+                ...(activeTab === 'teaching' ? { background: 'var(--primary)', borderColor: 'var(--primary-hover)', color: '#ffffff' } : { borderColor: 'var(--border)', color: 'var(--primary)', background: '#ffffff' })
               }}
             >
               Teaching ({teachingCount})
@@ -520,7 +520,7 @@ const FormSubmissions = () => {
               style={{
                 borderRadius: '8px',
                 fontWeight: 600,
-                ...(activeTab === 'non_teaching' ? { background: '#b91c1c', borderColor: '#991b1b', color: '#ffffff' } : { borderColor: '#fed7aa', color: '#b91c1c', background: '#ffffff' })
+                ...(activeTab === 'non_teaching' ? { background: 'var(--primary)', borderColor: 'var(--primary-hover)', color: '#ffffff' } : { borderColor: 'var(--border)', color: 'var(--primary)', background: '#ffffff' })
               }}
             >
               Non-Teaching ({nonTeachingCount})
@@ -532,7 +532,7 @@ const FormSubmissions = () => {
               style={{
                 borderRadius: '8px',
                 fontWeight: 600,
-                ...(activeTab === 'all' ? { background: '#b91c1c', borderColor: '#991b1b', color: '#ffffff' } : { borderColor: '#fed7aa', color: '#b91c1c', background: '#ffffff' })
+                ...(activeTab === 'all' ? { background: 'var(--primary)', borderColor: 'var(--primary-hover)', color: '#ffffff' } : { borderColor: 'var(--border)', color: 'var(--primary)', background: '#ffffff' })
               }}
             >
               All Categories ({allCandidates.length})
@@ -546,7 +546,7 @@ const FormSubmissions = () => {
                 size="sm"
                 value={selectedJobRole}
                 onChange={(e) => setSelectedJobRole(e.target.value)}
-                style={{ borderRadius: '8px', border: '1px solid #fed7aa', fontSize: '0.88rem', padding: '0.45rem 0.75rem' }}
+                style={{ borderRadius: '8px', border: '1px solid var(--border)', fontSize: '0.88rem', padding: '0.45rem 0.75rem' }}
               >
                 <option value="all">All Job Roles</option>
                 {getJobRoles().map((role, idx) => (
@@ -565,7 +565,7 @@ const FormSubmissions = () => {
                       setQuickSearch(searchInput);
                     }
                   }}
-                  style={{ border: '1px solid #fed7aa', fontSize: '0.88rem', padding: '0.45rem 0.75rem' }}
+                  style={{ border: '1px solid var(--border)', fontSize: '0.88rem', padding: '0.45rem 0.75rem' }}
                 />
                 <Button
                   variant="primary"
@@ -573,8 +573,8 @@ const FormSubmissions = () => {
                     setQuickSearch(searchInput);
                   }}
                   style={{
-                    background: '#b91c1c',
-                    borderColor: '#991b1b',
+                    background: 'var(--primary)',
+                    borderColor: 'var(--primary-hover)',
                     color: '#ffffff',
                     fontWeight: 600,
                     padding: '0 1rem'
@@ -589,7 +589,7 @@ const FormSubmissions = () => {
                       setSearchInput('');
                       setQuickSearch('');
                     }}
-                    style={{ borderRadius: '0 8px 8px 0', border: '1px solid #cbd5e1' }}
+                    style={{ borderRadius: '0 8px 8px 0', border: '1px solid var(--border-strong)' }}
                   >
                     Reset
                   </Button>
@@ -599,8 +599,8 @@ const FormSubmissions = () => {
           </Row>
 
           {/* Row 3: Status View Toggle Buttons */}
-          <div className="d-flex flex-wrap align-items-center gap-2 pt-2 border-top" style={{ borderColor: '#fed7aa' }}>
-            <span className="fw-bold me-2" style={{ fontSize: '0.8rem', color: '#7c2d12', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <div className="d-flex flex-wrap align-items-center gap-2 pt-2 border-top" style={{ borderColor: 'var(--border)' }}>
+            <span className="fw-bold me-2" style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Status View:
             </span>
             <Button
@@ -611,7 +611,7 @@ const FormSubmissions = () => {
                 borderRadius: '20px',
                 fontWeight: 600,
                 padding: '0.35rem 1.1rem',
-                ...(statusFilter === 'pending' ? { background: '#b91c1c', borderColor: '#991b1b', color: '#ffffff' } : { borderColor: '#fed7aa', color: '#b91c1c', background: '#ffffff' })
+                ...(statusFilter === 'pending' ? { background: 'var(--primary)', borderColor: 'var(--primary-hover)', color: '#ffffff' } : { borderColor: 'var(--border)', color: 'var(--primary)', background: '#ffffff' })
               }}
             >
               <FaClipboardList className="me-1" />
@@ -625,7 +625,7 @@ const FormSubmissions = () => {
                 borderRadius: '20px',
                 fontWeight: 600,
                 padding: '0.35rem 1.1rem',
-                ...(statusFilter === 'selected' ? { background: '#16a34a', borderColor: '#15803d', color: '#ffffff' } : { borderColor: '#a7f3d0', color: '#16a34a', background: '#ffffff' })
+                ...(statusFilter === 'selected' ? { background: 'var(--success)', borderColor: 'var(--success)', color: '#ffffff' } : { borderColor: '#a7f3d0', color: 'var(--success)', background: '#ffffff' })
               }}
             >
               <FaCheckCircle className="me-1" />
@@ -639,7 +639,7 @@ const FormSubmissions = () => {
                 borderRadius: '20px',
                 fontWeight: 600,
                 padding: '0.35rem 1.1rem',
-                ...(statusFilter === 'all' ? { background: '#475569', borderColor: '#334155', color: '#ffffff' } : { borderColor: '#cbd5e1', color: '#475569', background: '#ffffff' })
+                ...(statusFilter === 'all' ? { background: 'var(--text-secondary)', borderColor: 'var(--text-primary)', color: '#ffffff' } : { borderColor: 'var(--border-strong)', color: 'var(--text-secondary)', background: '#ffffff' })
               }}
             >
               All Candidates ({pendingCandidates.length + progressedCandidates.length})
@@ -689,7 +689,7 @@ const FormSubmissions = () => {
       {/* SINGLE UNIFIED CANDIDATES TABLE */}
       <Row className="mb-2">
         <Col>
-          <h4 className="mb-1" style={{ fontWeight: 700, color: '#991b1b' }}>
+          <h4 className="mb-1" style={{ fontWeight: 700, color: 'var(--primary-hover)' }}>
             {statusFilter === 'pending' ? 'Pending Submissions' : statusFilter === 'selected' ? 'Selected Candidates' : 'All Application Submissions'}
           </h4>
           <p className="text-muted mb-2" style={{ fontSize: '0.9rem' }}>
@@ -703,7 +703,7 @@ const FormSubmissions = () => {
       </Row>
 
       {loading ? (
-        <Card className="shadow-sm border-0 mb-4 p-3" style={{ border: '1px solid #fed7aa', borderRadius: '10px' }}>
+        <Card className="shadow-sm border-0 mb-4 p-3" style={{ border: '1px solid var(--border)', borderRadius: '10px' }}>
           <SkeletonLoader loading={true} variant="table" rows={6} columns="0.5fr 1.5fr 1.5fr 1fr 1fr 1fr 1.2fr" />
         </Card>
       ) : activeCandidatesList.length === 0 ? (
@@ -716,10 +716,10 @@ const FormSubmissions = () => {
         </Row>
       ) : (
         <>
-          <Card className="shadow-sm border-0 mb-4" style={{ border: '1px solid #fed7aa', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+          <Card className="shadow-sm border-0 mb-4" style={{ border: '1px solid var(--border)', borderRadius: '10px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
             <div style={{ width: '100%', overflowX: 'auto' }}>
               <Table striped hover size="sm" style={{ marginBottom: 0, width: '100%', verticalAlign: 'middle', borderCollapse: 'collapse' }}>
-                <thead style={{ background: '#fff7ed', borderBottom: '2px solid #fed7aa' }}>
+                <thead style={{ background: 'var(--primary-light)', borderBottom: '2px solid var(--border)' }}>
                   <tr>
                     <th style={{ width: '42px', padding: '0.65rem 0.35rem' }} className="text-center">
                       <FormCheck
@@ -740,12 +740,12 @@ const FormSubmissions = () => {
                         }}
                       />
                     </th>
-                    <th style={{ width: '22%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Candidate</th>
-                    <th style={{ width: '21%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Position & Department</th>
-                    <th style={{ width: '11%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Applied Date</th>
-                    <th style={{ width: '18%', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Category & ID</th>
-                    <th style={{ width: '10%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Status</th>
-                    <th style={{ width: '14%', textAlign: 'center', color: '#991b1b', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Actions</th>
+                    <th style={{ width: '22%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Candidate</th>
+                    <th style={{ width: '21%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Position & Department</th>
+                    <th style={{ width: '11%', textAlign: 'center', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Applied Date</th>
+                    <th style={{ width: '18%', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.6rem' }}>Category & ID</th>
+                    <th style={{ width: '10%', textAlign: 'center', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Status</th>
+                    <th style={{ width: '14%', textAlign: 'center', color: 'var(--primary-hover)', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '0.65rem 0.4rem' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -762,7 +762,7 @@ const FormSubmissions = () => {
                         </td>
                         <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.6rem' }}>
                           <div style={{ minWidth: 0 }}>
-                            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1e293b', textTransform: 'uppercase', letterSpacing: '0.01em' }}>
+                            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.01em' }}>
                               {candidate.user?.name || 'N/A'}
                             </div>
                             <small className="text-muted" style={{ fontSize: '0.78rem', display: 'block', wordBreak: 'break-all' }}>
@@ -775,7 +775,7 @@ const FormSubmissions = () => {
                             style={{ 
                               fontWeight: 600, 
                               fontSize: '0.84rem', 
-                              color: '#334155',
+                              color: 'var(--text-primary)',
                               maxWidth: '220px',
                               whiteSpace: 'nowrap',
                               overflow: 'hidden',
@@ -789,7 +789,7 @@ const FormSubmissions = () => {
                             {candidate.form?.department || 'N/A'}
                           </small>
                         </td>
-                        <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem', fontSize: '0.82rem', color: '#475569', whiteSpace: 'nowrap' }}>
+                        <td className="text-center" style={{ verticalAlign: 'middle', padding: '0.45rem 0.4rem', fontSize: '0.82rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
                           {candidate.createdAt ? new Date(candidate.createdAt).toLocaleDateString() : '—'}
                         </td>
                         <td style={{ verticalAlign: 'middle', padding: '0.45rem 0.6rem' }}>
@@ -800,9 +800,9 @@ const FormSubmissions = () => {
                                 padding: '0.22rem 0.5rem', 
                                 fontWeight: 600,
                                 borderRadius: '4px',
-                                background: candidate.form?.formCategory === 'teaching' ? '#fff7ed' : '#f1f5f9',
-                                color: candidate.form?.formCategory === 'teaching' ? '#c2410c' : '#475569',
-                                border: candidate.form?.formCategory === 'teaching' ? '1px solid #fed7aa' : '1px solid #cbd5e1',
+                                background: candidate.form?.formCategory === 'teaching' ? 'var(--primary-light)' : 'var(--background)',
+                                color: candidate.form?.formCategory === 'teaching' ? 'var(--text-secondary)' : 'var(--text-secondary)',
+                                border: candidate.form?.formCategory === 'teaching' ? '1px solid var(--border)' : '1px solid var(--border-strong)',
                                 minWidth: '72px',
                                 textAlign: 'center',
                                 display: 'inline-block'
@@ -817,9 +817,9 @@ const FormSubmissions = () => {
                                   padding: '0.22rem 0.5rem', 
                                   fontWeight: 700,
                                   borderRadius: '4px',
-                                  background: '#1e293b',
+                                  background: 'var(--text-primary)',
                                   color: '#ffffff',
-                                  border: '1px solid #0f172a',
+                                  border: '1px solid var(--text-primary)',
                                   letterSpacing: '0.02em'
                                 }}
                               >
@@ -832,9 +832,9 @@ const FormSubmissions = () => {
                                   padding: '0.22rem 0.5rem', 
                                   fontWeight: 500,
                                   borderRadius: '4px',
-                                  background: '#f8fafc',
-                                  color: '#94a3b8',
-                                  border: '1px dashed #cbd5e1'
+                                  background: 'var(--background)',
+                                  color: 'var(--text-muted)',
+                                  border: '1px dashed var(--border-strong)'
                                 }}
                               >
                                 No Candidate ID
@@ -861,7 +861,7 @@ const FormSubmissions = () => {
                                 height: '28px',
                                 padding: 0,
                                 borderRadius: '6px',
-                                background: 'linear-gradient(135deg, #b91c1c 0%, #991b1b 100%)',
+                                background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%)',
                                 border: 'none',
                                 color: '#fff',
                                 flexShrink: 0
@@ -884,8 +884,8 @@ const FormSubmissions = () => {
                                 padding: 0,
                                 borderRadius: '6px',
                                 background: '#ffffff',
-                                border: '1px solid #cbd5e1',
-                                color: '#475569',
+                                border: '1px solid var(--border-strong)',
+                                color: 'var(--text-secondary)',
                                 flexShrink: 0
                               }}
                             >
@@ -910,7 +910,7 @@ const FormSubmissions = () => {
                                     height: '28px',
                                     padding: 0,
                                     borderRadius: '6px',
-                                    background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                                    background: 'linear-gradient(135deg, var(--success) 0%, var(--success) 100%)',
                                     border: 'none',
                                     color: '#fff',
                                     flexShrink: 0
@@ -932,8 +932,8 @@ const FormSubmissions = () => {
                                     padding: 0,
                                     borderRadius: '6px',
                                     background: '#ffffff',
-                                    border: '1px solid #fecaca',
-                                    color: '#dc2626',
+                                    border: '1px solid var(--danger-light)',
+                                    color: 'var(--danger)',
                                     flexShrink: 0
                                   }}
                                 >
@@ -955,7 +955,7 @@ const FormSubmissions = () => {
                                     height: '28px',
                                     padding: 0,
                                     borderRadius: '6px',
-                                    background: 'linear-gradient(135deg, #b91c1c 0%, #ea580c 100%)',
+                                    background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%)',
                                     border: 'none',
                                     color: '#fff',
                                     flexShrink: 0
@@ -1015,7 +1015,7 @@ const FormSubmissions = () => {
             Candidate Profile - {selectedCandidate?.personalDetails?.name}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ maxHeight: '70vh', overflowY: 'auto', background: '#f8fafc' }}>
+        <Modal.Body style={{ maxHeight: '70vh', overflowY: 'auto', background: 'var(--background)' }}>
           {selectedCandidate && (
             <Tabs defaultActiveKey="application" className="mb-3">
               <Tab eventKey="application" title="Application Details">

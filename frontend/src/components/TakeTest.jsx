@@ -15,7 +15,7 @@ const TestContainer = styled.div`
   min-height: 100vh;
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  background: var(--background);
   padding: 0;
   margin: 0;
   overflow: hidden;
@@ -41,7 +41,7 @@ const TestCard = styled(Card)`
 `;
 
 const TestHeader = styled.div`
-  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: white;
   padding: 1rem 1.5rem;
   border-radius: 0;
@@ -170,8 +170,8 @@ const TestBody = styled.div`
 const QuestionSidebar = styled.div`
   width: 280px;
   min-width: 280px;
-  background: #f8fafc;
-  border-right: 2px solid #e2e8f0;
+  background: var(--surface);
+  border-right: 2px solid var(--border);
   padding: 1.5rem;
   overflow-y: auto;
   flex-shrink: 0;
@@ -248,7 +248,7 @@ const QuestionModalHeader = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 1rem;
-    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    background: linear-gradient(135deg, var(--primary), var(--accent));
     color: white;
     margin-bottom: 1rem;
     
@@ -303,19 +303,19 @@ const QuestionContent = styled.div`
 
 const QuestionCard = styled(Card)`
   margin-bottom: 1.5rem;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--border);
   border-radius: 12px;
   transition: all 0.3s ease;
   flex: 1;
 
   &:hover {
-    border-color: #0ea5e9;
+    border-color: var(--primary);
     box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1);
   }
 `;
 
 const QuestionNumber = styled.div`
-  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 12px 12px 0 0;
@@ -327,7 +327,7 @@ const QuestionText = styled.div`
   padding: 1.5rem;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
 `;
 
 const OptionButton = styled.button.attrs(() => ({
@@ -336,7 +336,7 @@ const OptionButton = styled.button.attrs(() => ({
   width: 100%;
   padding: 1rem;
   margin-bottom: 0.75rem;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--border);
   border-radius: 8px;
   background: white;
   text-align: left;
@@ -345,15 +345,15 @@ const OptionButton = styled.button.attrs(() => ({
   cursor: pointer;
 
   &:hover {
-    border-color: #0ea5e9;
-    background: #f0f9ff;
+    border-color: var(--primary);
+    background: var(--primary-light);
     transform: translateX(4px);
   }
 
   &.selected {
-    border-color: #0ea5e9;
-    background: #dbeafe;
-    color: #1e40af;
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
   }
 `;
 
@@ -361,12 +361,12 @@ const SubmitButton = styled(Button)`
   padding: 0.85rem 1.5rem;
   font-size: 1.05rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, var(--success), var(--success));
   border: none;
   border-radius: 12px;
 
   &:hover {
-    background: linear-gradient(135deg, #059669, #047857);
+    background: linear-gradient(135deg, var(--success), #047857);
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
   }
@@ -384,7 +384,7 @@ const SuccessContainer = styled.div`
   justify-content: center;
   min-height: 100vh;
   padding: 2rem;
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  background: var(--background);
 `;
 
 const SuccessCard = styled.div`
@@ -407,7 +407,7 @@ const SuccessIcon = styled.div`
   width: 120px;
   height: 120px;
   margin: 0 auto 2rem;
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, var(--success), var(--success));
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -434,7 +434,7 @@ const SuccessIcon = styled.div`
 const SuccessTitle = styled.h2`
   font-size: 2rem;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   
   @media (max-width: 768px) {
@@ -444,7 +444,7 @@ const SuccessTitle = styled.h2`
 
 const SuccessMessage = styled.p`
   font-size: 1.1rem;
-  color: #64748b;
+  color: var(--text-secondary);
   line-height: 1.7;
   margin-bottom: 2rem;
   
@@ -454,7 +454,7 @@ const SuccessMessage = styled.p`
 `;
 
 const InfoBox = styled.div`
-  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  background: linear-gradient(135deg, var(--warning-light), var(--warning-light));
   border: 2px solid #fbbf24;
   border-radius: 16px;
   padding: 1.5rem;
@@ -485,7 +485,7 @@ const InfoList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-  color: #b45309;
+  color: var(--warning);
   
   li {
     padding: 0.5rem 0;
@@ -497,7 +497,7 @@ const InfoList = styled.ul`
       content: '✓';
       position: absolute;
       left: 0;
-      color: #f59e0b;
+      color: var(--warning);
       font-weight: bold;
       font-size: 1.1rem;
     }
@@ -778,9 +778,9 @@ const TakeTest = () => {
       <TestContainer>
         <TestCard style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ padding: '3rem', textAlign: 'center', maxWidth: '600px' }}>
-            <FaExclamationTriangle style={{ fontSize: '4rem', color: '#ef4444', marginBottom: '1.5rem' }} />
-            <h2 style={{ color: '#1e293b', marginBottom: '1rem' }}>Unable to load test</h2>
-            <p style={{ color: '#64748b', marginBottom: '2rem', fontSize: '1.1rem' }}>
+            <FaExclamationTriangle style={{ fontSize: '4rem', color: 'var(--danger)', marginBottom: '1.5rem' }} />
+            <h2 style={{ color: 'var(--text-primary)', marginBottom: '1rem' }}>Unable to load test</h2>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '1.1rem' }}>
               {error || 'We could not load this assessment right now. Please try again shortly.'}
             </p>
             <Button 
@@ -802,9 +802,9 @@ const TakeTest = () => {
       <TestContainer>
         <TestCard style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ padding: '3rem', textAlign: 'center', maxWidth: '600px' }}>
-            <FaCheckCircle style={{ fontSize: '4rem', color: '#0ea5e9', marginBottom: '1.5rem' }} />
-            <h2 style={{ color: '#1e293b', marginBottom: '1rem' }}>Assessment Already Submitted</h2>
-            <p style={{ color: '#64748b', marginBottom: '2rem', fontSize: '1.05rem' }}>
+            <FaCheckCircle style={{ fontSize: '4rem', color: 'var(--primary)', marginBottom: '1.5rem' }} />
+            <h2 style={{ color: 'var(--text-primary)', marginBottom: '1rem' }}>Assessment Already Submitted</h2>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '1.05rem' }}>
               Our records show that you have already submitted this assessment. If you believe this is an error, please contact the recruitment team.
             </p>
             <Button variant="primary" onClick={() => window.close()}>
@@ -829,7 +829,7 @@ const TakeTest = () => {
           </SuccessMessage>
           <InfoBox>
             <InfoTitle>
-              <FaCheckCircle style={{ color: '#f59e0b', fontSize: '1.2rem' }} />
+              <FaCheckCircle style={{ color: 'var(--warning)', fontSize: '1.2rem' }} />
               What happens next?
             </InfoTitle>
             <InfoList>
@@ -851,9 +851,9 @@ const TakeTest = () => {
       <TestContainer>
         <TestCard style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ padding: '3rem', textAlign: 'center', maxWidth: '600px' }}>
-            <FaExclamationTriangle style={{ fontSize: '4rem', color: '#ef4444', marginBottom: '1.5rem' }} />
-            <h2 style={{ color: '#1e293b', marginBottom: '1rem' }}>No Questions Available</h2>
-            <p style={{ color: '#64748b', fontSize: '1.1rem' }}>
+            <FaExclamationTriangle style={{ fontSize: '4rem', color: 'var(--danger)', marginBottom: '1.5rem' }} />
+            <h2 style={{ color: 'var(--text-primary)', marginBottom: '1rem' }}>No Questions Available</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
               This assessment does not contain any questions yet. Please contact the administrator.
             </p>
           </div>
@@ -941,7 +941,7 @@ const TakeTest = () => {
               </button>
             </QuestionModalHeader>
             {!isMobile && (
-              <h6 style={{ color: '#1e293b', marginBottom: '1rem', fontWeight: 700, fontSize: '0.9rem' }}>
+              <h6 style={{ color: 'var(--text-primary)', marginBottom: '1rem', fontWeight: 700, fontSize: '0.9rem' }}>
                 Questions ({answeredCount}/{totalQuestions})
               </h6>
             )}

@@ -40,7 +40,7 @@ const pulse = keyframes`
 
 const DashboardContainer = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #fef7ed 0%, #fed7aa 100%);
+  background: var(--background);
   padding: 2rem 0;
   width: 100%;
   box-sizing: border-box;
@@ -89,9 +89,9 @@ const HeaderSection = styled.div`
 const DashboardTitle = styled.h1`
   font-size: 2.5rem;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #06b6d4, #22d3ee);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -109,7 +109,7 @@ const DashboardTitle = styled.h1`
 
 const DashboardSubtitle = styled.p`
   font-size: 1.1rem;
-  color: #64748b;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
@@ -136,14 +136,14 @@ const MobileActiveBar = styled.div`
     justify-content: center;
     gap: 0.45rem;
     padding: 0.4rem 0.8rem;
-    background: ${props => (props.$active ? '#0f172a' : '#ffffff')};
-    color: ${props => (props.$active ? '#ffffff' : '#64748b')};
+    background: ${props => (props.$active ? 'var(--text-primary)' : '#ffffff')};
+    color: ${props => (props.$active ? '#ffffff' : 'var(--text-secondary)')};
     border-radius: 9999px;
     font-size: 0.78rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    border: 1px solid ${props => (props.$active ? '#1e293b' : '#e2e8f0')};
+    border: 1px solid ${props => (props.$active ? 'var(--text-primary)' : 'var(--border)')};
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     min-height: 32px;
     text-align: center;
@@ -151,13 +151,13 @@ const MobileActiveBar = styled.div`
 
     .active-title {
       font-weight: 700;
-      color: ${props => (props.$active ? '#38bdf8' : '#0f172a')};
+      color: ${props => (props.$active ? 'var(--primary-hover)' : 'var(--text-primary)')};
     }
 
     .active-meta {
       opacity: 0.85;
       font-size: 0.72rem;
-      color: ${props => (props.$active ? '#cbd5e1' : '#94a3b8')};
+      color: ${props => (props.$active ? 'var(--border-strong)' : 'var(--text-muted)')};
     }
   }
 `;
@@ -174,7 +174,7 @@ const StatTooltip = styled.div`
       if (props.$position === 'right') return 'right: 0; left: auto;';
       return 'left: 50%; transform: translateX(-50%);';
     }}
-    background: #0f172a;
+    background: var(--text-primary);
     color: #ffffff;
     padding: 0.35rem 0.65rem;
     border-radius: 6px;
@@ -198,7 +198,7 @@ const StatTooltip = styled.div`
         return 'left: 50%; transform: translateX(-50%);';
       }}
       border: 5px solid transparent;
-      border-top-color: #0f172a;
+      border-top-color: var(--text-primary);
     }
   }
 `;
@@ -226,7 +226,7 @@ const StatCard = styled.div`
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   text-align: center;
   transition: all 0.3s ease;
   position: relative;
@@ -243,8 +243,8 @@ const StatCard = styled.div`
   ${props =>
     props.$error &&
     `
-    border-color: #fecaca;
-    background: #fef2f2;
+    border-color: var(--danger-light);
+    background: var(--danger-light);
   `}
 
   @media (max-width: 768px) {
@@ -257,7 +257,7 @@ const StatCard = styled.div`
     ${props =>
       props.$isHovered &&
       `
-      border-color: #0ea5e9 !important;
+      border-color: var(--secondary) !important;
       box-shadow: 0 0 12px rgba(14, 165, 233, 0.4) !important;
       transform: translateY(-2px) !important;
     `}
@@ -301,7 +301,7 @@ const StatIconWrapper = styled.div`
 const StatNumber = styled.div`
   font-size: 2rem;
   font-weight: 800;
-  color: ${props => (props.$error ? '#dc2626' : '#06b6d4')};
+  color: ${props => (props.$error ? 'var(--danger)' : 'var(--primary)')};
   margin-bottom: 0.25rem;
 
   @media (max-width: 768px) {
@@ -316,7 +316,7 @@ const StatNumber = styled.div`
 
 const StatLabel = styled.div`
   font-size: 0.9rem;
-  color: #64748b;
+  color: var(--text-secondary);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -333,11 +333,11 @@ const ErrorState = styled.div`
   text-align: center;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
-  border: 1px solid #fecaca;
+  border: 1px solid var(--danger-light);
 `;
 
 const ErrorMessage = styled.div`
-  color: #dc2626;
+  color: var(--danger);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -346,7 +346,7 @@ const ErrorMessage = styled.div`
 `;
 
 const RetryButton = styled.button`
-  background: #06b6d4;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -359,7 +359,7 @@ const RetryButton = styled.button`
   gap: 0.5rem;
 
   &:hover {
-    background: #dc2626;
+    background: var(--danger);
     transform: translateY(-2px);
   }
 `;
@@ -387,7 +387,7 @@ const MainCard = styled.div`
   border-radius: 16px;
   padding: 2.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -400,7 +400,7 @@ const MainCard = styled.div`
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #06b6d4, #22d3ee);
+    background: linear-gradient(90deg, var(--primary), var(--primary-hover));
   }
 
   &:hover {
@@ -422,7 +422,7 @@ const MainCard = styled.div`
 
 const CardIcon = styled.div`
   font-size: 3rem;
-  color: #06b6d4;
+  color: var(--primary);
   margin-bottom: 1.5rem;
   opacity: 0.8;
 
@@ -440,7 +440,7 @@ const CardIcon = styled.div`
 const CardTitle = styled.h3`
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 
   @media (max-width: 768px) {
@@ -455,7 +455,7 @@ const CardTitle = styled.h3`
 `;
 
 const CardDescription = styled.p`
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
@@ -474,7 +474,7 @@ const CardDescription = styled.p`
 `;
 
 const ActionButton = styled.button`
-  background: linear-gradient(135deg, #06b6d4, #22d3ee);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   color: white;
   border: none;
   border-radius: 8px;
@@ -533,7 +533,7 @@ const UpcomingInterviews = styled.div`
 const SectionTitle = styled.h3`
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
@@ -557,13 +557,13 @@ const InterviewItem = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem 0;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border);
   transition: background-color 0.2s ease;
   gap: 1rem;
   flex-wrap: wrap;
 
   &:hover {
-    background-color: #f8fafc;
+    background-color: var(--background);
     border-radius: 8px;
     padding: 1.25rem 0.75rem;
   }
@@ -596,7 +596,7 @@ const InterviewInfo = styled.div`
 const InterviewTitle = styled.h4`
   font-size: 1.1rem;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 0.25rem;
 
   @media (max-width: 768px) {
@@ -609,7 +609,7 @@ const InterviewTitle = styled.h4`
 `;
 
 const InterviewDetails = styled.p`
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   margin: 0;
 
@@ -623,7 +623,7 @@ const InterviewDetails = styled.p`
 `;
 
 const InterviewTime = styled.div`
-  color: ${props => props.$completed ? '#10b981' : '#06b6d4'};
+  color: ${props => props.$completed ? 'var(--success)' : 'var(--primary)'};
   font-weight: 600;
   font-size: 0.9rem;
 `;
@@ -638,17 +638,17 @@ const StatusIndicator = styled.div`
   font-weight: 600;
 
   &.upcoming {
-    background: #dbeafe;
-    color: #1d4ed8;
+    background: var(--primary-light);
+    color: var(--primary-hover);
   }
 
   &.completed {
-    background: #dcfce7;
+    background: var(--success-light);
     color: #166534;
   }
 
   &.pending {
-    background: #fef3c7;
+    background: var(--warning-light);
     color: #92400e;
     animation: ${pulse} 2s infinite;
   }
@@ -657,7 +657,7 @@ const StatusIndicator = styled.div`
 const EmptyState = styled.div`
   text-align: center;
   padding: 3rem 2rem;
-  color: #64748b;
+  color: var(--text-secondary);
 
   h4 {
     font-size: 1.2rem;
@@ -920,7 +920,7 @@ const DashboardOverview = () => {
             onMouseLeave={() => setHoveredStatCard(null)}
             onTouchStart={() => setHoveredStatCard(prev => (prev === 'total' ? null : 'total'))}
           >
-            <StatIconWrapper style={{ color: '#0ea5e9' }}>
+            <StatIconWrapper style={{ color: 'var(--secondary)' }}>
               <FaCalendarAlt />
             </StatIconWrapper>
             <StatNumber $error={!!dashboardData.error}>
@@ -968,7 +968,7 @@ const DashboardOverview = () => {
             onMouseLeave={() => setHoveredStatCard(null)}
             onTouchStart={() => setHoveredStatCard(prev => (prev === 'rate' ? null : 'rate'))}
           >
-            <StatIconWrapper style={{ color: '#10b981' }}>
+            <StatIconWrapper style={{ color: 'var(--success)' }}>
               <FaCheckCircle />
             </StatIconWrapper>
             <StatNumber $error={!!dashboardData.error}>

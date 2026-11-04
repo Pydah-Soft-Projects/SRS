@@ -7,7 +7,7 @@ import SkeletonLoader from '../SkeletonLoader';
 const Container = styled.div`
   padding: 2rem 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #fef7ed 0%, #fed7aa 100%);
+  background: var(--background);
   width: 100%;
   box-sizing: border-box;
 
@@ -54,9 +54,9 @@ const Header = styled.div`
 const Title = styled.h1`
   font-size: 2.5rem;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #06b6d4, #22d3ee);
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -74,7 +74,7 @@ const Title = styled.h1`
 
 const Subtitle = styled.p`
   font-size: 1.1rem;
-  color: #64748b;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
 
@@ -96,11 +96,11 @@ const ErrorState = styled.div`
   text-align: center;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
-  border: 1px solid #fecaca;
+  border: 1px solid var(--danger-light);
 `;
 
 const ErrorMessage = styled.div`
-  color: #dc2626;
+  color: var(--danger);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -109,7 +109,7 @@ const ErrorMessage = styled.div`
 `;
 
 const RetryButton = styled.button`
-  background: #06b6d4;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -122,7 +122,7 @@ const RetryButton = styled.button`
   gap: 0.5rem;
 
   &:hover {
-    background: #dc2626;
+    background: var(--danger);
     transform: translateY(-2px);
   }
 `;
@@ -136,14 +136,14 @@ const MobileActiveBar = styled.div`
     justify-content: center;
     gap: 0.45rem;
     padding: 0.4rem 0.8rem;
-    background: ${props => (props.$active ? '#0f172a' : '#ffffff')};
-    color: ${props => (props.$active ? '#ffffff' : '#64748b')};
+    background: ${props => (props.$active ? 'var(--text-primary)' : '#ffffff')};
+    color: ${props => (props.$active ? '#ffffff' : 'var(--text-secondary)')};
     border-radius: 9999px;
     font-size: 0.78rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    border: 1px solid ${props => (props.$active ? '#1e293b' : '#e2e8f0')};
+    border: 1px solid ${props => (props.$active ? 'var(--text-primary)' : 'var(--border)')};
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     min-height: 32px;
     text-align: center;
@@ -151,13 +151,13 @@ const MobileActiveBar = styled.div`
 
     .active-title {
       font-weight: 700;
-      color: ${props => (props.$active ? '#38bdf8' : '#0f172a')};
+      color: ${props => (props.$active ? 'var(--primary-hover)' : 'var(--text-primary)')};
     }
 
     .active-meta {
       opacity: 0.85;
       font-size: 0.72rem;
-      color: ${props => (props.$active ? '#cbd5e1' : '#94a3b8')};
+      color: ${props => (props.$active ? 'var(--border-strong)' : 'var(--text-muted)')};
     }
   }
 `;
@@ -174,7 +174,7 @@ const StatsTooltip = styled.div`
       if (props.$position === 'right') return 'right: 0; left: auto;';
       return 'left: 50%; transform: translateX(-50%);';
     }}
-    background: #0f172a;
+    background: var(--text-primary);
     color: #ffffff;
     padding: 0.35rem 0.65rem;
     border-radius: 6px;
@@ -198,7 +198,7 @@ const StatsTooltip = styled.div`
         return 'left: 50%; transform: translateX(-50%);';
       }}
       border: 5px solid transparent;
-      border-top-color: #0f172a;
+      border-top-color: var(--text-primary);
     }
   }
 `;
@@ -226,7 +226,7 @@ const StatsCard = styled.div`
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   transition: all 0.3s ease;
   position: relative;
   overflow: visible;
@@ -243,10 +243,10 @@ const StatsCard = styled.div`
     border-top-right-radius: 16px;
     background: ${props => {
       switch (props.$variant) {
-        case 'primary': return 'linear-gradient(90deg, #3b82f6, #2563eb)';
-        case 'success': return 'linear-gradient(90deg, #10b981, #059669)';
-        case 'warning': return 'linear-gradient(90deg, #f59e0b, #d97706)';
-        case 'info': return 'linear-gradient(90deg, #06b6d4, #0891b2)';
+        case 'primary': return 'linear-gradient(90deg, var(--primary), var(--secondary))';
+        case 'success': return 'linear-gradient(90deg, var(--success), var(--success))';
+        case 'warning': return 'linear-gradient(90deg, var(--warning), var(--warning))';
+        case 'info': return 'linear-gradient(90deg, var(--primary), var(--primary-hover))';
         default: return 'linear-gradient(90deg, #6b7280, #4b5563)';
       }
     }};
@@ -268,7 +268,7 @@ const StatsCard = styled.div`
     ${props =>
       props.$isHovered &&
       `
-      border-color: #0ea5e9 !important;
+      border-color: var(--secondary) !important;
       box-shadow: 0 0 12px rgba(14, 165, 233, 0.4) !important;
       transform: translateY(-2px) !important;
     `}
@@ -305,10 +305,10 @@ const StatsIcon = styled.div`
   font-size: 2.5rem;
   color: ${props => {
     switch (props.$variant) {
-      case 'primary': return '#3b82f6';
-      case 'success': return '#10b981';
-      case 'warning': return '#f59e0b';
-      case 'info': return '#06b6d4';
+      case 'primary': return 'var(--primary)';
+      case 'success': return 'var(--success)';
+      case 'warning': return 'var(--warning)';
+      case 'info': return 'var(--primary)';
       default: return '#6b7280';
     }
   }};
@@ -330,7 +330,7 @@ const StatsIcon = styled.div`
 
 const StatsLabel = styled.div`
   font-size: 0.9rem;
-  color: #64748b;
+  color: var(--text-secondary);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -350,7 +350,7 @@ const StatsLabel = styled.div`
 const StatsValue = styled.div`
   font-size: 2.5rem;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 
   @media (max-width: 768px) {
@@ -366,7 +366,7 @@ const StatsValue = styled.div`
 
 const StatsChange = styled.div`
   font-size: 0.875rem;
-  color: ${props => props.$positive ? '#10b981' : '#ef4444'};
+  color: ${props => props.$positive ? 'var(--success)' : 'var(--danger)'};
   font-weight: 600;
 `;
 
@@ -380,7 +380,7 @@ const EmptyState = styled.div`
 
 const EmptyIcon = styled.div`
   font-size: 4rem;
-  color: #cbd5e1;
+  color: var(--border-strong);
   margin-bottom: 1rem;
 `;
 
@@ -391,7 +391,7 @@ const EmptyTitle = styled.h3`
 `;
 
 const EmptyText = styled.p`
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 1rem;
 `;
 

@@ -359,12 +359,12 @@ const TestsManagement = () => {
       <div style={{ width: '100%' }}>
         <div className="mb-4" style={{ 
           padding: '1rem 1.5rem', 
-          background: 'linear-gradient(135deg, #667eea15 0%, #764ba215 100%)',
+          background: 'var(--primary-light)',
           borderRadius: '10px',
           border: '1px solid rgba(102, 126, 234, 0.2)'
         }}>
           <div className="d-flex flex-wrap align-items-center gap-3" style={{ flexWrap: 'wrap' }}>
-            <h5 className="mb-0" style={{ color: '#212529', fontWeight: '600', marginRight: '1.5rem' }}>
+            <h5 className="mb-0" style={{ color: 'var(--text-primary)', fontWeight: '600', marginRight: '1.5rem' }}>
               {profileData.personalDetails?.name || profileData.user?.name}
             </h5>
             {profileData.personalDetails?.email && (
@@ -433,7 +433,7 @@ const TestsManagement = () => {
                 </h6>
                 {firstSubmission ? (
                   <>
-                    <div className="fw-semibold mb-1" style={{ color: '#212529', fontSize: '0.95rem' }}>
+                    <div className="fw-semibold mb-1" style={{ color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                       {firstSubmission.testTitle || 'Assessment'}
                     </div>
                     <small className="text-muted" style={{ fontSize: '0.8rem' }}>
@@ -449,7 +449,7 @@ const TestsManagement = () => {
         </Row>
 
         <Card className="mb-4 border-0 shadow-sm">
-          <Card.Header style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderBottom: 'none' }}>
+          <Card.Header style={{ background: 'var(--primary)', color: 'white', borderBottom: 'none' }}>
             <h6 className="mb-0" style={{ color: 'white', fontWeight: '600' }}>
               <FaClipboardCheck className="me-2" />
               Completed Tests
@@ -458,14 +458,14 @@ const TestsManagement = () => {
           <Card.Body style={{ padding: '1.5rem', background: '#ffffff' }}>
             {completedTests.length > 0 ? (
               <Table striped bordered hover responsive style={{ marginBottom: 0 }}>
-                <thead style={{ background: '#f8f9fa' }}>
+                <thead style={{ background: 'var(--background)' }}>
                   <tr>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Test Title</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Score</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Percentage</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Status</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Submitted At</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Details</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Test Title</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Score</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Percentage</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Status</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Submitted At</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Details</th>
                   </tr>
                 </thead>
             <tbody>
@@ -512,49 +512,49 @@ const TestsManagement = () => {
                   {expandedTestResults[testKey] && (
                     <tr>
                       <td colSpan={6} style={{ padding: 0, border: 'none' }}>
-                        <div className="p-4" style={{ background: '#f8f9fa', borderRadius: '8px', margin: '0.5rem' }}>
+                        <div className="p-4" style={{ background: 'var(--background)', borderRadius: '8px', margin: '0.5rem' }}>
                           <div className="d-flex flex-wrap gap-3 mb-3" style={{ 
                             background: '#ffffff', 
                             padding: '1rem', 
                             borderRadius: '8px',
-                            border: '1px solid #e9ecef'
+                            border: '1px solid var(--border)'
                           }}>
                             <div style={{ flex: '1 1 auto', minWidth: '150px' }}>
-                              <strong style={{ color: '#495057', display: 'block', marginBottom: '0.25rem' }}>Score:</strong>
-                              <span style={{ color: '#212529', fontWeight: '600' }}>{scoreFormatter(test.score, test.totalScore)}</span>
+                              <strong style={{ color: 'var(--text-secondary)', display: 'block', marginBottom: '0.25rem' }}>Score:</strong>
+                              <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>{scoreFormatter(test.score, test.totalScore)}</span>
                             </div>
                             <div style={{ flex: '1 1 auto', minWidth: '150px' }}>
-                              <strong style={{ color: '#495057', display: 'block', marginBottom: '0.25rem' }}>Percentage:</strong>
-                              <span style={{ color: '#212529', fontWeight: '600' }}>{percentageFormatter(test.percentage)}</span>
+                              <strong style={{ color: 'var(--text-secondary)', display: 'block', marginBottom: '0.25rem' }}>Percentage:</strong>
+                              <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>{percentageFormatter(test.percentage)}</span>
                             </div>
                             <div style={{ flex: '1 1 auto', minWidth: '150px' }}>
-                              <strong style={{ color: '#495057', display: 'block', marginBottom: '0.25rem' }}>Started:</strong>
-                              <span style={{ color: '#212529' }}>{formatDateTime(test.startedAt)}</span>
+                              <strong style={{ color: 'var(--text-secondary)', display: 'block', marginBottom: '0.25rem' }}>Started:</strong>
+                              <span style={{ color: 'var(--text-primary)' }}>{formatDateTime(test.startedAt)}</span>
                             </div>
                             <div style={{ flex: '1 1 auto', minWidth: '150px' }}>
-                              <strong style={{ color: '#495057', display: 'block', marginBottom: '0.25rem' }}>Submitted:</strong>
-                              <span style={{ color: '#212529' }}>{formatDateTime(test.submittedAt)}</span>
+                              <strong style={{ color: 'var(--text-secondary)', display: 'block', marginBottom: '0.25rem' }}>Submitted:</strong>
+                              <span style={{ color: 'var(--text-primary)' }}>{formatDateTime(test.submittedAt)}</span>
                             </div>
                             {test.duration && (
                               <div style={{ flex: '1 1 auto', minWidth: '150px' }}>
-                                <strong style={{ color: '#495057', display: 'block', marginBottom: '0.25rem' }}>Test Duration:</strong>
-                                <span style={{ color: '#212529' }}>{test.duration} minutes</span>
+                                <strong style={{ color: 'var(--text-secondary)', display: 'block', marginBottom: '0.25rem' }}>Test Duration:</strong>
+                                <span style={{ color: 'var(--text-primary)' }}>{test.duration} minutes</span>
                               </div>
                             )}
                           </div>
                           {test.answers && test.answers.length > 0 ? (
-                            <div style={{ background: '#ffffff', padding: '1rem', borderRadius: '8px', border: '1px solid #e9ecef' }}>
+                            <div style={{ background: '#ffffff', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
                               <Table size="sm" bordered hover responsive style={{ marginBottom: 0 }}>
-                                <thead style={{ background: '#f8f9fa' }}>
+                                <thead style={{ background: 'var(--background)' }}>
                                   <tr>
-                                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>#</th>
-                                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Question</th>
-                                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Your Answer</th>
-                                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Correct Answer</th>
-                                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Result</th>
-                                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Marks</th>
-                                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Time Taken</th>
-                                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Answered At</th>
+                                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>#</th>
+                                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Question</th>
+                                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Your Answer</th>
+                                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Correct Answer</th>
+                                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Result</th>
+                                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Marks</th>
+                                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Time Taken</th>
+                                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Answered At</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -603,7 +603,7 @@ const TestsManagement = () => {
         {/* Typing Test Results Section */}
         {typingTestResultsForCandidate.length > 0 && (
           <Card className="mb-4 border-0 shadow-sm">
-            <Card.Header style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderBottom: 'none' }}>
+            <Card.Header style={{ background: 'var(--primary)', color: 'white', borderBottom: 'none' }}>
               <h6 className="mb-0" style={{ color: 'white', fontWeight: '600' }}>
                 <FaKeyboard className="me-2" />
                 Typing Test Results
@@ -611,16 +611,16 @@ const TestsManagement = () => {
             </Card.Header>
             <Card.Body style={{ padding: '1.5rem', background: '#ffffff' }}>
               <Table striped bordered hover responsive style={{ marginBottom: 0 }}>
-                <thead style={{ background: '#f8f9fa' }}>
+                <thead style={{ background: 'var(--background)' }}>
                   <tr>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Test Title</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>WPM</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Accuracy</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Errors</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Time Taken</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Duration</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Submitted At</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Actions</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Test Title</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>WPM</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Accuracy</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Errors</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Time Taken</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Duration</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Submitted At</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -664,7 +664,7 @@ const TestsManagement = () => {
 
         {assignments.length > 0 && (
           <Card className="border-0 shadow-sm">
-            <Card.Header style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderBottom: 'none' }}>
+            <Card.Header style={{ background: 'var(--primary)', color: 'white', borderBottom: 'none' }}>
               <h6 className="mb-0" style={{ color: 'white', fontWeight: '600' }}>
                 <FaListUl className="me-2" />
                 Assigned Tests
@@ -672,13 +672,13 @@ const TestsManagement = () => {
             </Card.Header>
             <Card.Body style={{ padding: '1.5rem', background: '#ffffff' }}>
               <Table striped bordered hover responsive style={{ marginBottom: 0 }}>
-                <thead style={{ background: '#f8f9fa' }}>
+                <thead style={{ background: 'var(--background)' }}>
                   <tr>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Title</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Status</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Invited</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Completed</th>
-                    <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6' }}>Score</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Title</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Status</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Invited</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Completed</th>
+                    <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)' }}>Score</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1911,10 +1911,10 @@ const TestsManagement = () => {
       <Tabs activeKey={activeTab} onSelect={(key) => setActiveTab(key || 'assessments')} className="mb-4">
         <Tab eventKey="assessments" title="Candidate Assessments">
           {/* Re-arranged Dedicated Filter Container */}
-          <Card style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', padding: '1rem', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(185, 28, 28, 0.04)' }}>
+          <Card style={{ background: '#ffffff', border: '1px solid var(--border)', borderRadius: '12px', padding: '1rem', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(var(--primary-rgb), 0.04)' }}>
             {/* Row 1: Category Filter Buttons */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.875rem', paddingBottom: '0.75rem', borderBottom: '1px solid #fed7aa' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.875rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border)' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Category:
               </span>
               <div className="d-flex flex-wrap gap-2">
@@ -1927,13 +1927,13 @@ const TestsManagement = () => {
                     fontWeight: '600',
                     transition: 'all 0.2s',
                     ...(candidateFilters.category === 'all' ? {
-                      background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                      background: 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
                       border: 'none',
                       color: '#ffffff'
                     } : {
-                      borderColor: '#fed7aa',
-                      color: '#991b1b',
-                      background: '#fff7ed'
+                      borderColor: 'var(--border)',
+                      color: 'var(--primary-hover)',
+                      background: 'var(--primary-light)'
                     })
                   }}
                 >
@@ -1948,13 +1948,13 @@ const TestsManagement = () => {
                     fontWeight: '600',
                     transition: 'all 0.2s',
                     ...(candidateFilters.category === 'teaching' ? {
-                      background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                      background: 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
                       border: 'none',
                       color: '#ffffff'
                     } : {
-                      borderColor: '#fed7aa',
-                      color: '#991b1b',
-                      background: '#fff7ed'
+                      borderColor: 'var(--border)',
+                      color: 'var(--primary-hover)',
+                      background: 'var(--primary-light)'
                     })
                   }}
                 >
@@ -1969,13 +1969,13 @@ const TestsManagement = () => {
                     fontWeight: '600',
                     transition: 'all 0.2s',
                     ...(candidateFilters.category === 'non_teaching' ? {
-                      background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                      background: 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
                       border: 'none',
                       color: '#ffffff'
                     } : {
-                      borderColor: '#fed7aa',
-                      color: '#991b1b',
-                      background: '#fff7ed'
+                      borderColor: 'var(--border)',
+                      color: 'var(--primary-hover)',
+                      background: 'var(--primary-light)'
                     })
                   }}
                 >
@@ -1988,14 +1988,14 @@ const TestsManagement = () => {
             <Row className="g-3 align-items-center">
               <Col md={3} sm={6}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     Test State
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={testStatusFilter}
                     onChange={(event) => setTestStatusFilter(event.target.value)}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Test States</option>
                     <option value="pending">Pending Tests</option>
@@ -2005,14 +2005,14 @@ const TestsManagement = () => {
               </Col>
               <Col md={3} sm={6}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     Job Role
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={candidateFilters.position}
                     onChange={(event) => setCandidateFilters(prev => ({ ...prev, position: event.target.value }))}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Job Roles</option>
                     {availablePositions.map(position => (
@@ -2023,7 +2023,7 @@ const TestsManagement = () => {
               </Col>
               <Col md={6} sm={12}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     Search Candidates
                   </Form.Label>
                   <InputGroup size="sm">
@@ -2036,7 +2036,7 @@ const TestsManagement = () => {
                           setCandidateFilters(prev => ({ ...prev, search: searchInput }));
                         }
                       }}
-                      style={{ border: '1px solid #fed7aa', borderRight: 'none' }}
+                      style={{ border: '1px solid var(--border)', borderRight: 'none' }}
                     />
                     <Button
                       variant="primary"
@@ -2044,7 +2044,7 @@ const TestsManagement = () => {
                         setCandidateFilters(prev => ({ ...prev, search: searchInput }));
                       }}
                       style={{ 
-                        background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                        background: 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
                         border: 'none',
                         fontWeight: '600',
                         padding: '0 1rem'
@@ -2059,7 +2059,7 @@ const TestsManagement = () => {
                         setCandidateFilters({ category: 'all', position: 'all', search: '' });
                         setTestStatusFilter('all');
                       }}
-                      style={{ border: '1px solid #fed7aa', background: '#fee2e2', color: '#991b1b', fontWeight: '600' }}
+                      style={{ border: '1px solid var(--border)', background: 'var(--danger-light)', color: 'var(--primary-hover)', fontWeight: '600' }}
                     >
                       Reset
                     </Button>
@@ -2074,7 +2074,7 @@ const TestsManagement = () => {
                 <Card.Header 
                   className="d-flex justify-content-between align-items-center"
                   style={{ 
-                    background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                    background: 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
                     color: 'white',
                     borderBottom: 'none',
                     padding: '1.25rem'
@@ -2110,14 +2110,14 @@ const TestsManagement = () => {
                   ) : (
                     <div style={{ width: '100%' }}>
                       <Table striped hover size="sm" style={{ marginBottom: 0, width: '100%', verticalAlign: 'middle' }}>
-                        <thead style={{ background: '#f8f9fa' }}>
+                        <thead style={{ background: 'var(--background)' }}>
                           <tr>
-                            <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '22%' }}>Name</th>
-                            <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '13%' }}>Candidate ID</th>
-                            <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '22%' }}>Position</th>
-                            <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '13%' }}>Department</th>
-                            <th style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '16%' }}>Stage</th>
-                            <th className="text-end" style={{ fontWeight: '600', color: '#495057', borderBottom: '2px solid #dee2e6', width: '14%' }}>Actions</th>
+                            <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)', width: '22%' }}>Name</th>
+                            <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)', width: '13%' }}>Candidate ID</th>
+                            <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)', width: '22%' }}>Position</th>
+                            <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)', width: '13%' }}>Department</th>
+                            <th style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)', width: '16%' }}>Stage</th>
+                            <th className="text-end" style={{ fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '2px solid var(--border)', width: '14%' }}>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -2257,7 +2257,7 @@ const TestsManagement = () => {
                                                     height: '28px',
                                                     padding: 0,
                                                     borderRadius: '6px',
-                                                    background: 'linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%)',
+                                                    background: 'linear-gradient(135deg, #0284c7 0%, var(--secondary) 100%)',
                                                     border: 'none',
                                                     color: '#fff'
                                                   }}
@@ -2378,31 +2378,31 @@ const TestsManagement = () => {
           <Row className="mb-3 align-items-center">
             <Col className="d-flex justify-content-between align-items-center">
               <div>
-                <h5 className="mb-1" style={{ fontWeight: '700', color: '#991b1b', letterSpacing: '-0.01em' }}>Reusable Question Topics</h5>
+                <h5 className="mb-1" style={{ fontWeight: '700', color: 'var(--primary-hover)', letterSpacing: '-0.01em' }}>Reusable Question Topics</h5>
                 <span className="text-muted" style={{ fontSize: '0.85rem' }}>Organise MCQ templates by department & stream</span>
               </div>
               <Button 
                 onClick={() => openTopicModal()}
                 style={{ 
                   borderRadius: '8px',
-                  background: 'linear-gradient(135deg, #b91c1c 0%, #ea580c 100%)',
+                  background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%)',
                   border: 'none',
                   fontWeight: '600',
                   fontSize: '0.875rem',
                   padding: '0.5rem 1.25rem',
                   color: '#ffffff',
-                  boxShadow: '0 2px 6px rgba(185, 28, 28, 0.25)',
+                  boxShadow: '0 2px 6px rgba(var(--primary-rgb), 0.25)',
                   transition: 'all 0.2s ease',
                   display: 'inline-flex',
                   alignItems: 'center'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(185, 28, 28, 0.35)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(var(--primary-rgb), 0.35)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(185, 28, 28, 0.25)';
+                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(var(--primary-rgb), 0.25)';
                 }}
               >
                 <FaPlus className="me-2" />Add Topic
@@ -2419,8 +2419,8 @@ const TestsManagement = () => {
                     style={{ 
                       borderRadius: '12px', 
                       overflow: 'hidden', 
-                      border: '1px solid #fed7aa',
-                      boxShadow: '0 2px 10px rgba(185, 28, 28, 0.05)',
+                      border: '1px solid var(--border)',
+                      boxShadow: '0 2px 10px rgba(var(--primary-rgb), 0.05)',
                       background: '#ffffff'
                     }}
                   >
@@ -2428,8 +2428,8 @@ const TestsManagement = () => {
                       className="d-flex justify-content-between align-items-center"
                       style={{ 
                         background: category.value === 'teaching' 
-                          ? 'linear-gradient(135deg, #991b1b 0%, #b91c1c 100%)'
-                          : 'linear-gradient(135deg, #c2410c 0%, #ea580c 100%)',
+                          ? 'linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%)'
+                          : 'linear-gradient(135deg, var(--text-secondary) 0%, var(--primary) 100%)',
                         color: '#ffffff',
                         borderBottom: 'none',
                         padding: '0.85rem 1.25rem'
@@ -2446,7 +2446,7 @@ const TestsManagement = () => {
                           fontWeight: '700',
                           borderRadius: '20px',
                           background: '#ffffff',
-                          color: category.value === 'teaching' ? '#991b1b' : '#c2410c',
+                          color: category.value === 'teaching' ? 'var(--primary-hover)' : 'var(--text-secondary)',
                           boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                         }}
                       >
@@ -2464,10 +2464,10 @@ const TestsManagement = () => {
                     >
                       {topicsLoading ? (
                         <div className="text-center py-4">
-                          <Spinner animation="border" size="sm" style={{ color: '#b91c1c' }} />
+                          <Spinner animation="border" size="sm" style={{ color: 'var(--primary)' }} />
                         </div>
                       ) : items.length === 0 ? (
-                        <Alert variant="light" className="mb-0" style={{ border: '1px dashed #fed7aa', background: '#ffffff', color: '#78350f' }}>No topics created yet.</Alert>
+                        <Alert variant="light" className="mb-0" style={{ border: '1px dashed var(--border)', background: '#ffffff', color: '#78350f' }}>No topics created yet.</Alert>
                       ) : (
                         items.map(topic => (
                           <Card 
@@ -2476,17 +2476,17 @@ const TestsManagement = () => {
                             style={{ 
                               borderRadius: '8px',
                               transition: 'all 0.2s ease',
-                              border: '1px solid #fed7aa',
+                              border: '1px solid var(--border)',
                               background: '#ffffff'
                             }}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.transform = 'translateY(-1px)';
-                              e.currentTarget.style.borderColor = '#f97316';
-                              e.currentTarget.style.boxShadow = '0 4px 10px rgba(185, 28, 28, 0.08)';
+                              e.currentTarget.style.borderColor = 'var(--accent)';
+                              e.currentTarget.style.boxShadow = '0 4px 10px rgba(var(--primary-rgb), 0.08)';
                             }}
                             onMouseLeave={(e) => {
                               e.currentTarget.style.transform = 'translateY(0)';
-                              e.currentTarget.style.borderColor = '#fed7aa';
+                              e.currentTarget.style.borderColor = 'var(--border)';
                               e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
                             }}
                           >
@@ -2494,7 +2494,7 @@ const TestsManagement = () => {
                               <div className="d-flex justify-content-between align-items-center">
                                 <div style={{ flex: 1, minWidth: 0 }}>
                                   <div className="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                                    <span style={{ fontWeight: '700', color: '#1f2937', fontSize: '0.92rem' }}>
+                                    <span style={{ fontWeight: '700', color: 'var(--text-primary)', fontSize: '0.92rem' }}>
                                       {topic.name}
                                     </span>
                                     <span 
@@ -2523,9 +2523,9 @@ const TestsManagement = () => {
                                         padding: '0.2rem 0.55rem',
                                         borderRadius: '6px',
                                         fontWeight: '600',
-                                        background: '#fff7ed',
-                                        color: '#c2410c',
-                                        border: '1px solid #fed7aa',
+                                        background: 'var(--primary-light)',
+                                        color: 'var(--text-secondary)',
+                                        border: '1px solid var(--border)',
                                         display: 'inline-flex',
                                         alignItems: 'center'
                                       }}
@@ -2546,13 +2546,13 @@ const TestsManagement = () => {
                                       fontSize: '0.75rem',
                                       padding: '0.25rem 0.6rem',
                                       background: '#ffffff',
-                                      border: '1px solid #fed7aa',
+                                      border: '1px solid var(--border)',
                                       color: '#4b5563',
                                       transition: 'all 0.15s'
                                     }}
                                     title="Edit Topic"
                                   >
-                                    <FaEdit className="me-1" style={{ color: '#b91c1c' }} />Edit
+                                    <FaEdit className="me-1" style={{ color: 'var(--primary)' }} />Edit
                                   </Button>
                                   <Button
                                     variant="light"
@@ -2563,9 +2563,9 @@ const TestsManagement = () => {
                                       fontWeight: '600', 
                                       fontSize: '0.75rem',
                                       padding: '0.25rem 0.6rem',
-                                      background: topic.isActive ? '#fff5f5' : '#f0fdf4',
-                                      border: topic.isActive ? '1px solid #fecaca' : '1px solid #bbf7d0',
-                                      color: topic.isActive ? '#dc2626' : '#16a34a',
+                                      background: topic.isActive ? '#fff5f5' : 'var(--success-light)',
+                                      border: topic.isActive ? '1px solid var(--danger-light)' : '1px solid var(--success-light)',
+                                      color: topic.isActive ? 'var(--danger)' : 'var(--success)',
                                       transition: 'all 0.15s'
                                     }}
                                     title={topic.isActive ? 'Deactivate Topic' : 'Activate Topic'}
@@ -2587,12 +2587,12 @@ const TestsManagement = () => {
         </Tab>
 
         <Tab eventKey="questionBank" title="Question Bank">
-          <Card style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', padding: '1rem', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(185, 28, 28, 0.04)' }}>
+          <Card style={{ background: '#ffffff', border: '1px solid var(--border)', borderRadius: '12px', padding: '1rem', marginBottom: '1.25rem', boxShadow: '0 2px 8px rgba(var(--primary-rgb), 0.04)' }}>
             {/* Filter Dropdowns Row */}
             <Row className="mb-3 g-3">
               <Col md={3} sm={6}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     Campus
                   </Form.Label>
                   <Form.Select
@@ -2606,7 +2606,7 @@ const TestsManagement = () => {
                         set: 'all' // Reset set when campus changes
                       }));
                     }}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Campuses</option>
                     {filterOptions.campuses.map(campus => (
@@ -2619,7 +2619,7 @@ const TestsManagement = () => {
               </Col>
               <Col md={3} sm={6}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     Department
                   </Form.Label>
                   <Form.Select
@@ -2633,7 +2633,7 @@ const TestsManagement = () => {
                       }));
                     }}
                     disabled={questionFilters.campus === 'all'}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Departments</option>
                     {filterOptions.departments.map(dept => (
@@ -2646,7 +2646,7 @@ const TestsManagement = () => {
               </Col>
               <Col md={3} sm={6}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     Set
                   </Form.Label>
                   <Form.Select
@@ -2654,7 +2654,7 @@ const TestsManagement = () => {
                     value={questionFilters.set}
                     onChange={(event) => setQuestionFilters(prev => ({ ...prev, set: event.target.value }))}
                     disabled={questionFilters.campus === 'all' && questionFilters.department === 'all'}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Sets</option>
                     {filterOptions.sets.map(set => (
@@ -2667,14 +2667,14 @@ const TestsManagement = () => {
               </Col>
               <Col md={3} sm={6}>
                 <Form.Group>
-                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <Form.Label style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     Topic
                   </Form.Label>
                   <Form.Select
                     size="sm"
                     value={questionFilters.topicId}
                     onChange={(event) => setQuestionFilters(prev => ({ ...prev, topicId: event.target.value }))}
-                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid #fed7aa' }}
+                    style={{ borderRadius: '6px', fontSize: '0.85rem', border: '1px solid var(--border)' }}
                   >
                     <option value="all">All Topics</option>
                     {filterOptions.topics.map(topic => (
@@ -2695,13 +2695,13 @@ const TestsManagement = () => {
                     placeholder="Search question text..."
                     value={questionFilters.search}
                     onChange={(event) => setQuestionFilters(prev => ({ ...prev, search: event.target.value }))}
-                    style={{ border: '1px solid #fed7aa', borderRight: 'none' }}
+                    style={{ border: '1px solid var(--border)', borderRight: 'none' }}
                   />
                   <Button
                     variant="primary"
                     onClick={fetchQuestions}
                     style={{
-                      background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                      background: 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
                       border: 'none',
                       padding: '0 1rem'
                     }}
@@ -2727,7 +2727,7 @@ const TestsManagement = () => {
                     });
                     setBulkModalVisible(true);
                   }}
-                  style={{ fontWeight: '600', borderColor: '#fed7aa', color: '#991b1b', background: '#fff7ed' }}
+                  style={{ fontWeight: '600', borderColor: 'var(--border)', color: 'var(--primary-hover)', background: 'var(--primary-light)' }}
                 >
                   <FaUpload className="me-2" />Bulk Upload (Excel)
                 </Button>
@@ -2770,7 +2770,7 @@ const TestsManagement = () => {
                     setQuestionModalVisible(true);
                   }}
                   style={{
-                    background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                    background: 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
                     border: 'none',
                     fontWeight: '600'
                   }}
@@ -2785,7 +2785,7 @@ const TestsManagement = () => {
             <Col>
               <div className="d-flex justify-content-between align-items-center" style={{ 
                 padding: '1rem',
-                background: 'linear-gradient(135deg, #b91c1c 0%, #f97316 100%)',
+                background: 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
                 borderRadius: '12px',
                 color: 'white',
                 position: 'sticky',
@@ -2850,14 +2850,14 @@ const TestsManagement = () => {
                   </Alert>
                 ) : (
                   <>
-                    <div className="mb-3 d-flex align-items-center justify-content-between" style={{ padding: '0.6rem 1rem', background: '#fff7ed', borderRadius: '8px', border: '1px solid #fed7aa' }}>
+                    <div className="mb-3 d-flex align-items-center justify-content-between" style={{ padding: '0.6rem 1rem', background: 'var(--primary-light)', borderRadius: '8px', border: '1px solid var(--border)' }}>
                       <Form.Check
                         type="checkbox"
                         id="select-all-questions-check"
                         checked={questions.length > 0 && selectedQuestions.length === questions.length}
                         onChange={handleSelectAllQuestions}
                         label={
-                          <span style={{ fontWeight: '600', color: '#991b1b', fontSize: '0.86rem' }}>
+                          <span style={{ fontWeight: '600', color: 'var(--primary-hover)', fontSize: '0.86rem' }}>
                             Select All ({selectedQuestions.length} selected)
                           </span>
                         }
@@ -2881,23 +2881,23 @@ const TestsManagement = () => {
                             <Card 
                               style={{ 
                                 height: '100%',
-                                border: isSelected ? '2px solid #b91c1c' : '1px solid #fed7aa',
+                                border: isSelected ? '2px solid var(--primary)' : '1px solid var(--border)',
                                 borderRadius: '10px',
                                 background: '#ffffff',
                                 transition: 'all 0.2s ease',
-                                boxShadow: isSelected ? '0 4px 12px rgba(185, 28, 28, 0.15)' : '0 2px 6px rgba(185, 28, 28, 0.04)'
+                                boxShadow: isSelected ? '0 4px 12px rgba(var(--primary-rgb), 0.15)' : '0 2px 6px rgba(var(--primary-rgb), 0.04)'
                               }}
                               onMouseEnter={(e) => {
                                 if (!isSelected) {
-                                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(185, 28, 28, 0.1)';
-                                  e.currentTarget.style.borderColor = '#f97316';
+                                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(var(--primary-rgb), 0.1)';
+                                  e.currentTarget.style.borderColor = 'var(--accent)';
                                   e.currentTarget.style.transform = 'translateY(-2px)';
                                 }
                               }}
                               onMouseLeave={(e) => {
                                 if (!isSelected) {
-                                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(185, 28, 28, 0.04)';
-                                  e.currentTarget.style.borderColor = '#fed7aa';
+                                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(var(--primary-rgb), 0.04)';
+                                  e.currentTarget.style.borderColor = 'var(--border)';
                                   e.currentTarget.style.transform = 'translateY(0)';
                                 }
                               }}
@@ -2922,19 +2922,19 @@ const TestsManagement = () => {
                                       fontWeight: '600',
                                       fontSize: '0.76rem',
                                       background: '#ffffff',
-                                      border: '1px solid #fed7aa',
-                                      color: '#991b1b',
+                                      border: '1px solid var(--border)',
+                                      color: 'var(--primary-hover)',
                                       display: 'inline-flex',
                                       alignItems: 'center',
                                       transition: 'all 0.15s ease'
                                     }}
                                     onMouseEnter={(e) => {
-                                      e.currentTarget.style.background = '#fff7ed';
-                                      e.currentTarget.style.borderColor = '#f97316';
+                                      e.currentTarget.style.background = 'var(--primary-light)';
+                                      e.currentTarget.style.borderColor = 'var(--accent)';
                                     }}
                                     onMouseLeave={(e) => {
                                       e.currentTarget.style.background = '#ffffff';
-                                      e.currentTarget.style.borderColor = '#fed7aa';
+                                      e.currentTarget.style.borderColor = 'var(--border)';
                                     }}
                                   >
                                     <FaEdit className="me-1" />
@@ -2946,7 +2946,7 @@ const TestsManagement = () => {
                                     whiteSpace: 'pre-wrap', 
                                     fontSize: '0.9rem',
                                     fontWeight: '600',
-                                    color: '#1f2937',
+                                    color: 'var(--text-primary)',
                                     marginBottom: '0.75rem',
                                     lineHeight: '1.5'
                                   }}>
@@ -2966,7 +2966,7 @@ const TestsManagement = () => {
                                           background: '#fffdfa',
                                           borderRadius: '6px',
                                           fontSize: '0.82rem',
-                                          border: '1px solid #fed7aa',
+                                          border: '1px solid var(--border)',
                                           whiteSpace: 'nowrap',
                                           flex: '0 1 auto',
                                           display: 'inline-flex',
@@ -2976,8 +2976,8 @@ const TestsManagement = () => {
                                       >
                                         <span style={{ 
                                           fontWeight: '700', 
-                                          color: '#991b1b',
-                                          background: '#fff7ed',
+                                          color: 'var(--primary-hover)',
+                                          background: 'var(--primary-light)',
                                           padding: '0.1rem 0.35rem',
                                           borderRadius: '4px',
                                           fontSize: '0.75rem'
@@ -3059,8 +3059,8 @@ const TestsManagement = () => {
             <Col>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <div>
-                  <h4 className="mb-1" style={{ fontWeight: '700', color: '#212529' }}>
-                    <FaKeyboard className="me-2" style={{ color: '#667eea' }} />
+                  <h4 className="mb-1" style={{ fontWeight: '700', color: 'var(--text-primary)' }}>
+                    <FaKeyboard className="me-2" style={{ color: 'var(--primary)' }} />
                     Typing Test Results
                   </h4>
                   <p className="text-muted mb-0">View and manage typing test results for non-teaching candidates</p>
@@ -3082,7 +3082,7 @@ const TestsManagement = () => {
                     onClick={handleExportTypingCSV} 
                     disabled={filteredAndSortedTypingResults.length === 0}
                     style={{
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      background: 'var(--primary)',
                       border: 'none',
                       fontWeight: '600'
                     }}
@@ -3228,12 +3228,12 @@ const TestsManagement = () => {
                 <Col md={4}>
                   <InputGroup>
                     <InputGroup.Text style={{ 
-                      background: '#f8f9fa', 
-                      border: '2px solid #e9ecef',
+                      background: 'var(--background)', 
+                      border: '2px solid var(--border)',
                       borderRight: 'none',
                       borderRadius: '10px 0 0 10px'
                     }}>
-                      <FaSearch style={{ color: '#6c757d' }} />
+                      <FaSearch style={{ color: 'var(--text-muted)' }} />
                     </InputGroup.Text>
                     <Form.Control
                       type="text"
@@ -3241,7 +3241,7 @@ const TestsManagement = () => {
                       value={typingSearchTerm}
                       onChange={(e) => setTypingSearchTerm(e.target.value)}
                       style={{
-                        border: '2px solid #e9ecef',
+                        border: '2px solid var(--border)',
                         borderLeft: 'none',
                         borderRadius: '0 10px 10px 0',
                         padding: '0.75rem 1rem'
@@ -3254,7 +3254,7 @@ const TestsManagement = () => {
                     value={typingFilterTestId}
                     onChange={(e) => setTypingFilterTestId(e.target.value)}
                     style={{
-                      border: '2px solid #e9ecef',
+                      border: '2px solid var(--border)',
                       borderRadius: '10px',
                       padding: '0.75rem 1rem'
                     }}
@@ -3272,7 +3272,7 @@ const TestsManagement = () => {
                     value={typingSortBy}
                     onChange={(e) => setTypingSortBy(e.target.value)}
                     style={{
-                      border: '2px solid #e9ecef',
+                      border: '2px solid var(--border)',
                       borderRadius: '10px',
                       padding: '0.75rem 1rem'
                     }}
@@ -3288,7 +3288,7 @@ const TestsManagement = () => {
                     value={typingSortOrder}
                     onChange={(e) => setTypingSortOrder(e.target.value)}
                     style={{
-                      border: '2px solid #e9ecef',
+                      border: '2px solid var(--border)',
                       borderRadius: '10px',
                       padding: '0.75rem 1rem'
                     }}
@@ -3328,7 +3328,7 @@ const TestsManagement = () => {
                 <div className="table-responsive">
                   <Table striped bordered hover style={{ marginBottom: 0 }}>
                     <thead style={{ 
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      background: 'var(--primary)',
                       color: 'white'
                     }}>
                       <tr>
@@ -3348,7 +3348,7 @@ const TestsManagement = () => {
                         <tr key={index} style={{ transition: 'background-color 0.2s ease' }}>
                           <td style={{ padding: '1rem', verticalAlign: 'middle' }}>
                             <div>
-                              <strong style={{ color: '#212529', fontSize: '0.95rem' }}>
+                              <strong style={{ color: 'var(--text-primary)', fontSize: '0.95rem' }}>
                                 {result.candidate?.user?.name || 'N/A'}
                               </strong>
                               <br />
@@ -3364,7 +3364,7 @@ const TestsManagement = () => {
                             </div>
                           </td>
                           <td style={{ padding: '1rem', verticalAlign: 'middle' }}>
-                            <span style={{ fontWeight: '500', color: '#495057' }}>
+                            <span style={{ fontWeight: '500', color: 'var(--text-secondary)' }}>
                               {result.typingTest?.title || 'N/A'}
                             </span>
                           </td>
@@ -3392,12 +3392,12 @@ const TestsManagement = () => {
                             </span>
                           </td>
                           <td style={{ padding: '1rem', verticalAlign: 'middle' }}>
-                            <span style={{ fontWeight: '500', color: '#495057' }}>
+                            <span style={{ fontWeight: '500', color: 'var(--text-secondary)' }}>
                               {result.timeTaken || 0}s
                             </span>
                           </td>
                           <td style={{ padding: '1rem', verticalAlign: 'middle' }}>
-                            <span style={{ fontWeight: '500', color: '#495057' }}>
+                            <span style={{ fontWeight: '500', color: 'var(--text-secondary)' }}>
                               {result.duration || 0} min
                             </span>
                           </td>
@@ -3449,7 +3449,7 @@ const TestsManagement = () => {
             <Modal.Header 
               closeButton 
               style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'var(--primary)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '12px 12px 0 0'
@@ -3460,14 +3460,14 @@ const TestsManagement = () => {
                 Typing Test Result Details
               </Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ padding: '2rem', background: '#f8f9fa' }}>
+            <Modal.Body style={{ padding: '2rem', background: 'var(--background)' }}>
               {selectedTypingResult && (
                 <div>
                   <Row className="mb-3 g-3">
                     <Col md={6}>
                       <Card className="border-0 shadow-sm" style={{ borderRadius: '12px' }}>
                         <Card.Header style={{
-                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                          background: 'var(--primary)',
                           color: 'white',
                           border: 'none',
                           borderRadius: '12px 12px 0 0',
@@ -3477,24 +3477,24 @@ const TestsManagement = () => {
                         </Card.Header>
                         <Card.Body style={{ padding: '1.5rem' }}>
                           <p style={{ marginBottom: '0.75rem' }}>
-                            <strong style={{ color: '#495057' }}>Name:</strong>{' '}
-                            <span style={{ color: '#212529' }}>{selectedTypingResult.candidate?.user?.name || 'N/A'}</span>
+                            <strong style={{ color: 'var(--text-secondary)' }}>Name:</strong>{' '}
+                            <span style={{ color: 'var(--text-primary)' }}>{selectedTypingResult.candidate?.user?.name || 'N/A'}</span>
                           </p>
                           <p style={{ marginBottom: '0.75rem' }}>
-                            <strong style={{ color: '#495057' }}>Email:</strong>{' '}
-                            <span style={{ color: '#212529' }}>{selectedTypingResult.candidate?.user?.email || 'N/A'}</span>
+                            <strong style={{ color: 'var(--text-secondary)' }}>Email:</strong>{' '}
+                            <span style={{ color: 'var(--text-primary)' }}>{selectedTypingResult.candidate?.user?.email || 'N/A'}</span>
                           </p>
                           <p style={{ marginBottom: '0.75rem' }}>
-                            <strong style={{ color: '#495057' }}>Candidate Number:</strong>{' '}
+                            <strong style={{ color: 'var(--text-secondary)' }}>Candidate Number:</strong>{' '}
                             <Badge bg="secondary">{selectedTypingResult.candidate?.candidateNumber || 'N/A'}</Badge>
                           </p>
                           <p style={{ marginBottom: '0.75rem' }}>
-                            <strong style={{ color: '#495057' }}>Position:</strong>{' '}
-                            <span style={{ color: '#212529' }}>{selectedTypingResult.candidate?.form?.position || 'N/A'}</span>
+                            <strong style={{ color: 'var(--text-secondary)' }}>Position:</strong>{' '}
+                            <span style={{ color: 'var(--text-primary)' }}>{selectedTypingResult.candidate?.form?.position || 'N/A'}</span>
                           </p>
                           <p style={{ marginBottom: 0 }}>
-                            <strong style={{ color: '#495057' }}>Department:</strong>{' '}
-                            <span style={{ color: '#212529' }}>{selectedTypingResult.candidate?.form?.department || 'N/A'}</span>
+                            <strong style={{ color: 'var(--text-secondary)' }}>Department:</strong>{' '}
+                            <span style={{ color: 'var(--text-primary)' }}>{selectedTypingResult.candidate?.form?.department || 'N/A'}</span>
                           </p>
                         </Card.Body>
                       </Card>
@@ -3502,7 +3502,7 @@ const TestsManagement = () => {
                     <Col md={6}>
                       <Card className="border-0 shadow-sm" style={{ borderRadius: '12px' }}>
                         <Card.Header style={{
-                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                          background: 'var(--primary)',
                           color: 'white',
                           border: 'none',
                           borderRadius: '12px 12px 0 0',
@@ -3512,20 +3512,20 @@ const TestsManagement = () => {
                         </Card.Header>
                         <Card.Body style={{ padding: '1.5rem' }}>
                           <p style={{ marginBottom: '0.75rem' }}>
-                            <strong style={{ color: '#495057' }}>Test Title:</strong>{' '}
-                            <span style={{ color: '#212529' }}>{selectedTypingResult.typingTest?.title || 'N/A'}</span>
+                            <strong style={{ color: 'var(--text-secondary)' }}>Test Title:</strong>{' '}
+                            <span style={{ color: 'var(--text-primary)' }}>{selectedTypingResult.typingTest?.title || 'N/A'}</span>
                           </p>
                           <p style={{ marginBottom: '0.75rem' }}>
-                            <strong style={{ color: '#495057' }}>Duration:</strong>{' '}
-                            <span style={{ color: '#212529' }}>{selectedTypingResult.duration || 0} minute(s)</span>
+                            <strong style={{ color: 'var(--text-secondary)' }}>Duration:</strong>{' '}
+                            <span style={{ color: 'var(--text-primary)' }}>{selectedTypingResult.duration || 0} minute(s)</span>
                           </p>
                           <p style={{ marginBottom: '0.75rem' }}>
-                            <strong style={{ color: '#495057' }}>Started At:</strong>{' '}
-                            <span style={{ color: '#212529' }}>{formatTypingDate(selectedTypingResult.startedAt)}</span>
+                            <strong style={{ color: 'var(--text-secondary)' }}>Started At:</strong>{' '}
+                            <span style={{ color: 'var(--text-primary)' }}>{formatTypingDate(selectedTypingResult.startedAt)}</span>
                           </p>
                           <p style={{ marginBottom: 0 }}>
-                            <strong style={{ color: '#495057' }}>Submitted At:</strong>{' '}
-                            <span style={{ color: '#212529' }}>{formatTypingDate(selectedTypingResult.submittedAt)}</span>
+                            <strong style={{ color: 'var(--text-secondary)' }}>Submitted At:</strong>{' '}
+                            <span style={{ color: 'var(--text-primary)' }}>{formatTypingDate(selectedTypingResult.submittedAt)}</span>
                           </p>
                         </Card.Body>
                       </Card>
@@ -3535,7 +3535,7 @@ const TestsManagement = () => {
                     <Col>
                       <Card className="border-0 shadow-sm" style={{ borderRadius: '12px' }}>
                         <Card.Header style={{
-                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                          background: 'var(--primary)',
                           color: 'white',
                           border: 'none',
                           borderRadius: '12px 12px 0 0',
@@ -3610,21 +3610,21 @@ const TestsManagement = () => {
                           <Row>
                             <Col md={6}>
                               <p style={{ marginBottom: '0.75rem', fontSize: '1rem' }}>
-                                <strong style={{ color: '#495057' }}>Total Characters:</strong>{' '}
-                                <span style={{ color: '#212529', fontWeight: '600' }}>
+                                <strong style={{ color: 'var(--text-secondary)' }}>Total Characters:</strong>{' '}
+                                <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
                                   {selectedTypingResult.totalCharacters || 0}
                                 </span>
                               </p>
                               <p style={{ marginBottom: 0, fontSize: '1rem' }}>
-                                <strong style={{ color: '#495057' }}>Correct Characters:</strong>{' '}
-                                <span style={{ color: '#212529', fontWeight: '600' }}>
+                                <strong style={{ color: 'var(--text-secondary)' }}>Correct Characters:</strong>{' '}
+                                <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>
                                   {selectedTypingResult.correctCharacters || 0}
                                 </span>
                               </p>
                             </Col>
                             <Col md={6}>
                               <p style={{ marginBottom: 0, fontSize: '1rem' }}>
-                                <strong style={{ color: '#495057' }}>Status:</strong>{' '}
+                                <strong style={{ color: 'var(--text-secondary)' }}>Status:</strong>{' '}
                                 <Badge bg="success" style={{ 
                                   fontSize: '0.9rem', 
                                   padding: '0.5rem 1rem',
@@ -3645,7 +3645,7 @@ const TestsManagement = () => {
             <Modal.Footer style={{
               border: 'none',
               padding: '1.5rem 2rem',
-              background: '#f8f9fa',
+              background: 'var(--background)',
               borderRadius: '0 0 12px 12px'
             }}>
               <Button 
@@ -3845,7 +3845,7 @@ const TestsManagement = () => {
         <Modal.Header 
           closeButton 
           style={{ 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+            background: 'var(--primary)', 
             color: 'white', 
             borderBottom: 'none' 
           }}
@@ -3855,7 +3855,7 @@ const TestsManagement = () => {
             Candidate Test Overview
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ padding: '1.5rem', background: '#f8f9fa', maxHeight: '85vh', overflowY: 'auto' }}>
+        <Modal.Body style={{ padding: '1.5rem', background: 'var(--background)', maxHeight: '85vh', overflowY: 'auto' }}>
           {profileLoading ? (
             <div className="text-center py-5">
               <Spinner animation="border" variant="primary" />
@@ -3865,7 +3865,7 @@ const TestsManagement = () => {
             renderCandidateProfileContent()
           )}
         </Modal.Body>
-        <Modal.Footer style={{ borderTop: '1px solid #dee2e6', background: '#ffffff' }}>
+        <Modal.Footer style={{ borderTop: '1px solid var(--border)', background: '#ffffff' }}>
           <Button 
             variant="secondary" 
             onClick={closeProfileModal} 
@@ -3911,7 +3911,7 @@ const TestsManagement = () => {
         <Modal.Header
           closeButton
           style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'var(--primary)',
             color: 'white',
             borderBottom: 'none'
           }}
@@ -3921,28 +3921,28 @@ const TestsManagement = () => {
             Typing Test Result Details
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ padding: '1.5rem', background: '#f8f9fa', maxHeight: '85vh', overflowY: 'auto' }}>
+        <Modal.Body style={{ padding: '1.5rem', background: 'var(--background)', maxHeight: '85vh', overflowY: 'auto' }}>
           {selectedTypingResult ? (
             <div>
               <Row className="mb-3 g-3">
                 <Col md={6}>
-                  <Card className="h-100 border-0 shadow-sm" style={{ background: 'linear-gradient(135deg, #667eea15 0%, #764ba215 100%)' }}>
+                  <Card className="h-100 border-0 shadow-sm" style={{ background: 'var(--primary-light)' }}>
                     <Card.Body style={{ padding: '1.25rem' }}>
                       <h6 className="text-muted mb-3 text-uppercase" style={{ fontSize: '0.75rem', letterSpacing: '0.5px', fontWeight: '600' }}>
                         Candidate Information
                       </h6>
                       <div style={{ lineHeight: '1.8' }}>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Name:</strong>
-                          <span style={{ color: '#212529' }}> {profileData?.personalDetails?.name || profileData?.user?.name || 'N/A'}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Name:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {profileData?.personalDetails?.name || profileData?.user?.name || 'N/A'}</span>
                         </p>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Email:</strong>
-                          <span style={{ color: '#212529' }}> {profileData?.personalDetails?.email || profileData?.user?.email || 'N/A'}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Email:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {profileData?.personalDetails?.email || profileData?.user?.email || 'N/A'}</span>
                         </p>
                         <p className="mb-0">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Candidate Number:</strong>
-                          <span style={{ color: '#212529' }}> {profileData?.candidateNumber || 'N/A'}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Candidate Number:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {profileData?.candidateNumber || 'N/A'}</span>
                         </p>
                       </div>
                     </Card.Body>
@@ -3956,20 +3956,20 @@ const TestsManagement = () => {
                       </h6>
                       <div style={{ lineHeight: '1.8' }}>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Test Title:</strong>
-                          <span style={{ color: '#212529' }}> {selectedTypingResult.typingTest?.title || 'N/A'}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Test Title:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {selectedTypingResult.typingTest?.title || 'N/A'}</span>
                         </p>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Duration:</strong>
-                          <span style={{ color: '#212529' }}> {selectedTypingResult.duration || 0} minute(s)</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Duration:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {selectedTypingResult.duration || 0} minute(s)</span>
                         </p>
                         <p className="mb-2">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Started At:</strong>
-                          <span style={{ color: '#212529' }}> {formatTypingDate(selectedTypingResult.startedAt)}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Started At:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {formatTypingDate(selectedTypingResult.startedAt)}</span>
                         </p>
                         <p className="mb-0">
-                          <strong style={{ color: '#495057', minWidth: '140px', display: 'inline-block' }}>Submitted At:</strong>
-                          <span style={{ color: '#212529' }}> {formatTypingDate(selectedTypingResult.submittedAt)}</span>
+                          <strong style={{ color: 'var(--text-secondary)', minWidth: '140px', display: 'inline-block' }}>Submitted At:</strong>
+                          <span style={{ color: 'var(--text-primary)' }}> {formatTypingDate(selectedTypingResult.submittedAt)}</span>
                         </p>
                       </div>
                     </Card.Body>
@@ -3979,7 +3979,7 @@ const TestsManagement = () => {
               <Row>
                 <Col>
                   <Card className="border-0 shadow-sm">
-                    <Card.Header style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderBottom: 'none' }}>
+                    <Card.Header style={{ background: 'var(--primary)', color: 'white', borderBottom: 'none' }}>
                       <h5 className="mb-0" style={{ color: 'white', fontWeight: '600' }}>
                         Performance Metrics
                       </h5>
@@ -4027,7 +4027,7 @@ const TestsManagement = () => {
             <Alert variant="warning">No typing test result details available.</Alert>
           )}
         </Modal.Body>
-        <Modal.Footer style={{ borderTop: '1px solid #dee2e6', background: '#ffffff' }}>
+        <Modal.Footer style={{ borderTop: '1px solid var(--border)', background: '#ffffff' }}>
           <Button
             variant="secondary"
             onClick={() => {
@@ -4065,7 +4065,7 @@ const TestsManagement = () => {
         <Modal.Header 
           closeButton
           style={{ 
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+            background: 'var(--primary)', 
             color: 'white', 
             borderBottom: 'none' 
           }}
@@ -4076,11 +4076,11 @@ const TestsManagement = () => {
           </Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleGenerateAssessment}>
-          <Modal.Body style={{ padding: '1.5rem', background: '#f8f9fa', maxHeight: '75vh', overflowY: 'auto' }}>
+          <Modal.Body style={{ padding: '1.5rem', background: 'var(--background)', maxHeight: '75vh', overflowY: 'auto' }}>
             <Row className="mb-3 g-3">
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label style={{ fontWeight: '600', color: '#495057', marginBottom: '0.5rem' }}>
+                  <Form.Label style={{ fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
                     Assign to Candidate<span className="text-danger">*</span>
                   </Form.Label>
                   <Form.Select
@@ -4098,7 +4098,7 @@ const TestsManagement = () => {
                     required
                     style={{ 
                       borderRadius: '8px',
-                      border: '1px solid #dee2e6',
+                      border: '1px solid var(--border)',
                       padding: '0.75rem'
                     }}
                   >
@@ -4110,7 +4110,7 @@ const TestsManagement = () => {
                     ))}
                   </Form.Select>
                   {selectedCandidate && (candidateCampus || candidateDepartment) && (
-                    <div className="mt-2" style={{ fontSize: '0.875rem', color: '#6c757d' }}>
+                    <div className="mt-2" style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
                       <strong>Campus:</strong> {candidateCampus || 'N/A'} | <strong>Department:</strong> {candidateDepartment || 'N/A'}
                     </div>
                   )}
@@ -4118,7 +4118,7 @@ const TestsManagement = () => {
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label style={{ fontWeight: '600', color: '#495057', marginBottom: '0.5rem' }}>
+                  <Form.Label style={{ fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
                     Assessment Title<span className="text-danger">*</span>
                   </Form.Label>
                   <Form.Control
@@ -4128,7 +4128,7 @@ const TestsManagement = () => {
                     required
                     style={{ 
                       borderRadius: '8px',
-                      border: '1px solid #dee2e6',
+                      border: '1px solid var(--border)',
                       padding: '0.75rem'
                     }}
                   />
@@ -4139,7 +4139,7 @@ const TestsManagement = () => {
             <Row className="mb-3 g-3">
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label style={{ fontWeight: '600', color: '#495057', marginBottom: '0.5rem' }}>
+                  <Form.Label style={{ fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
                     Duration (minutes)<span className="text-danger">*</span>
                   </Form.Label>
                   <Form.Control
@@ -4150,7 +4150,7 @@ const TestsManagement = () => {
                     required
                     style={{ 
                       borderRadius: '8px',
-                      border: '1px solid #dee2e6',
+                      border: '1px solid var(--border)',
                       padding: '0.75rem'
                     }}
                   />
@@ -4158,7 +4158,7 @@ const TestsManagement = () => {
               </Col>
               <Col md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontWeight: '600', color: '#495057', marginBottom: '0.5rem' }}>
+                  <Form.Label style={{ fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
                     Passing %
                   </Form.Label>
                   <Form.Control
@@ -4169,7 +4169,7 @@ const TestsManagement = () => {
                     onChange={(event) => setBuilderState(prev => ({ ...prev, passingPercentage: Number(event.target.value) }))}
                     style={{ 
                       borderRadius: '8px',
-                      border: '1px solid #dee2e6',
+                      border: '1px solid var(--border)',
                       padding: '0.75rem'
                     }}
                   />
@@ -4177,7 +4177,7 @@ const TestsManagement = () => {
               </Col>
               <Col md={3}>
                 <Form.Group>
-                  <Form.Label style={{ fontWeight: '600', color: '#495057', marginBottom: '0.5rem' }}>
+                  <Form.Label style={{ fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
                     Cutoff %
                   </Form.Label>
                   <Form.Control
@@ -4188,7 +4188,7 @@ const TestsManagement = () => {
                     onChange={(event) => setBuilderState(prev => ({ ...prev, cutoffPercentage: Number(event.target.value) }))}
                     style={{ 
                       borderRadius: '8px',
-                      border: '1px solid #dee2e6',
+                      border: '1px solid var(--border)',
                       padding: '0.75rem'
                     }}
                   />
@@ -4197,7 +4197,7 @@ const TestsManagement = () => {
             </Row>
 
             <Form.Group className="mb-3">
-              <Form.Label style={{ fontWeight: '600', color: '#495057', marginBottom: '0.5rem' }}>
+              <Form.Label style={{ fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
                 Description
               </Form.Label>
               <Form.Control
@@ -4208,14 +4208,14 @@ const TestsManagement = () => {
                 placeholder="Purpose and overview of the assessment"
                 style={{ 
                   borderRadius: '8px',
-                  border: '1px solid #dee2e6',
+                  border: '1px solid var(--border)',
                   padding: '0.75rem'
                 }}
               />
             </Form.Group>
 
             <Form.Group className="mb-4">
-              <Form.Label style={{ fontWeight: '600', color: '#495057', marginBottom: '0.5rem' }}>
+              <Form.Label style={{ fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
                 Candidate Instructions
               </Form.Label>
               <Form.Control
@@ -4226,7 +4226,7 @@ const TestsManagement = () => {
                 placeholder="Any instructions to show before the assessment begins"
                 style={{ 
                   borderRadius: '8px',
-                  border: '1px solid #dee2e6',
+                  border: '1px solid var(--border)',
                   padding: '0.75rem'
                 }}
               />
@@ -4236,7 +4236,7 @@ const TestsManagement = () => {
               <Card.Header 
                 className="d-flex justify-content-between align-items-center"
                 style={{ 
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'var(--primary)',
                   color: 'white',
                   borderBottom: 'none',
                   padding: '1rem 1.25rem'
@@ -4287,14 +4287,14 @@ const TestsManagement = () => {
                   return (
                     <Row className="align-items-end mb-3 g-3" key={index} style={{ 
                       padding: '1rem', 
-                      background: '#f8f9fa', 
+                      background: 'var(--background)', 
                       borderRadius: '8px',
-                      border: '1px solid #e9ecef',
+                      border: '1px solid var(--border)',
                       marginBottom: '1rem'
                     }}>
                       <Col md={6}>
                         <Form.Group>
-                          <Form.Label style={{ fontWeight: '600', color: '#495057', marginBottom: '0.5rem' }}>
+                          <Form.Label style={{ fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
                             Topic<span className="text-danger">*</span>
                           </Form.Label>
                           <Form.Select
@@ -4303,7 +4303,7 @@ const TestsManagement = () => {
                             required
                             style={{ 
                               borderRadius: '8px',
-                              border: '1px solid #dee2e6',
+                              border: '1px solid var(--border)',
                               padding: '0.75rem'
                             }}
                           >
@@ -4315,7 +4315,7 @@ const TestsManagement = () => {
                             ))}
                           </Form.Select>
                           {builderFilterOptionsLoading && (
-                            <div className="mt-1" style={{ fontSize: '0.75rem', color: '#6c757d' }}>
+                            <div className="mt-1" style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                               Loading topics...
                             </div>
                           )}
@@ -4328,7 +4328,7 @@ const TestsManagement = () => {
                       </Col>
                       <Col md={4}>
                         <Form.Group>
-                          <Form.Label style={{ fontWeight: '600', color: '#495057', marginBottom: '0.5rem' }}>
+                          <Form.Label style={{ fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
                             Question Count<span className="text-danger">*</span>
                           </Form.Label>
                           <div className="d-flex align-items-center gap-2">
@@ -4340,7 +4340,7 @@ const TestsManagement = () => {
                               required
                               style={{ 
                                 borderRadius: '8px',
-                                border: '1px solid #dee2e6',
+                                border: '1px solid var(--border)',
                                 padding: '0.75rem',
                                 flex: 1
                               }}
@@ -4398,10 +4398,10 @@ const TestsManagement = () => {
           </Modal.Body>
           <Modal.Footer 
             className="d-flex justify-content-between align-items-center"
-            style={{ borderTop: '1px solid #dee2e6', background: '#ffffff', padding: '1.25rem' }}
+            style={{ borderTop: '1px solid var(--border)', background: '#ffffff', padding: '1.25rem' }}
           >
             <div className="text-muted d-flex align-items-center gap-2" style={{ fontWeight: '500' }}>
-              <FaClipboardCheck style={{ color: '#667eea' }} />
+              <FaClipboardCheck style={{ color: 'var(--primary)' }} />
               <span>{totalSelectedQuestions} question(s) will be included.</span>
             </div>
             <div className="d-flex gap-2">
@@ -4419,7 +4419,7 @@ const TestsManagement = () => {
                   disabled={builderSaving}
                   style={{ 
                     borderRadius: '8px',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'var(--primary)',
                     border: 'none',
                     fontWeight: '500',
                     transition: 'all 0.3s'
@@ -4977,7 +4977,7 @@ const TestsManagement = () => {
           <Modal.Body>
             <Alert variant="light">
               <strong>Format:</strong> Your Word document should contain questions in the following format:
-              <pre style={{ marginTop: '10px', fontSize: '12px', backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
+              <pre style={{ marginTop: '10px', fontSize: '12px', backgroundColor: 'var(--background)', padding: '10px', borderRadius: '4px' }}>
 {`51: The mating of individuals related by common ancestry is known as:
 
 A Cross breeding
@@ -5170,11 +5170,11 @@ Ans: 3`}
                 <Alert variant="info">
                   <strong>Preview: {previewQuestions.length} question(s) parsed</strong>
                 </Alert>
-                <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid #dee2e6', borderRadius: '4px', padding: '15px', backgroundColor: '#f8f9fa' }}>
+                <div style={{ maxHeight: '400px', overflowY: 'auto', border: '1px solid var(--border)', borderRadius: '4px', padding: '15px', backgroundColor: 'var(--background)' }}>
                   {previewQuestions.map((q, idx) => (
-                    <div key={idx} className="mb-4 p-3" style={{ backgroundColor: '#ffffff', borderRadius: '4px', border: '1px solid #dee2e6' }}>
+                    <div key={idx} className="mb-4 p-3" style={{ backgroundColor: '#ffffff', borderRadius: '4px', border: '1px solid var(--border)' }}>
                       <div className="d-flex justify-content-between align-items-start mb-2">
-                        <strong style={{ color: '#495057' }}>Question {idx + 1}</strong>
+                        <strong style={{ color: 'var(--text-secondary)' }}>Question {idx + 1}</strong>
                         <Badge bg={q.correctAnswer !== null ? 'success' : 'danger'}>
                           {q.correctAnswer !== null ? 'Valid' : 'Invalid'}
                         </Badge>
@@ -5469,7 +5469,7 @@ Ans: 3`}
         <Form onSubmit={handleCreateTypingTest}>
           <Modal.Body style={{ 
             padding: '2rem', 
-            background: 'linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%)',
+            background: 'linear-gradient(to bottom, var(--background) 0%, #ffffff 100%)',
             overflowY: 'auto',
             overflowX: 'hidden'
           }}>
@@ -5482,7 +5482,7 @@ Ans: 3`}
                   gap: '0.75rem',
                   marginBottom: '1.25rem',
                   paddingBottom: '1rem',
-                  borderBottom: '2px solid #e9ecef'
+                  borderBottom: '2px solid var(--border)'
                 }}>
                   <div style={{
                     width: '40px',
@@ -5499,14 +5499,14 @@ Ans: 3`}
                     👤
                   </div>
                   <div>
-                    <h6 style={{ margin: 0, fontWeight: '600', color: '#212529' }}>Candidate Selection</h6>
-                    <small style={{ color: '#6c757d' }}>Select the candidate for this typing test</small>
+                    <h6 style={{ margin: 0, fontWeight: '600', color: 'var(--text-primary)' }}>Candidate Selection</h6>
+                    <small style={{ color: 'var(--text-muted)' }}>Select the candidate for this typing test</small>
                   </div>
                 </div>
                 <Form.Group>
                   <Form.Label style={{ 
                     fontWeight: '600', 
-                    color: '#495057', 
+                    color: 'var(--text-secondary)', 
                     marginBottom: '0.75rem',
                     fontSize: '0.95rem'
                   }}>
@@ -5527,7 +5527,7 @@ Ans: 3`}
                     required
                     style={{
                       borderRadius: '10px',
-                      border: '2px solid #e9ecef',
+                      border: '2px solid var(--border)',
                       padding: '0.875rem 1rem',
                       fontSize: '0.95rem',
                       transition: 'all 0.3s ease',
@@ -5580,13 +5580,13 @@ Ans: 3`}
                   gap: '0.75rem',
                   marginBottom: '1.25rem',
                   paddingBottom: '1rem',
-                  borderBottom: '2px solid #e9ecef'
+                  borderBottom: '2px solid var(--border)'
                 }}>
                   <div style={{
                     width: '40px',
                     height: '40px',
                     borderRadius: '10px',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'var(--primary)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -5597,8 +5597,8 @@ Ans: 3`}
                     ⚙️
                   </div>
                   <div>
-                    <h6 style={{ margin: 0, fontWeight: '600', color: '#212529' }}>Test Configuration</h6>
-                    <small style={{ color: '#6c757d' }}>Set up the typing test parameters</small>
+                    <h6 style={{ margin: 0, fontWeight: '600', color: 'var(--text-primary)' }}>Test Configuration</h6>
+                    <small style={{ color: 'var(--text-muted)' }}>Set up the typing test parameters</small>
                   </div>
                 </div>
 
@@ -5607,7 +5607,7 @@ Ans: 3`}
                     <Form.Group>
                       <Form.Label style={{ 
                         fontWeight: '600', 
-                        color: '#495057', 
+                        color: 'var(--text-secondary)', 
                         marginBottom: '0.75rem',
                         fontSize: '0.95rem'
                       }}>
@@ -5620,7 +5620,7 @@ Ans: 3`}
                         required
                         style={{
                           borderRadius: '10px',
-                          border: '2px solid #e9ecef',
+                          border: '2px solid var(--border)',
                           padding: '0.875rem 1rem',
                           fontSize: '0.95rem',
                           transition: 'all 0.3s ease',
@@ -5634,7 +5634,7 @@ Ans: 3`}
                 <Form.Group className="mb-3">
                   <Form.Label style={{ 
                     fontWeight: '600', 
-                    color: '#495057', 
+                    color: 'var(--text-secondary)', 
                     marginBottom: '0.75rem',
                     fontSize: '0.95rem'
                   }}>
@@ -5648,7 +5648,7 @@ Ans: 3`}
                     placeholder="Brief description of the typing test (optional)"
                     style={{
                       borderRadius: '10px',
-                      border: '2px solid #e9ecef',
+                      border: '2px solid var(--border)',
                       padding: '0.875rem 1rem',
                       fontSize: '0.95rem',
                       transition: 'all 0.3s ease',
@@ -5663,7 +5663,7 @@ Ans: 3`}
                     <Form.Group>
                       <Form.Label style={{ 
                         fontWeight: '600', 
-                        color: '#495057', 
+                        color: 'var(--text-secondary)', 
                         marginBottom: '0.75rem',
                         fontSize: '0.95rem'
                       }}>
@@ -5671,9 +5671,9 @@ Ans: 3`}
                       </Form.Label>
                       <div className="d-flex gap-3" style={{ 
                         padding: '1rem',
-                        background: '#f8f9fa',
+                        background: 'var(--background)',
                         borderRadius: '10px',
-                        border: '2px solid #e9ecef'
+                        border: '2px solid var(--border)'
                       }}>
                         <Form.Check
                           type="checkbox"
@@ -5682,7 +5682,7 @@ Ans: 3`}
                             <span style={{ 
                               fontWeight: '500',
                               fontSize: '0.95rem',
-                              color: '#495057'
+                              color: 'var(--text-secondary)'
                             }}>
                               1 minute
                             </span>
@@ -5711,7 +5711,7 @@ Ans: 3`}
                             <span style={{ 
                               fontWeight: '500',
                               fontSize: '0.95rem',
-                              color: '#495057'
+                              color: 'var(--text-secondary)'
                             }}>
                               2 minutes
                             </span>
@@ -5740,7 +5740,7 @@ Ans: 3`}
                     <Form.Group>
                       <Form.Label style={{ 
                         fontWeight: '600', 
-                        color: '#495057', 
+                        color: 'var(--text-secondary)', 
                         marginBottom: '0.75rem',
                         fontSize: '0.95rem'
                       }}>
@@ -5751,7 +5751,7 @@ Ans: 3`}
                         onChange={(event) => setTypingTestForm(prev => ({ ...prev, defaultDuration: Number(event.target.value) }))}
                         style={{
                           borderRadius: '10px',
-                          border: '2px solid #e9ecef',
+                          border: '2px solid var(--border)',
                           padding: '0.875rem 1rem',
                           fontSize: '0.95rem',
                           transition: 'all 0.3s ease',
@@ -5777,7 +5777,7 @@ Ans: 3`}
                   gap: '0.75rem',
                   marginBottom: '1.25rem',
                   paddingBottom: '1rem',
-                  borderBottom: '2px solid #e9ecef'
+                  borderBottom: '2px solid var(--border)'
                 }}>
                   <div style={{
                     width: '40px',
@@ -5794,14 +5794,14 @@ Ans: 3`}
                     📝
                   </div>
                   <div>
-                    <h6 style={{ margin: 0, fontWeight: '600', color: '#212529' }}>Typing Content</h6>
-                    <small style={{ color: '#6c757d' }}>The text candidates will type during the test</small>
+                    <h6 style={{ margin: 0, fontWeight: '600', color: 'var(--text-primary)' }}>Typing Content</h6>
+                    <small style={{ color: 'var(--text-muted)' }}>The text candidates will type during the test</small>
                   </div>
                 </div>
                 <Form.Group>
                   <Form.Label style={{ 
                     fontWeight: '600', 
-                    color: '#495057', 
+                    color: 'var(--text-secondary)', 
                     marginBottom: '0.75rem',
                     fontSize: '0.95rem'
                   }}>
@@ -5816,13 +5816,13 @@ Ans: 3`}
                     required
                     style={{
                       borderRadius: '10px',
-                      border: '2px solid #e9ecef',
+                      border: '2px solid var(--border)',
                       padding: '1rem',
                       fontSize: '0.95rem',
                       fontFamily: '"Courier New", monospace',
                       lineHeight: '1.6',
                       transition: 'all 0.3s ease',
-                      background: '#f8f9fa',
+                      background: 'var(--background)',
                       resize: 'vertical'
                     }}
                   />
@@ -5830,7 +5830,7 @@ Ans: 3`}
                     display: 'block',
                     marginTop: '0.5rem',
                     fontSize: '0.85rem',
-                    color: '#6c757d',
+                    color: 'var(--text-muted)',
                     fontStyle: 'italic'
                   }}>
                     💡 This is the text that candidates will be required to type during the test. Make it clear and meaningful.
@@ -5848,7 +5848,7 @@ Ans: 3`}
                   gap: '0.75rem',
                   marginBottom: '1.25rem',
                   paddingBottom: '1rem',
-                  borderBottom: '2px solid #e9ecef'
+                  borderBottom: '2px solid var(--border)'
                 }}>
                   <div style={{
                     width: '40px',
@@ -5865,14 +5865,14 @@ Ans: 3`}
                     📋
                   </div>
                   <div>
-                    <h6 style={{ margin: 0, fontWeight: '600', color: '#212529' }}>Candidate Instructions</h6>
-                    <small style={{ color: '#6c757d' }}>Guidelines to show before the test begins</small>
+                    <h6 style={{ margin: 0, fontWeight: '600', color: 'var(--text-primary)' }}>Candidate Instructions</h6>
+                    <small style={{ color: 'var(--text-muted)' }}>Guidelines to show before the test begins</small>
                   </div>
                 </div>
                 <Form.Group>
                   <Form.Label style={{ 
                     fontWeight: '600', 
-                    color: '#495057', 
+                    color: 'var(--text-secondary)', 
                     marginBottom: '0.75rem',
                     fontSize: '0.95rem'
                   }}>
@@ -5886,7 +5886,7 @@ Ans: 3`}
                     placeholder="Instructions to show before the typing test begins..."
                     style={{
                       borderRadius: '10px',
-                      border: '2px solid #e9ecef',
+                      border: '2px solid var(--border)',
                       padding: '0.875rem 1rem',
                       fontSize: '0.95rem',
                       transition: 'all 0.3s ease',
@@ -5907,13 +5907,13 @@ Ans: 3`}
                   gap: '0.75rem',
                   marginBottom: '1.25rem',
                   paddingBottom: '1rem',
-                  borderBottom: '2px solid #e9ecef'
+                  borderBottom: '2px solid var(--border)'
                 }}>
                   <div style={{
                     width: '40px',
                     height: '40px',
                     borderRadius: '10px',
-                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                    background: 'linear-gradient(135deg, var(--warning) 0%, var(--warning) 100%)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -5924,8 +5924,8 @@ Ans: 3`}
                     🕐
                   </div>
                   <div>
-                    <h6 style={{ margin: 0, fontWeight: '600', color: '#212529' }}>Test Schedule</h6>
-                    <small style={{ color: '#6c757d' }}>Set when the test becomes available and expires</small>
+                    <h6 style={{ margin: 0, fontWeight: '600', color: 'var(--text-primary)' }}>Test Schedule</h6>
+                    <small style={{ color: 'var(--text-muted)' }}>Set when the test becomes available and expires</small>
                   </div>
                 </div>
 
@@ -5934,7 +5934,7 @@ Ans: 3`}
                     <Form.Group>
                       <Form.Label style={{ 
                         fontWeight: '600', 
-                        color: '#495057', 
+                        color: 'var(--text-secondary)', 
                         marginBottom: '0.75rem',
                         fontSize: '0.95rem'
                       }}>
@@ -5950,7 +5950,7 @@ Ans: 3`}
                             required
                             style={{
                               borderRadius: '10px',
-                              border: '2px solid #e9ecef',
+                              border: '2px solid var(--border)',
                               padding: '0.875rem 1rem',
                               fontSize: '0.95rem',
                               transition: 'all 0.3s ease',
@@ -5966,7 +5966,7 @@ Ans: 3`}
                             required
                             style={{
                               borderRadius: '10px',
-                              border: '2px solid #e9ecef',
+                              border: '2px solid var(--border)',
                               padding: '0.875rem 1rem',
                               fontSize: '0.95rem',
                               transition: 'all 0.3s ease',
@@ -5979,7 +5979,7 @@ Ans: 3`}
                         display: 'block',
                         marginTop: '0.5rem',
                         fontSize: '0.85rem',
-                        color: '#6c757d'
+                        color: 'var(--text-muted)'
                       }}>
                         When the test becomes available to candidates
                       </Form.Text>
@@ -5989,7 +5989,7 @@ Ans: 3`}
                     <Form.Group>
                       <Form.Label style={{ 
                         fontWeight: '600', 
-                        color: '#495057', 
+                        color: 'var(--text-secondary)', 
                         marginBottom: '0.75rem',
                         fontSize: '0.95rem'
                       }}>
@@ -6004,7 +6004,7 @@ Ans: 3`}
                             min={typingTestForm.startDate || new Date().toISOString().split('T')[0]}
                             style={{
                               borderRadius: '10px',
-                              border: '2px solid #e9ecef',
+                              border: '2px solid var(--border)',
                               padding: '0.875rem 1rem',
                               fontSize: '0.95rem',
                               transition: 'all 0.3s ease',
@@ -6020,11 +6020,11 @@ Ans: 3`}
                             disabled={!typingTestForm.endDate}
                             style={{
                               borderRadius: '10px',
-                              border: '2px solid #e9ecef',
+                              border: '2px solid var(--border)',
                               padding: '0.875rem 1rem',
                               fontSize: '0.95rem',
                               transition: 'all 0.3s ease',
-                              background: typingTestForm.endDate ? 'white' : '#f8f9fa'
+                              background: typingTestForm.endDate ? 'white' : 'var(--background)'
                             }}
                           />
                         </Col>
@@ -6033,7 +6033,7 @@ Ans: 3`}
                         display: 'block',
                         marginTop: '0.5rem',
                         fontSize: '0.85rem',
-                        color: '#6c757d'
+                        color: 'var(--text-muted)'
                       }}>
                         When the test expires (leave empty for no expiration)
                       </Form.Text>
@@ -6102,27 +6102,27 @@ Ans: 3`}
                         <>
                           <div style={{ marginBottom: '0.75rem' }}>
                             <strong style={{ color: '#0c5460' }}>👤 Candidate:</strong>{' '}
-                            <span style={{ color: '#495057', fontWeight: '500' }}>{candidateName}</span>
+                            <span style={{ color: 'var(--text-secondary)', fontWeight: '500' }}>{candidateName}</span>
                           </div>
                           <div style={{ marginBottom: '0.75rem' }}>
                             <strong style={{ color: '#0c5460' }}>⌨️ Test:</strong>{' '}
-                            <span style={{ color: '#495057', fontWeight: '500' }}>{typingTestAssignmentDetails.title}</span>
+                            <span style={{ color: 'var(--text-secondary)', fontWeight: '500' }}>{typingTestAssignmentDetails.title}</span>
                           </div>
                           <div style={{ marginBottom: '0.75rem' }}>
                             <strong style={{ color: '#0c5460' }}>⏱️ Duration:</strong>{' '}
-                            <span style={{ color: '#495057', fontWeight: '500' }}>{durationText}</span>
+                            <span style={{ color: 'var(--text-secondary)', fontWeight: '500' }}>{durationText}</span>
                           </div>
                           <div>
                             <strong style={{ color: '#0c5460' }}>🔗 Test Link:</strong>
                             <div style={{
-                              background: '#f8f9fa',
+                              background: 'var(--background)',
                               borderRadius: '8px',
                               padding: '0.75rem',
                               marginTop: '0.5rem',
                               wordBreak: 'break-all',
                               fontSize: '0.9rem',
-                              color: '#495057',
-                              border: '1px solid #dee2e6',
+                              color: 'var(--text-secondary)',
+                              border: '1px solid var(--border)',
                               fontFamily: 'monospace'
                             }}>
                               {testLink}
@@ -6130,7 +6130,7 @@ Ans: 3`}
                             <small style={{ 
                               display: 'block',
                               marginTop: '0.5rem',
-                              color: '#6c757d',
+                              color: 'var(--text-muted)',
                               fontStyle: 'italic'
                             }}>
                               ⚠️ This link includes the candidate ID and can only be used by the assigned candidate.
@@ -6173,7 +6173,7 @@ Ans: 3`}
           </Modal.Body>
           <Modal.Footer style={{
             background: 'white',
-            borderTop: '2px solid #e9ecef',
+            borderTop: '2px solid var(--border)',
             padding: '1.5rem 2rem',
             display: 'flex',
             justifyContent: 'flex-end',
