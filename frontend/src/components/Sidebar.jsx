@@ -382,149 +382,158 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
           </ul>
         </nav>
 
-        {/* User / Authentication Footer Section */}
+        {/* User / Authentication Footer Section (Matching Campo Standard Profile Pill) */}
         <div
-          className="border-t shrink-0 campo-sidebar-footer"
+          className="shrink-0 campo-sidebar-footer"
           style={{
-            borderColor: 'var(--border)',
-            borderTopWidth: '1px',
-            borderTopStyle: 'solid',
             backgroundColor: 'var(--sidebar)',
             flexShrink: 0,
             width: '100%',
             boxSizing: 'border-box',
+            padding: '0.75rem',
           }}
         >
           {isOpen ? (
-            <div style={{ padding: '0.75rem', boxSizing: 'border-box', width: '100%' }}>
-              <div
-                className="flex items-center gap-2.5 p-2 rounded-xl border transition-all"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.625rem',
-                  padding: '0.5rem',
-                  borderRadius: '12px',
-                  backgroundColor: 'var(--primary-light)',
-                  borderColor: 'var(--border)',
-                  borderWidth: '1px',
-                  borderStyle: 'solid',
-                  boxSizing: 'border-box',
-                  width: '100%',
-                }}
-              >
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 border"
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '9999px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 700,
-                    fontSize: '12px',
-                    flexShrink: 0,
-                    backgroundColor: 'var(--primary)',
-                    color: 'var(--sidebar-text)',
-                    borderColor: 'var(--border)',
-                    borderWidth: '1px',
-                    borderStyle: 'solid',
-                  }}
-                >
-                  {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-                </div>
-                <div style={{ flex: '1 1 0%', minWidth: 0 }}>
-                  <div
-                    className="text-xs font-semibold truncate leading-tight"
-                    style={{
-                      color: 'var(--primary)',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      lineHeight: 1.25,
-                    }}
-                    title={user?.name}
-                  >
-                    {user?.name || 'User'}
-                  </div>
-                  <div
-                    className="text-[11px] truncate capitalize leading-tight mt-0.5"
-                    style={{
-                      color: 'var(--sidebar-muted)',
-                      fontSize: '11px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      textTransform: 'capitalize',
-                      lineHeight: 1.25,
-                      marginTop: '2px',
-                    }}
-                  >
-                    {formatUserRole(user?.role || 'User')}
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  title="Logout"
-                  aria-label="Logout"
-                  className="w-7 h-7 rounded-lg border flex items-center justify-center shrink-0 cursor-pointer transition-transform hover:scale-105 active:scale-95"
-                  style={{
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    cursor: 'pointer',
-                    padding: 0,
-                    backgroundColor: 'var(--surface)',
-                    borderColor: 'var(--border)',
-                    borderWidth: '1px',
-                    borderStyle: 'solid',
-                    color: 'var(--danger)',
-                  }}
-                >
-                  <LogOut size={14} />
-                </button>
-              </div>
-            </div>
-          ) : (
             <div
+              className="flex items-center gap-3 px-3 py-2.5 rounded-2xl campo-sidebar-profile-card transition-all"
               style={{
-                padding: '0.75rem 0.5rem',
                 display: 'flex',
-                flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
+                gap: '0.75rem',
+                padding: '0.625rem 0.75rem',
+                borderRadius: '16px',
+                backgroundColor: 'rgba(0, 0, 0, 0.28)',
                 boxSizing: 'border-box',
                 width: '100%',
               }}
             >
+              {/* Circular Avatar */}
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0 shadow-sm campo-sidebar-avatar"
+                style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '9999px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 700,
+                  fontSize: '0.95rem',
+                  flexShrink: 0,
+                  backgroundColor: 'var(--surface)',
+                  color: 'var(--primary)',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12)',
+                }}
+              >
+                {user?.name?.charAt(0)?.toUpperCase() || 'S'}
+              </div>
+
+              {/* User Name & Role */}
+              <div style={{ flex: '1 1 0%', minWidth: 0 }}>
+                <div
+                  className="font-bold text-[13px] truncate leading-tight tracking-tight"
+                  style={{
+                    color: 'var(--sidebar-text)',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    letterSpacing: '-0.01em',
+                    lineHeight: 1.25,
+                  }}
+                  title={user?.name || 'System Superadmin'}
+                >
+                  {user?.name || 'System Superadmin'}
+                </div>
+                <div
+                  className="text-[11px] font-normal truncate leading-tight mt-0.5"
+                  style={{
+                    color: 'var(--sidebar-muted)',
+                    fontSize: '11px',
+                    fontWeight: 400,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    lineHeight: 1.25,
+                    marginTop: '2px',
+                  }}
+                >
+                  {formatUserRole(user?.role || 'Superadmin')}
+                </div>
+              </div>
+
+              {/* Minimal Logout Action Icon */}
               <button
                 type="button"
                 onClick={handleLogout}
                 title="Logout"
                 aria-label="Logout"
-                className="w-10 h-10 rounded-lg border flex items-center justify-center cursor-pointer transition-transform hover:scale-105 active:scale-95"
+                className="p-1 transition-opacity hover:opacity-75 cursor-pointer flex items-center justify-center shrink-0 campo-sidebar-logout-btn"
                 style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '8px',
+                  background: 'transparent',
+                  border: 'none',
+                  padding: '4px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  padding: 0,
+                  color: 'var(--sidebar-text)',
+                  flexShrink: 0,
+                }}
+              >
+                <LogOut size={18} />
+              </button>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                padding: '0.25rem 0',
+                boxSizing: 'border-box',
+                width: '100%',
+              }}
+            >
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0 shadow-sm campo-sidebar-avatar"
+                style={{
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: '9999px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 700,
+                  fontSize: '0.95rem',
+                  flexShrink: 0,
                   backgroundColor: 'var(--surface)',
-                  borderColor: 'var(--border)',
-                  borderWidth: '1px',
-                  borderStyle: 'solid',
-                  color: 'var(--danger)',
+                  color: 'var(--primary)',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12)',
+                }}
+                title={user?.name || 'User'}
+              >
+                {user?.name?.charAt(0)?.toUpperCase() || 'S'}
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                title="Logout"
+                aria-label="Logout"
+                className="p-1.5 rounded-lg transition-opacity hover:opacity-75 cursor-pointer campo-sidebar-logout-btn"
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  padding: '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  color: 'var(--sidebar-text)',
+                  flexShrink: 0,
                 }}
                 onMouseEnter={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
