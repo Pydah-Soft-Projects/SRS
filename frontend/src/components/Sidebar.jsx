@@ -18,7 +18,6 @@ import {
 } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
-import pydahLogoIcon from '../Pydah_logo_whitebg.avif';
 
 const SidebarContainer = styled.div`
   position: fixed;
@@ -49,7 +48,7 @@ const SidebarContainer = styled.div`
 `;
 
 const SidebarHeader = styled.div`
-  padding: ${props => props.$isOpen ? '0.75rem 1.15rem' : '0.65rem 0'};
+  padding: ${props => props.$isOpen ? '0.65rem 0.9rem' : '0.6rem 0'};
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -61,23 +60,25 @@ const SidebarHeader = styled.div`
   box-sizing: border-box;
   overflow: hidden;
   flex-shrink: 0;
-  min-height: 64px;
+  min-height: 58px;
 
   @media (max-width: 768px) {
-    padding: ${props => props.$isOpen ? '1rem' : '0.75rem 0'};
-    min-height: 56px;
+    padding: ${props => props.$isOpen ? '0.75rem 0.9rem' : '0.6rem 0'};
+    min-height: 54px;
   }
 `;
 
 const Logo = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: ${props => props.$isOpen ? 'flex-start' : 'center'};
-  gap: ${props => props.$isOpen ? '0.75rem' : '0'};
+  flex-direction: ${props => props.$isOpen ? 'column' : 'row'};
+  align-items: ${props => props.$isOpen ? 'flex-start' : 'center'};
+  justify-content: center;
+  gap: ${props => props.$isOpen ? '0.15rem' : '0'};
   width: ${props => props.$isOpen ? 'auto' : '100%'};
   max-width: 100%;
+  min-width: 0;
   transition: all 0.3s ease;
-  flex-shrink: 0;
+  flex-shrink: 1;
   overflow: hidden;
   opacity: 1;
   pointer-events: auto;
@@ -93,33 +94,32 @@ const Logo = styled.div`
 `;
 
 const LogoImg = styled.img`
-  height: ${props => props.$isOpen ? '44px' : '34px'};
-  width: auto;
-  max-width: ${props => props.$isOpen ? '88px' : '48px'};
+  height: ${props => props.$isOpen ? '28px' : '32px'};
+  width: ${props => props.$isOpen ? 'auto' : '32px'};
+  max-width: ${props => props.$isOpen ? '150px' : '32px'};
   object-fit: contain;
+  object-position: ${props => props.$isOpen ? 'left center' : 'center'};
   flex-shrink: 0;
-  border-radius: 8px;
+  border-radius: ${props => props.$isOpen ? '0' : '8px'};
   filter: none;
   transition: all 0.25s ease;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
   }
 `;
 
-const LogoText = styled.span`
-  font-size: 1.15rem;
-  font-weight: 800;
+const LogoSubtext = styled.span`
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  color: var(--sidebar-muted);
   white-space: nowrap;
   opacity: ${props => props.$isOpen ? 1 : 0};
-  width: ${props => props.$isOpen ? 'auto' : '0'};
+  height: ${props => props.$isOpen ? 'auto' : '0'};
   overflow: hidden;
-  transition: opacity 0.3s ease, width 0.3s ease;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 0.5px;
+  transition: opacity 0.3s ease;
 `;
 
 const ToggleButton = styled.button`
@@ -150,8 +150,8 @@ const ToggleButton = styled.button`
 `;
 
 const SidebarContent = styled.div`
-  padding: 1rem 0;
-  height: calc(100vh - 80px);
+  padding: 0.6rem 0;
+  height: calc(100vh - 58px);
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -163,7 +163,7 @@ const SidebarContent = styled.div`
 
 const Navigation = styled.nav`
   flex: 1;
-  padding: ${props => props.$isOpen ? '0 0.75rem' : '0 0.375rem'};
+  padding: ${props => props.$isOpen ? '0 0.65rem' : '0 0.375rem'};
   overflow-y: auto;
   overflow-x: hidden;
   transition: padding 0.3s ease;
@@ -181,7 +181,7 @@ const Navigation = styled.nav`
 `;
 
 const NavSection = styled.div`
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.35rem;
 `;
 
 const SectionTitle = styled.h6`
@@ -190,8 +190,8 @@ const SectionTitle = styled.h6`
   color: var(--sidebar-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 0.4rem;
-  padding: 0 0.875rem;
+  margin-bottom: 0.25rem;
+  padding: 0 0.75rem;
   opacity: ${props => props.$isOpen ? 1 : 0};
   height: ${props => props.$isOpen ? 'auto' : '0'};
   overflow: hidden;
@@ -201,7 +201,7 @@ const SectionTitle = styled.h6`
 const Divider = styled.div`
   height: 1px;
   background: var(--border);
-  margin: 0.625rem 0.875rem;
+  margin: 0.35rem 0.75rem;
   transition: margin 0.3s ease;
 `;
 
@@ -215,7 +215,7 @@ const NavList = styled.ul`
 `;
 
 const NavItem = styled.li`
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.125rem;
   position: relative;
   width: 100%;
   box-sizing: border-box;
@@ -230,10 +230,10 @@ const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: ${props => props.$isOpen ? 'flex-start' : 'center'};
-  padding: ${props => props.$isOpen ? '0.7rem 0.875rem' : '0.7rem 0'};
+  padding: ${props => props.$isOpen ? '0.48rem 0.75rem' : '0.48rem 0'};
   color: var(--sidebar-text);
   text-decoration: none;
-  border-radius: 10px;
+  border-radius: 8px;
   transition: all 0.2s ease;
   position: relative;
   width: 100%;
@@ -620,14 +620,13 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
       <Overlay $isOpen={isOpen} $showOnMobile={true} onClick={toggleSidebar} />
       <SidebarContainer $isOpen={isOpen}>
         <SidebarHeader $isOpen={isOpen}>
-          <Logo $isOpen={isOpen} onClick={!isOpen ? toggleSidebar : undefined} title={!isOpen ? "Expand sidebar" : "Pydah Staff Recruitment"}>
-            <LogoImg 
+          <Logo $isOpen={isOpen} onClick={!isOpen ? toggleSidebar : undefined} title={!isOpen ? "Expand sidebar" : "Campo - Staff Recruitment"}>
+            <LogoImg
               $isOpen={isOpen}
-              src={pydahLogoIcon || (process.env.PUBLIC_URL + '/Pydah_logo_whitebg.avif')} 
-              alt="Pydah Logo" 
-              onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/Pydah_logo_whitebg.avif'; }}
+              src={`${process.env.PUBLIC_URL}/campo-logos/${isOpen ? 'campo_logo_transparent_hq.png' : 'favicon.svg'}`}
+              alt="Campo"
             />
-            <LogoText $isOpen={isOpen}>SRS</LogoText>
+            {isOpen && <LogoSubtext $isOpen={isOpen}>Staff Recruitment</LogoSubtext>}
           </Logo>
           {isOpen && (
             <ToggleButton onClick={toggleSidebar} $isOpen={isOpen} title="Collapse sidebar">

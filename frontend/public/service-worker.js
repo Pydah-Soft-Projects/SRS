@@ -10,8 +10,8 @@
  */
 
 // Service worker version - increment this to force update
-const CACHE_VERSION = '1.0.0';
-const CACHE_NAME = `pydah-recruitment-${CACHE_VERSION}`;
+const CACHE_VERSION = '1.0.1';
+const CACHE_NAME = `campo-srs-${CACHE_VERSION}`;
 
 // Install event - runs when service worker is first installed
 self.addEventListener('install', (event) => {
@@ -43,8 +43,8 @@ self.addEventListener('push', (event) => {
   let notificationData = {
     title: 'New Notification',
     body: 'You have a new notification',
-    icon: '/logo192.png',
-    badge: '/logo192.png',
+    icon: '/campo-logos/icon-192.png',
+    badge: '/campo-logos/icon-192.png',
     tag: 'default',
     requireInteraction: false,
     data: {}
@@ -79,20 +79,20 @@ self.addEventListener('push', (event) => {
   const getNotificationStyle = (type) => {
     const styles = {
       'new_application': {
-        icon: notificationData.icon || '/Pydah_logo_whitebg.avif',
-        badge: notificationData.badge || '/Pydah_logo_whitebg.avif',
+        icon: notificationData.icon || '/campo-logos/icon-192.png',
+        badge: notificationData.badge || '/campo-logos/icon-192.png',
         color: '#10b981', // Green for new applications
         vibrate: [200, 100, 200]
       },
       'test_completed': {
-        icon: notificationData.icon || '/Pydah_logo_whitebg.avif',
-        badge: notificationData.badge || '/Pydah_logo_whitebg.avif',
+        icon: notificationData.icon || '/campo-logos/icon-192.png',
+        badge: notificationData.badge || '/campo-logos/icon-192.png',
         color: '#3b82f6', // Blue for test completions
         vibrate: [100, 50, 100, 50, 100]
       },
       'default': {
-        icon: notificationData.icon || '/Pydah_logo_whitebg.avif',
-        badge: notificationData.badge || '/Pydah_logo_whitebg.avif',
+        icon: notificationData.icon || '/campo-logos/icon-192.png',
+        badge: notificationData.badge || '/campo-logos/icon-192.png',
         color: '#6366f1', // Indigo for default
         vibrate: [200, 100, 200]
       }

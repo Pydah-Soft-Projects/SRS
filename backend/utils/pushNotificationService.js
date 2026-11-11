@@ -139,9 +139,9 @@ async function sendNotificationToUser(userId, notificationData) {
     };
     
     // Prepare notification payload with enhanced styling
-    // Use pydah-logo.png as the default logo (matching the favicon)
-    const defaultIcon = `${frontendUrl}/pydah-logo.png`;
-    const defaultBadge = `${frontendUrl}/pydah-logo.png`;
+    // Use Campo icon as the default notification logo
+    const defaultIcon = `${frontendUrl}/campo-logos/icon-192.png`;
+    const defaultBadge = `${frontendUrl}/campo-logos/icon-192.png`;
     
     // Determine notification type for styling
     const notificationType = notificationData.data?.type || 'default';

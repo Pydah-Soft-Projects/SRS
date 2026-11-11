@@ -828,8 +828,8 @@ router.post('/public/:uniqueLink/submit', upload.any(), async (req, res) => {
       const notificationData = {
         title: '🎯 New Application Received',
         body: `${userDetails.name} has submitted an application for ${form.position || form.title}`,
-        icon: `${frontendUrl}/pydah-logo.png`,
-        badge: `${frontendUrl}/pydah-logo.png`,
+        icon: `${frontendUrl}/campo-logos/icon-192.png`,
+        badge: `${frontendUrl}/campo-logos/icon-192.png`,
         url: `${frontendUrl}/candidates/${candidate._id}`,
         data: {
           candidateId: candidate._id.toString(),

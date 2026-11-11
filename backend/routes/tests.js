@@ -3840,8 +3840,8 @@ router.post('/:id/submit', async (req, res) => {
       const notificationData = {
         title: `${statusEmoji} Test Completed`,
         body: `${candidate.user.name} completed "${test.title}" with ${percentage.toFixed(1)}% (${passed ? 'Passed ✓' : 'Failed ✗'})`,
-        icon: `${frontendUrl}/pydah-logo.png`,
-        badge: `${frontendUrl}/pydah-logo.png`,
+        icon: `${frontendUrl}/campo-logos/icon-192.png`,
+        badge: `${frontendUrl}/campo-logos/icon-192.png`,
         url: `${frontendUrl}/candidates/${candidate._id}`,
         data: {
           candidateId: candidate._id.toString(),
