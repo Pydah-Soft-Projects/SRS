@@ -96,8 +96,8 @@ const AppLayout = ({ children, showSidebar = true }) => {
       };
     } else {
       return {
-        marginLeft: sidebarOpen ? '264px' : '64px',
-        width: sidebarOpen ? 'calc(100% - 264px)' : 'calc(100% - 64px)',
+        marginLeft: sidebarOpen ? '256px' : '80px',
+        width: sidebarOpen ? 'calc(100% - 256px)' : 'calc(100% - 80px)',
       };
     }
   };
@@ -128,7 +128,7 @@ const AppLayout = ({ children, showSidebar = true }) => {
             justifyContent: 'center',
             cursor: 'pointer',
             boxShadow: '0 4px 12px rgba(var(--primary-rgb), 0.35)',
-            color: '#ffffff',
+            color: 'var(--sidebar-text)',
             fontSize: '1.1rem',
           }}
         >

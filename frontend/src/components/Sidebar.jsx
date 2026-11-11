@@ -1,556 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  FaUserTie,
-  FaFileAlt,
-  FaUsers,
-  FaClipboardList,
-  FaCalendarAlt,
-  FaChartBar,
-  FaSignOutAlt,
-  FaBars,
-  FaUser,
-  FaHome,
-  FaUserShield,
-  FaCog,
-  FaComments
-} from 'react-icons/fa';
+  LayoutDashboard,
+  FileText,
+  Inbox,
+  ClipboardList,
+  Users,
+  ShieldCheck,
+  Building2,
+  Calendar,
+  Settings,
+  MessageSquare,
+  BarChart3,
+  User,
+  LogOut,
+  ChevronLeft,
+  ChevronRight,
+  ArrowLeft,
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import api from '../services/api';
-
-const SidebarContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: ${props => props.$isOpen ? '264px' : '64px'};
-  background: var(--sidebar);
-  color: var(--sidebar-text);
-  border-right: 1px solid var(--border);
-  transition: width 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1);
-  z-index: 1000;
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  @media (max-width: 768px) {
-    width: ${props => props.$isOpen ? '280px' : '0px'};
-    transform: ${props => props.$isOpen ? 'translateX(0)' : 'translateX(-100%)'};
-    box-shadow: ${props => props.$isOpen ? '4px 0 24px rgba(185, 28, 28, 0.2)' : 'none'};
-  }
-
-  &::-webkit-scrollbar { width: 4px; }
-  &::-webkit-scrollbar-track { background: var(--sidebar); }
-  &::-webkit-scrollbar-thumb { background: var(--sidebar-muted); border-radius: 4px; }
-  &::-webkit-scrollbar-thumb:hover { background: var(--primary); }
-`;
-
-const SidebarHeader = styled.div`
-  padding: ${props => props.$isOpen ? '0.65rem 0.9rem' : '0.6rem 0'};
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: ${props => props.$isOpen ? 'space-between' : 'center'};
-  background: var(--sidebar);
-  transition: padding 0.3s ease;
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-  flex-shrink: 0;
-  min-height: 58px;
-
-  @media (max-width: 768px) {
-    padding: ${props => props.$isOpen ? '0.75rem 0.9rem' : '0.6rem 0'};
-    min-height: 54px;
-  }
-`;
-
-const Logo = styled.div`
-  display: flex;
-  flex-direction: ${props => props.$isOpen ? 'column' : 'row'};
-  align-items: ${props => props.$isOpen ? 'flex-start' : 'center'};
-  justify-content: center;
-  gap: ${props => props.$isOpen ? '0.15rem' : '0'};
-  width: ${props => props.$isOpen ? 'auto' : '100%'};
-  max-width: 100%;
-  min-width: 0;
-  transition: all 0.3s ease;
-  flex-shrink: 1;
-  overflow: hidden;
-  opacity: 1;
-  pointer-events: auto;
-  cursor: ${props => props.$isOpen ? 'default' : 'pointer'};
-
-  &:hover {
-    transform: scale(1.02);
-  }
-
-  @media (max-width: 768px) {
-    display: flex;
-  }
-`;
-
-const LogoImg = styled.img`
-  height: ${props => props.$isOpen ? '28px' : '32px'};
-  width: ${props => props.$isOpen ? 'auto' : '32px'};
-  max-width: ${props => props.$isOpen ? '150px' : '32px'};
-  object-fit: contain;
-  object-position: ${props => props.$isOpen ? 'left center' : 'center'};
-  flex-shrink: 0;
-  border-radius: ${props => props.$isOpen ? '0' : '8px'};
-  filter: none;
-  transition: all 0.25s ease;
-
-  &:hover {
-    transform: scale(1.03);
-  }
-`;
-
-const LogoSubtext = styled.span`
-  font-size: 0.6875rem;
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: 0.02em;
-  color: var(--sidebar-muted);
-  white-space: nowrap;
-  opacity: ${props => props.$isOpen ? 1 : 0};
-  height: ${props => props.$isOpen ? 'auto' : '0'};
-  overflow: hidden;
-  transition: opacity 0.3s ease;
-`;
-
-const ToggleButton = styled.button`
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--primary);
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0.45rem;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-
-  &:hover {
-    background: var(--primary);
-  color: #ffffff;
-  border-color: var(--primary);
-  }
-
-  @media (max-width: 768px) { width: 34px; height: 34px; }
-  @media (max-width: 480px) { width: 34px; height: 34px; }
-`;
-
-const SidebarContent = styled.div`
-  padding: 0.6rem 0;
-  height: calc(100vh - 58px);
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-`;
-
-const Navigation = styled.nav`
-  flex: 1;
-  padding: ${props => props.$isOpen ? '0 0.65rem' : '0 0.375rem'};
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: padding 0.3s ease;
-  width: 100%;
-  box-sizing: border-box;
-  -webkit-overflow-scrolling: touch;
-
-  @media (max-width: 768px) {
-    padding: ${props => props.$isOpen ? '0 0.625rem' : '0 0.375rem'};
-  }
-
-  @media (max-width: 480px) {
-    padding: ${props => props.$isOpen ? '0 0.625rem' : '0 0.375rem'};
-  }
-`;
-
-const NavSection = styled.div`
-  margin-bottom: 0.35rem;
-`;
-
-const SectionTitle = styled.h6`
-  font-size: 0.68rem;
-  font-weight: 800;
-  color: var(--sidebar-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 0.25rem;
-  padding: 0 0.75rem;
-  opacity: ${props => props.$isOpen ? 1 : 0};
-  height: ${props => props.$isOpen ? 'auto' : '0'};
-  overflow: hidden;
-  transition: opacity 0.3s ease;
-`;
-
-const Divider = styled.div`
-  height: 1px;
-  background: var(--border);
-  margin: 0.35rem 0.75rem;
-  transition: margin 0.3s ease;
-`;
-
-const NavList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-`;
-
-const NavItem = styled.li`
-  margin-bottom: 0.125rem;
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-  overflow: visible;
-
-  &:hover {
-    transform: ${props => props.$isOpen ? 'translateX(2px)' : 'none'};
-  }
-`;
-
-const NavLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  justify-content: ${props => props.$isOpen ? 'flex-start' : 'center'};
-  padding: ${props => props.$isOpen ? '0.48rem 0.75rem' : '0.48rem 0'};
-  color: var(--sidebar-text);
-  text-decoration: none;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-  font-weight: 600;
-  font-size: 0.875rem;
-
-  &:hover {
-    background: var(--primary-light);
-  color: var(--primary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  }
-
-  &.active {
-    background: var(--primary);
-  color: #ffffff;
-  font-weight: 700;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-  }
-
-  svg {
-    font-size: 0.95rem;
-    margin-right: ${props => props.$isOpen ? '0.7rem' : '0'};
-    min-width: 16px;
-    width: ${props => props.$isOpen ? 'auto' : '16px'};
-    height: ${props => props.$isOpen ? 'auto' : '16px'};
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-    color: var(--sidebar-muted);
-  }
-
-  &:hover svg { color: var(--primary); }
-  &.active svg { color: #ffffff; }
-`;
-
-const NavText = styled.span`
-  opacity: ${props => props.$isOpen ? 1 : 0};
-  width: ${props => props.$isOpen ? 'auto' : '0'};
-  overflow: hidden;
-  transition: opacity 0.3s ease, width 0.3s ease;
-  white-space: nowrap;
-  font-weight: 500;
-  pointer-events: ${props => props.$isOpen ? 'auto' : 'none'};
-  margin: 0;
-`;
-
-const Tooltip = styled.div`
-  position: fixed;
-  left: ${props => props.$left ? `${props.$left}px` : '74px'};
-  top: ${props => props.$top ? `${props.$top}px` : '50%'};
-  transform: translateY(-50%);
-  background: var(--sidebar);
-  color: white;
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  white-space: nowrap;
-  opacity: ${props => props.$show ? 1 : 0};
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-  z-index: 9999;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  visibility: ${props => props.$show ? 'visible' : 'hidden'};
-
-  &::before {
-    content: '';
-    position: absolute;
-    right: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    border: 6px solid transparent;
-    border-right-color: var(--sidebar);
-  }
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const UserSection = styled.div`
-  border-top: 1px solid var(--border);
-  padding: ${props => props.$isOpen ? '0.75rem' : '0.5rem 0.25rem'};
-  background: var(--sidebar);
-  transition: padding 0.3s ease;
-  width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const UserInfo = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: ${props => props.$isOpen ? '0.5rem' : '0'};
-  margin-bottom: 0;
-  padding: ${props => props.$isOpen ? '0.6rem 0.7rem' : '0'};
-  border-radius: 10px;
-  background: ${props => props.$isOpen ? 'var(--primary-light)' : 'transparent'};
-  border: ${props => props.$isOpen ? '1px solid var(--border)' : 'none'};
-  box-shadow: ${props => props.$isOpen ? '0 2px 8px rgba(185, 28, 28, 0.06)' : 'none'};
-  transition: all 0.3s ease;
-  width: 100%;
-  box-sizing: border-box;
-  overflow: ${props => props.$isOpen ? 'visible' : 'hidden'};
-  opacity: ${props => props.$isOpen ? 1 : 0};
-
-  &:hover {
-    background: ${props => props.$isOpen ? 'var(--primary-light)' : 'transparent'};
-    box-shadow: ${props => props.$isOpen ? '0 4px 12px rgba(185, 28, 28, 0.12)' : 'none'};
-  }
-`;
-
-const UserAvatar = styled.div`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--primary);
-  border: 2px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: white;
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
-    width: 9px;
-    height: 9px;
-    background: var(--success);
-    border: 2px solid var(--surface);
-    border-radius: 50%;
-    transition: all 0.3s ease;
-  }
-`;
-
-const UserDetails = styled.div`
-  opacity: ${props => props.$isOpen ? 1 : 0};
-  width: ${props => props.$isOpen ? 'auto' : '0'};
-  overflow: hidden;
-  transition: opacity 0.3s ease, width 0.3s ease;
-  flex: 1;
-  min-width: 0;
-  margin-left: 0.25rem;
-`;
-
-const UserName = styled.div`
-  font-weight: 600;
-  font-size: 0.82rem;
-  margin-bottom: 0.1rem;
-  color: var(--sidebar-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const UserRole = styled.div`
-  font-size: 0.7rem;
-  color: var(--sidebar-muted);
-  text-transform: capitalize;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const LogoutButton = styled.button`
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  background: var(--danger-light);
-  border: 1px solid var(--danger);
-  color: var(--danger);
-  text-decoration: none;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  flex-shrink: 0;
-  box-sizing: border-box;
-
-  &:hover {
-    background: var(--danger);
-  color: #ffffff;
-  border-color: var(--danger);
-    transform: scale(1.08);
-  }
-
-  svg {
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-    color: var(--danger);
-  }
-
-  &:hover svg {
-    color: #ffffff;
-  }
-`;
-
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-  display: ${props => props.$isOpen && props.$showOnMobile ? 'block' : 'none'};
-  backdrop-filter: blur(4px);
-
-  @media (min-width: 768px) {
-    display: none;
-  }
-`;
 
 const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout, hasPermission } = useAuth();
-  const [notifications, setNotifications] = useState({ feedback: 0, interviews: 0 });
-  const [dashboardCounts, setDashboardCounts] = useState({
-    pendingApprovals: 0,
-    upcomingInterviews: 0,
-    newSubmissions: 0,
-    activeForms: 0
-  });
   const [hoveredItem, setHoveredItem] = useState(null);
-
-  useEffect(() => {
-    if (user?.role === 'panel_member') {
-      fetchNotifications();
-    } else if (user?.role === 'super_admin' || user?.role === 'sub_admin') {
-      fetchDashboardCounts();
-      // Periodically refresh counts every 60 seconds without re-hammering the server on each section click
-      const interval = setInterval(fetchDashboardCounts, 60000);
-      return () => clearInterval(interval);
-    }
-  }, [user]);
-
-  // Fetch notifications when super_admin or sub_admin switches into panel member area
-  useEffect(() => {
-    if ((user?.role === 'super_admin' || (user?.role === 'sub_admin' && user?.hasPanelMemberAccess)) && location.pathname.startsWith('/panel-member')) {
-      fetchNotifications();
-    }
-  }, [location.pathname, user]);
-
-  const fetchNotifications = async () => {
-    if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
-    try {
-      const response = await api.get('/interviews/panel-member/notifications');
-      setNotifications(response.data);
-    } catch (error) {
-      if (typeof navigator !== 'undefined' && !navigator.onLine) return;
-      console.warn('Could not fetch notifications:', error?.message || error);
-    }
-  };
-
-  const fetchDashboardCounts = async () => {
-    if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
-    try {
-      const [formsRes, candidatesRes, interviewsRes] = await Promise.allSettled([
-        api.get('/forms'),
-        api.get('/candidates'),
-        api.get('/interviews')
-      ]);
-
-      const forms = formsRes.status === 'fulfilled' ? formsRes.value.data?.forms || [] : [];
-      const candidates = candidatesRes.status === 'fulfilled' ? candidatesRes.value.data?.candidates || [] : [];
-      const interviews = interviewsRes.status === 'fulfilled' ? interviewsRes.value.data?.interviews || [] : [];
-
-      // Calculate counts
-      const candidateForms = forms.filter(f => f.formType === 'candidate_profile');
-      const activeForms = candidateForms.filter(f => f.isActive !== false).length;
-      const pendingApprovals = candidates.filter(c => c.status === 'pending' || c.status === 'application_review').length;
-      
-      const now = new Date();
-      const fourteenDaysFromNow = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
-      const upcomingInterviews = interviews.filter(i => {
-        if (!i.scheduledDate) return false;
-        const scheduled = new Date(i.scheduledDate);
-        return scheduled >= now && scheduled <= fourteenDaysFromNow;
-      }).length;
-
-      const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      const newSubmissions = candidates.filter(c => {
-        if (!c.createdAt) return false;
-        return new Date(c.createdAt) >= sevenDaysAgo;
-      }).length;
-
-      setDashboardCounts({
-        pendingApprovals,
-        upcomingInterviews,
-        newSubmissions,
-        activeForms
-      });
-    } catch (error) {
-      if (typeof navigator !== 'undefined' && !navigator.onLine) return;
-      console.warn('Could not fetch dashboard counts:', error?.message || error);
-    }
-  };
 
   const handleLogout = () => {
     if (isMobile && isOpen) {
@@ -560,176 +34,543 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
     navigate('/login');
   };
 
+  const getDefaultRoute = () => {
+    switch (user?.role) {
+      case 'super_admin':
+        return '/super-admin';
+      case 'sub_admin':
+        return '/sub-admin';
+      case 'panel_member':
+        return '/panel-member';
+      case 'candidate':
+        return '/candidate';
+      default:
+        return '/';
+    }
+  };
+
   const navigationItems = {
     super_admin: [
-      { path: '/super-admin', icon: FaUserTie, label: 'Dashboard' },
-      { path: '/super-admin/creation', icon: FaFileAlt, label: 'Candidate Application', badge: dashboardCounts.activeForms },
-      { path: '/super-admin/submissions', icon: FaFileAlt, label: 'Application Submissions', badge: dashboardCounts.pendingApprovals },
-      { path: '/super-admin/tests', icon: FaClipboardList, label: 'Test Management' },
-      { path: '/super-admin/users', icon: FaUserTie, label: 'Panel Members' },
-      { path: '/super-admin/sub-admins', icon: FaUserShield, label: 'User Management' },
-      { path: '/super-admin/courses', icon: FaCog, label: 'Campus Management' },
-      { path: '/super-admin/interviews', icon: FaCalendarAlt, label: 'Interview Management', badge: dashboardCounts.upcomingInterviews },
-      { path: '/super-admin/candidates', icon: FaUsers, label: 'Candidate Management', badge: dashboardCounts.newSubmissions },
-      { path: '/super-admin/settings', icon: FaCog, label: 'Notifications' },
-      { path: '/panel-member/feedback', icon: FaComments, label: 'Panel Member View', divider: true },
+      { path: '/super-admin', icon: LayoutDashboard, label: 'Dashboard' },
+      { path: '/super-admin/creation', icon: FileText, label: 'Candidate Application' },
+      { path: '/super-admin/submissions', icon: Inbox, label: 'Application Submissions' },
+      { path: '/super-admin/tests', icon: ClipboardList, label: 'Test Management' },
+      { path: '/super-admin/users', icon: Users, label: 'Panel Members' },
+      { path: '/super-admin/sub-admins', icon: ShieldCheck, label: 'User Management' },
+      { path: '/super-admin/courses', icon: Building2, label: 'Campus Management' },
+      { path: '/super-admin/interviews', icon: Calendar, label: 'Interview Management' },
+      { path: '/super-admin/candidates', icon: Users, label: 'Candidate Management' },
+      { path: '/super-admin/settings', icon: Settings, label: 'Notifications' },
+      { path: '/panel-member/feedback', icon: MessageSquare, label: 'Panel Member View', divider: true },
     ],
     panel_member: [
-      { path: '/panel-member', icon: FaHome, label: 'Dashboard' },
-      { path: '/panel-member/interviews', icon: FaCalendarAlt, label: 'My Interviews', badge: notifications.interviews },
-      { path: '/panel-member/reports', icon: FaChartBar, label: 'Reports & Analytics' },
-      { path: '/panel-member/profile', icon: FaUser, label: 'Profile Settings' },
+      { path: '/panel-member', icon: LayoutDashboard, label: 'Dashboard' },
+      { path: '/panel-member/interviews', icon: Calendar, label: 'My Interviews' },
+      { path: '/panel-member/reports', icon: BarChart3, label: 'Reports & Analytics' },
+      { path: '/panel-member/profile', icon: User, label: 'Profile Settings' },
     ],
     candidate: [
-      { path: '/candidate', icon: FaUserTie, label: 'Dashboard' },
-      { path: '/candidate/profile', icon: FaUser, label: 'My Profile' },
-      { path: '/candidate/tests', icon: FaClipboardList, label: 'My Tests' },
-    ]
+      { path: '/candidate', icon: LayoutDashboard, label: 'Dashboard' },
+      { path: '/candidate/profile', icon: User, label: 'My Profile' },
+      { path: '/candidate/tests', icon: ClipboardList, label: 'My Tests' },
+    ],
   };
 
   const subAdminNavigation = [
-    { path: '/sub-admin', icon: FaHome, label: 'Dashboard' },
-    { path: '/sub-admin/forms', icon: FaFileAlt, label: 'Forms & Applications', permission: 'forms.manage', badge: dashboardCounts.activeForms },
-    { path: '/sub-admin/submissions', icon: FaFileAlt, label: 'Application Submissions', permission: 'forms.manage', badge: dashboardCounts.pendingApprovals },
-    { path: '/sub-admin/candidates', icon: FaUsers, label: 'Candidate Management', permission: 'candidates.manage', badge: dashboardCounts.newSubmissions },
-    { path: '/sub-admin/tests', icon: FaClipboardList, label: 'Test Management', permission: 'tests.manage' },
-    { path: '/sub-admin/interviews', icon: FaCalendarAlt, label: 'Interview Management', permission: 'interviews.manage', badge: dashboardCounts.upcomingInterviews },
-    { path: '/sub-admin/users', icon: FaUserTie, label: 'Panel Members', permission: 'panel_members.manage' },
+    { path: '/sub-admin', icon: LayoutDashboard, label: 'Dashboard' },
+    { path: '/sub-admin/forms', icon: FileText, label: 'Forms & Applications', permission: 'forms.manage' },
+    { path: '/sub-admin/submissions', icon: Inbox, label: 'Application Submissions', permission: 'forms.manage' },
+    { path: '/sub-admin/candidates', icon: Users, label: 'Candidate Management', permission: 'candidates.manage' },
+    { path: '/sub-admin/tests', icon: ClipboardList, label: 'Test Management', permission: 'tests.manage' },
+    { path: '/sub-admin/interviews', icon: Calendar, label: 'Interview Management', permission: 'interviews.manage' },
+    { path: '/sub-admin/users', icon: Users, label: 'Panel Members', permission: 'panel_members.manage' },
   ];
 
   let currentNavItems = navigationItems[user?.role] || [];
 
   if (user?.role === 'sub_admin') {
-    currentNavItems = subAdminNavigation.filter(item => !item.permission || hasPermission(item.permission));
+    currentNavItems = subAdminNavigation.filter(
+      (item) => !item.permission || hasPermission(item.permission)
+    );
   }
 
   // If super_admin or sub_admin with panel access is viewing panel member pages, show panel member navigation
-  if ((user?.role === 'super_admin' || (user?.role === 'sub_admin' && user?.hasPanelMemberAccess)) && location.pathname.startsWith('/panel-member')) {
+  if (
+    (user?.role === 'super_admin' || (user?.role === 'sub_admin' && user?.hasPanelMemberAccess)) &&
+    location.pathname.startsWith('/panel-member')
+  ) {
     currentNavItems = [
       ...navigationItems.panel_member,
-      { path: user?.role === 'super_admin' ? '/super-admin' : '/sub-admin', icon: FaUserShield, label: `Back to ${user?.role === 'super_admin' ? 'Admin' : 'Sub Admin'} View`, divider: true }
+      {
+        path: user?.role === 'super_admin' ? '/super-admin' : '/sub-admin',
+        icon: ArrowLeft,
+        label: `Back to ${user?.role === 'super_admin' ? 'Admin' : 'Sub Admin'} View`,
+        divider: true,
+      },
     ];
   }
 
   const formatUserRole = (role) => {
-    return role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return role ? role.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase()) : 'User';
   };
 
   return (
     <>
-      <Overlay $isOpen={isOpen} $showOnMobile={true} onClick={toggleSidebar} />
-      <SidebarContainer $isOpen={isOpen}>
-        <SidebarHeader $isOpen={isOpen}>
-          <Logo $isOpen={isOpen} onClick={!isOpen ? toggleSidebar : undefined} title={!isOpen ? "Expand sidebar" : "Campo - Staff Recruitment"}>
-            <LogoImg
-              $isOpen={isOpen}
-              src={`${process.env.PUBLIC_URL}/campo-logos/${isOpen ? 'campo_logo_transparent_hq.png' : 'favicon.svg'}`}
-              alt="Campo"
-            />
-            {isOpen && <LogoSubtext $isOpen={isOpen}>Staff Recruitment</LogoSubtext>}
-          </Logo>
-          {isOpen && (
-            <ToggleButton onClick={toggleSidebar} $isOpen={isOpen} title="Collapse sidebar">
-              <FaBars />
-            </ToggleButton>
+      {/* Mobile Backdrop Overlay */}
+      {isMobile && isOpen && (
+        <div
+          className="fixed inset-0 z-30 transition-opacity backdrop-blur-sm bg-black/50"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 30,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backdropFilter: 'blur(4px)',
+          }}
+          onClick={toggleSidebar}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Standardized Campo Portal Sidebar Container */}
+      <aside
+        className={`fixed top-0 left-0 bottom-0 z-40 border-r flex flex-col transition-all duration-300 ease-in-out campo-sidebar ${
+          isOpen ? 'w-64 campo-sidebar-expanded' : 'w-20 campo-sidebar-collapsed'
+        } ${
+          isMobile
+            ? isOpen
+              ? 'translate-x-0 shadow-2xl'
+              : '-translate-x-full'
+            : 'translate-x-0'
+        }`}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          bottom: 0,
+          height: '100vh',
+          width: isOpen ? '256px' : '80px',
+          minWidth: isOpen ? '256px' : '80px',
+          maxWidth: isOpen ? '256px' : '80px',
+          zIndex: 40,
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: 'var(--sidebar)',
+          color: 'var(--sidebar-text)',
+          borderColor: 'var(--border)',
+          borderRightWidth: '1px',
+          borderRightStyle: 'solid',
+          fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
+          boxSizing: 'border-box',
+          overflow: 'visible',
+        }}
+      >
+        {/* Floating Circular Collapse Button */}
+        <button
+          type="button"
+          onClick={toggleSidebar}
+          className="absolute -right-3 top-[106px] z-50 w-6 h-6 rounded-full shadow-md border flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95 focus:outline-none campo-sidebar-toggle-btn"
+          style={{
+            position: 'absolute',
+            right: '-12px',
+            top: '106px',
+            zIndex: 50,
+            width: '24px',
+            height: '24px',
+            borderRadius: '9999px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 0,
+            cursor: 'pointer',
+            backgroundColor: 'var(--surface)',
+            borderColor: 'var(--border)',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            color: 'var(--primary)',
+          }}
+          aria-label={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+          title={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+        >
+          {isOpen ? (
+            <ChevronLeft size={14} className="stroke-[2.5]" style={{ color: 'var(--primary)', strokeWidth: 2.5 }} />
+          ) : (
+            <ChevronRight size={14} className="stroke-[2.5]" style={{ color: 'var(--primary)', strokeWidth: 2.5 }} />
           )}
-        </SidebarHeader>
+        </button>
 
-        <SidebarContent>
-          <Navigation $isOpen={isOpen}>
-            <NavSection>
-              <SectionTitle $isOpen={isOpen}>Navigation</SectionTitle>
-              <NavList>
-                {currentNavItems.map((item, index) => (
-                  <React.Fragment key={item.path}>
-                    {item.divider && index > 0 && <Divider $isOpen={isOpen} />}
-                    <NavItem $isOpen={isOpen}>
-                      <NavLink
-                        to={item.path}
-                        className={location.pathname === item.path || (item.path === '/panel-member/feedback' && location.pathname.startsWith('/panel-member')) ? 'active' : ''}
-                        $isOpen={isOpen}
-                        onClick={() => {
-                          if (isMobile && isOpen) {
-                            toggleSidebar();
-                          }
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!isOpen) {
-                            const rect = e.currentTarget.getBoundingClientRect();
-                            setHoveredItem({
-                              id: item.path,
-                              top: rect.top + rect.height / 2,
-                              left: rect.right + 10,
-                              label: item.label
-                            });
-                          }
-                        }}
-                        onMouseLeave={() => setHoveredItem(null)}
-                      >
-                        <item.icon />
-                        <NavText $isOpen={isOpen}>{item.label}</NavText>
-                      </NavLink>
-                    </NavItem>
-                  </React.Fragment>
-                ))}
-              </NavList>
-            </NavSection>
-          </Navigation>
+        {/* Top Header */}
+        <div
+          className="flex flex-col items-center justify-center text-center pt-6 pb-4 border-b relative campo-sidebar-header"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            paddingTop: '1.5rem',
+            paddingBottom: '1rem',
+            borderColor: 'var(--border)',
+            borderBottomWidth: '1px',
+            borderBottomStyle: 'solid',
+            width: '100%',
+            boxSizing: 'border-box',
+            flexShrink: 0,
+            position: 'relative',
+          }}
+        >
+          <Link
+            to={getDefaultRoute()}
+            className="flex flex-col items-center justify-center no-underline"
+            style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+            title="Campo - Staff Recruitment"
+          >
+            <img
+              src="/campo-logos/campo_logo_transparent_hq.png"
+              alt="Campo Logo"
+              className="h-7 object-contain mx-auto transition-all duration-300"
+              style={{
+                height: '1.75rem',
+                objectFit: 'contain',
+                margin: '0 auto',
+                maxWidth: isOpen ? '120px' : '44px',
+              }}
+            />
+            {isOpen && (
+              <span
+                className="text-[11px] font-semibold tracking-wider uppercase mt-1.5 whitespace-nowrap transition-opacity duration-300"
+                style={{
+                  color: 'var(--sidebar-muted)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  marginTop: '0.375rem',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Staff Recruitment
+              </span>
+            )}
+          </Link>
+        </div>
 
-          <UserSection $isOpen={isOpen}>
-            {isOpen ? (
-              <UserInfo $isOpen={isOpen}>
-                <UserAvatar $isOpen={isOpen}>
+        {/* Navigation Content */}
+        <nav
+          className={`flex-1 overflow-y-auto overflow-x-hidden space-y-1 select-none campo-sidebar-nav ${
+            isOpen ? 'px-3 py-4' : 'px-2 py-4 campo-sidebar-nav-collapsed'
+          }`}
+          style={{
+            flex: '1 1 0%',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            padding: isOpen ? '1rem 0.75rem' : '1rem 0.5rem',
+            width: '100%',
+            boxSizing: 'border-box',
+          }}
+        >
+          {isOpen && (
+            <div
+              className="px-3 pb-2 text-[10px] font-bold tracking-wider uppercase"
+              style={{
+                color: 'var(--sidebar-muted)',
+                fontSize: '10px',
+                fontWeight: 700,
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+                paddingLeft: '0.75rem',
+                paddingRight: '0.75rem',
+                paddingBottom: '0.5rem',
+              }}
+            >
+              Navigation
+            </div>
+          )}
+
+          <ul
+            className="space-y-1 list-none p-0 m-0"
+            style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}
+          >
+            {currentNavItems.map((item, index) => {
+              const Icon = item.icon;
+              const isActive =
+                location.pathname === item.path ||
+                (item.path === '/panel-member/feedback' &&
+                  location.pathname.startsWith('/panel-member'));
+
+              return (
+                <React.Fragment key={item.path}>
+                  {item.divider && index > 0 && (
+                    <li
+                      className="my-2 border-t list-none"
+                      style={{
+                        borderColor: 'var(--border)',
+                        borderTopWidth: '1px',
+                        borderTopStyle: 'solid',
+                        margin: '0.5rem 0',
+                        listStyle: 'none',
+                      }}
+                    />
+                  )}
+                  <li className="relative list-none" style={{ listStyle: 'none', position: 'relative' }}>
+                    <Link
+                      to={item.path}
+                      onClick={() => {
+                        if (isMobile && isOpen) {
+                          toggleSidebar();
+                        }
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isOpen) {
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          setHoveredItem({
+                            id: item.path,
+                            top: rect.top + rect.height / 2,
+                            label: item.label,
+                          });
+                        }
+                      }}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      className={`campo-sidebar-nav-item flex items-center rounded-lg text-sm transition-all duration-150 no-underline ${
+                        isOpen ? 'px-3 py-2.5 gap-3' : 'px-0 py-2.5 justify-center'
+                      } ${isActive ? 'active font-semibold shadow-sm' : 'font-medium'}`}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: isOpen ? 'flex-start' : 'center',
+                        gap: isOpen ? '0.75rem' : '0',
+                        padding: isOpen ? '0.625rem 0.75rem' : '0.625rem 0',
+                        borderRadius: '8px',
+                        textDecoration: 'none',
+                        fontSize: '0.875rem',
+                        fontWeight: isActive ? 600 : 500,
+                        backgroundColor: isActive ? 'var(--primary)' : 'transparent',
+                        color: isActive ? 'var(--sidebar-text)' : 'var(--sidebar-text)',
+                        boxSizing: 'border-box',
+                        width: '100%',
+                      }}
+                    >
+                      <Icon
+                        size={18}
+                        className="shrink-0 transition-colors"
+                        style={{
+                          color: isActive ? 'var(--sidebar-text)' : 'var(--sidebar-muted)',
+                          flexShrink: 0,
+                        }}
+                      />
+                      {isOpen && (
+                        <span
+                          className="truncate whitespace-nowrap leading-none"
+                          style={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            lineHeight: 1,
+                          }}
+                        >
+                          {item.label}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                </React.Fragment>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* User / Authentication Footer Section */}
+        <div
+          className="border-t shrink-0 campo-sidebar-footer"
+          style={{
+            borderColor: 'var(--border)',
+            borderTopWidth: '1px',
+            borderTopStyle: 'solid',
+            backgroundColor: 'var(--sidebar)',
+            flexShrink: 0,
+            width: '100%',
+            boxSizing: 'border-box',
+          }}
+        >
+          {isOpen ? (
+            <div style={{ padding: '0.75rem', boxSizing: 'border-box', width: '100%' }}>
+              <div
+                className="flex items-center gap-2.5 p-2 rounded-xl border transition-all"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.625rem',
+                  padding: '0.5rem',
+                  borderRadius: '12px',
+                  backgroundColor: 'var(--primary-light)',
+                  borderColor: 'var(--border)',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  boxSizing: 'border-box',
+                  width: '100%',
+                }}
+              >
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 border"
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '9999px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 700,
+                    fontSize: '12px',
+                    flexShrink: 0,
+                    backgroundColor: 'var(--primary)',
+                    color: 'var(--sidebar-text)',
+                    borderColor: 'var(--border)',
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+                  }}
+                >
                   {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-                </UserAvatar>
-                <UserDetails $isOpen={isOpen}>
-                  <UserName title={user?.name}>{user?.name || 'User'}</UserName>
-                  <UserRole>
-                    <FaUserTie style={{ fontSize: '0.7rem' }} />
+                </div>
+                <div style={{ flex: '1 1 0%', minWidth: 0 }}>
+                  <div
+                    className="text-xs font-semibold truncate leading-tight"
+                    style={{
+                      color: 'var(--primary)',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      lineHeight: 1.25,
+                    }}
+                    title={user?.name}
+                  >
+                    {user?.name || 'User'}
+                  </div>
+                  <div
+                    className="text-[11px] truncate capitalize leading-tight mt-0.5"
+                    style={{
+                      color: 'var(--sidebar-muted)',
+                      fontSize: '11px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      textTransform: 'capitalize',
+                      lineHeight: 1.25,
+                      marginTop: '2px',
+                    }}
+                  >
                     {formatUserRole(user?.role || 'User')}
-                  </UserRole>
-                </UserDetails>
-                <LogoutButton 
-                  onClick={handleLogout} 
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleLogout}
                   title="Logout"
                   aria-label="Logout"
+                  className="w-7 h-7 rounded-lg border flex items-center justify-center shrink-0 cursor-pointer transition-transform hover:scale-105 active:scale-95"
+                  style={{
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    cursor: 'pointer',
+                    padding: 0,
+                    backgroundColor: 'var(--surface)',
+                    borderColor: 'var(--border)',
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+                    color: 'var(--danger)',
+                  }}
                 >
-                  <FaSignOutAlt />
-                </LogoutButton>
-              </UserInfo>
-            ) : (
-              <LogoutButton 
-                onClick={handleLogout} 
+                  <LogOut size={14} />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div
+              style={{
+                padding: '0.75rem 0.5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxSizing: 'border-box',
+                width: '100%',
+              }}
+            >
+              <button
+                type="button"
+                onClick={handleLogout}
                 title="Logout"
                 aria-label="Logout"
-                style={{ width: '36px', height: '36px', margin: '0 auto' }}
+                className="w-10 h-10 rounded-lg border flex items-center justify-center cursor-pointer transition-transform hover:scale-105 active:scale-95"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  padding: 0,
+                  backgroundColor: 'var(--surface)',
+                  borderColor: 'var(--border)',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  color: 'var(--danger)',
+                }}
                 onMouseEnter={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
                   setHoveredItem({
                     id: 'logout',
                     top: rect.top + rect.height / 2,
-                    left: rect.right + 10,
-                    label: 'Logout'
+                    label: 'Logout',
                   });
                 }}
                 onMouseLeave={() => setHoveredItem(null)}
               >
-                <FaSignOutAlt />
-              </LogoutButton>
-            )}
-          </UserSection>
-        </SidebarContent>
+                <LogOut size={16} />
+              </button>
+            </div>
+          )}
+        </div>
 
+        {/* Hover Tooltip in Collapsed State */}
         {!isOpen && hoveredItem && (
-          <Tooltip 
-            $show={!!hoveredItem}
-            $top={hoveredItem.top}
-            $left={hoveredItem.left}
+          <div
+            className="fixed z-50 px-3 py-1.5 text-xs font-medium rounded-md shadow-lg pointer-events-none whitespace-nowrap border"
+            style={{
+              position: 'fixed',
+              left: '88px',
+              top: hoveredItem.top,
+              transform: 'translateY(-50%)',
+              zIndex: 50,
+              padding: '0.375rem 0.75rem',
+              fontSize: '12px',
+              fontWeight: 500,
+              borderRadius: '6px',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+              pointerEvents: 'none',
+              whiteSpace: 'nowrap',
+              backgroundColor: 'var(--surface)',
+              color: 'var(--primary)',
+              borderColor: 'var(--border)',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
+            }}
           >
             {hoveredItem.label}
-          </Tooltip>
+          </div>
         )}
-      </SidebarContainer>
+      </aside>
     </>
   );
 };
