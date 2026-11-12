@@ -49,69 +49,106 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
     }
   };
 
-  const navigationItems = {
+  // Structured sections preserving existing labels, routes, icons, and order
+  const navigationSections = {
     super_admin: [
-      { path: '/super-admin', icon: LayoutDashboard, label: 'Dashboard' },
-      { path: '/super-admin/creation', icon: FileText, label: 'Candidate Application' },
-      { path: '/super-admin/submissions', icon: Inbox, label: 'Application Submissions' },
-      { path: '/super-admin/tests', icon: ClipboardList, label: 'Test Management' },
-      { path: '/super-admin/users', icon: Users, label: 'Panel Members' },
-      { path: '/super-admin/sub-admins', icon: ShieldCheck, label: 'User Management' },
-      { path: '/super-admin/courses', icon: Building2, label: 'Campus Management' },
-      { path: '/super-admin/interviews', icon: Calendar, label: 'Interview Management' },
-      { path: '/super-admin/candidates', icon: Users, label: 'Candidate Management' },
-      { path: '/super-admin/settings', icon: Settings, label: 'Notifications' },
-      { path: '/panel-member/feedback', icon: MessageSquare, label: 'Panel Member View', divider: true },
+      {
+        title: 'Navigation',
+        items: [
+          { path: '/super-admin', icon: LayoutDashboard, label: 'Dashboard' },
+          { path: '/super-admin/creation', icon: FileText, label: 'Candidate Application' },
+          { path: '/super-admin/submissions', icon: Inbox, label: 'Application Submissions' },
+          { path: '/super-admin/tests', icon: ClipboardList, label: 'Test Management' },
+          { path: '/super-admin/users', icon: Users, label: 'Panel Members' },
+          { path: '/super-admin/sub-admins', icon: ShieldCheck, label: 'User Management' },
+          { path: '/super-admin/courses', icon: Building2, label: 'Campus Management' },
+          { path: '/super-admin/interviews', icon: Calendar, label: 'Interview Management' },
+          { path: '/super-admin/candidates', icon: Users, label: 'Candidate Management' },
+          { path: '/super-admin/settings', icon: Settings, label: 'Notifications' },
+        ],
+      },
+      {
+        title: 'Views',
+        items: [
+          { path: '/panel-member/feedback', icon: MessageSquare, label: 'Panel Member View' },
+        ],
+      },
     ],
     panel_member: [
-      { path: '/panel-member', icon: LayoutDashboard, label: 'Dashboard' },
-      { path: '/panel-member/interviews', icon: Calendar, label: 'My Interviews' },
-      { path: '/panel-member/reports', icon: BarChart3, label: 'Reports & Analytics' },
-      { path: '/panel-member/profile', icon: User, label: 'Profile Settings' },
+      {
+        title: 'Navigation',
+        items: [
+          { path: '/panel-member', icon: LayoutDashboard, label: 'Dashboard' },
+          { path: '/panel-member/interviews', icon: Calendar, label: 'My Interviews' },
+          { path: '/panel-member/reports', icon: BarChart3, label: 'Reports & Analytics' },
+          { path: '/panel-member/profile', icon: User, label: 'Profile Settings' },
+        ],
+      },
     ],
     candidate: [
-      { path: '/candidate', icon: LayoutDashboard, label: 'Dashboard' },
-      { path: '/candidate/profile', icon: User, label: 'My Profile' },
-      { path: '/candidate/tests', icon: ClipboardList, label: 'My Tests' },
+      {
+        title: 'Navigation',
+        items: [
+          { path: '/candidate', icon: LayoutDashboard, label: 'Dashboard' },
+          { path: '/candidate/profile', icon: User, label: 'My Profile' },
+          { path: '/candidate/tests', icon: ClipboardList, label: 'My Tests' },
+        ],
+      },
+    ],
+    sub_admin: [
+      {
+        title: 'Navigation',
+        items: [
+          { path: '/sub-admin', icon: LayoutDashboard, label: 'Dashboard' },
+          { path: '/sub-admin/forms', icon: FileText, label: 'Forms & Applications', permission: 'forms.manage' },
+          { path: '/sub-admin/submissions', icon: Inbox, label: 'Application Submissions', permission: 'forms.manage' },
+          { path: '/sub-admin/candidates', icon: Users, label: 'Candidate Management', permission: 'candidates.manage' },
+          { path: '/sub-admin/tests', icon: ClipboardList, label: 'Test Management', permission: 'tests.manage' },
+          { path: '/sub-admin/interviews', icon: Calendar, label: 'Interview Management', permission: 'interviews.manage' },
+          { path: '/sub-admin/users', icon: Users, label: 'Panel Members', permission: 'panel_members.manage' },
+        ],
+      },
     ],
   };
 
-  const subAdminNavigation = [
-    { path: '/sub-admin', icon: LayoutDashboard, label: 'Dashboard' },
-    { path: '/sub-admin/forms', icon: FileText, label: 'Forms & Applications', permission: 'forms.manage' },
-    { path: '/sub-admin/submissions', icon: Inbox, label: 'Application Submissions', permission: 'forms.manage' },
-    { path: '/sub-admin/candidates', icon: Users, label: 'Candidate Management', permission: 'candidates.manage' },
-    { path: '/sub-admin/tests', icon: ClipboardList, label: 'Test Management', permission: 'tests.manage' },
-    { path: '/sub-admin/interviews', icon: Calendar, label: 'Interview Management', permission: 'interviews.manage' },
-    { path: '/sub-admin/users', icon: Users, label: 'Panel Members', permission: 'panel_members.manage' },
-  ];
+  let rawSections = navigationSections[user?.role] || [];
 
-  let currentNavItems = navigationItems[user?.role] || [];
-
+  // Filter items by role-based permission for sub_admin
   if (user?.role === 'sub_admin') {
-    currentNavItems = subAdminNavigation.filter(
-      (item) => !item.permission || hasPermission(item.permission)
-    );
+    rawSections = rawSections.map((section) => ({
+      ...section,
+      items: section.items.filter((item) => !item.permission || hasPermission(item.permission)),
+    }));
   }
 
-  // If super_admin or sub_admin with panel access is viewing panel member pages, show panel member navigation
+  // Switch to panel member navigation when super_admin or sub_admin is on panel member route
   if (
     (user?.role === 'super_admin' || (user?.role === 'sub_admin' && user?.hasPanelMemberAccess)) &&
     location.pathname.startsWith('/panel-member')
   ) {
-    currentNavItems = [
-      ...navigationItems.panel_member,
+    rawSections = [
       {
-        path: user?.role === 'super_admin' ? '/super-admin' : '/sub-admin',
-        icon: ArrowLeft,
-        label: `Back to ${user?.role === 'super_admin' ? 'Admin' : 'Sub Admin'} View`,
-        divider: true,
+        title: 'Panel Member',
+        items: navigationSections.panel_member[0].items,
+      },
+      {
+        title: 'Views',
+        items: [
+          {
+            path: user?.role === 'super_admin' ? '/super-admin' : '/sub-admin',
+            icon: ArrowLeft,
+            label: `Back to ${user?.role === 'super_admin' ? 'Admin' : 'Sub Admin'} View`,
+          },
+        ],
       },
     ];
   }
 
+  // Do not display sections that have no permitted navigation items
+  const activeSections = rawSections.filter((section) => section.items && section.items.length > 0);
+
   const formatUserRole = (role) => {
-    return role ? role.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase()) : 'User';
+    return role ? role.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase()) : 'Superadmin';
   };
 
   return (
@@ -119,7 +156,7 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
       {/* Mobile Backdrop Overlay */}
       {isMobile && isOpen && (
         <div
-          className="fixed inset-0 z-30 transition-opacity backdrop-blur-sm bg-black/50"
+          className="fixed inset-0 z-30 transition-opacity backdrop-blur-sm"
           style={{
             position: 'fixed',
             top: 0,
@@ -135,14 +172,14 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
         />
       )}
 
-      {/* Standardized Campo Portal Sidebar Container */}
+      {/* Standardized Campo Portal Sidebar */}
       <aside
-        className={`fixed top-0 left-0 bottom-0 z-40 border-r flex flex-col transition-all duration-300 ease-in-out campo-sidebar ${
+        className={`fixed top-0 left-0 bottom-0 z-40 flex flex-col campo-sidebar ${
           isOpen ? 'w-64 campo-sidebar-expanded' : 'w-20 campo-sidebar-collapsed'
         } ${
           isMobile
             ? isOpen
-              ? 'translate-x-0 shadow-2xl'
+              ? 'translate-x-0'
               : '-translate-x-full'
             : 'translate-x-0'
         }`}
@@ -158,21 +195,21 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
           zIndex: 40,
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: 'var(--sidebar)',
-          color: 'var(--sidebar-text)',
-          borderColor: 'var(--border)',
-          borderRightWidth: '1px',
-          borderRightStyle: 'solid',
+          backgroundColor: 'var(--sidebar, #1E3150)',
+          color: 'var(--sidebar-text, #FFFFFF)',
+          borderRight: '1px solid var(--border)',
+          boxShadow: '4px 0 24px -2px rgba(10, 20, 35, 0.45)',
           fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
+          transition: 'width 200ms cubic-bezier(0.4, 0, 0.2, 1), transform 200ms cubic-bezier(0.4, 0, 0.2, 1)',
           boxSizing: 'border-box',
           overflow: 'visible',
         }}
       >
-        {/* Floating Circular Collapse Button */}
+        {/* Floating Circular Collapse Control */}
         <button
           type="button"
           onClick={toggleSidebar}
-          className="absolute -right-3 top-[106px] z-50 w-6 h-6 rounded-full shadow-md border flex items-center justify-center cursor-pointer transition-transform hover:scale-110 active:scale-95 focus:outline-none campo-sidebar-toggle-btn"
+          className="campo-sidebar-toggle-btn focus:outline-none"
           style={{
             position: 'absolute',
             right: '-12px',
@@ -186,36 +223,35 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
             justifyContent: 'center',
             padding: 0,
             cursor: 'pointer',
-            backgroundColor: 'var(--surface)',
-            borderColor: 'var(--border)',
-            borderWidth: '1px',
-            borderStyle: 'solid',
+            backgroundColor: 'var(--surface, #FFFFFF)',
+            border: '1px solid var(--border)',
+            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
             color: 'var(--primary)',
+            transition: 'transform 150ms ease',
           }}
           aria-label={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
           title={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
         >
           {isOpen ? (
-            <ChevronLeft size={14} className="stroke-[2.5]" style={{ color: 'var(--primary)', strokeWidth: 2.5 }} />
+            <ChevronLeft size={14} strokeWidth={2.5} style={{ color: 'var(--primary)' }} />
           ) : (
-            <ChevronRight size={14} className="stroke-[2.5]" style={{ color: 'var(--primary)', strokeWidth: 2.5 }} />
+            <ChevronRight size={14} strokeWidth={2.5} style={{ color: 'var(--primary)' }} />
           )}
         </button>
 
-        {/* Top Header */}
+        {/* Brand Header */}
         <div
-          className="flex flex-col items-center justify-center text-center pt-6 pb-4 border-b relative campo-sidebar-header"
+          className={`campo-sidebar-header ${
+            isOpen ? 'campo-sidebar-header-expanded' : 'campo-sidebar-header-collapsed'
+          }`}
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             textAlign: 'center',
-            paddingTop: '1.5rem',
-            paddingBottom: '1rem',
-            borderColor: 'var(--border)',
-            borderBottomWidth: '1px',
-            borderBottomStyle: 'solid',
+            padding: isOpen ? '24px 24px 16px 24px' : '24px 8px 16px 8px',
+            borderBottom: '1px solid var(--border)',
             width: '100%',
             boxSizing: 'border-box',
             flexShrink: 0,
@@ -225,202 +261,236 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
           <Link
             to={getDefaultRoute()}
             className="flex flex-col items-center justify-center no-underline"
-            style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+            style={{
+              textDecoration: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
             title="Campo - Staff Recruitment"
           >
-            <img
-              src="/campo-logos/campo_logo_transparent_hq.png"
-              alt="Campo Logo"
-              className="h-7 object-contain mx-auto transition-all duration-300"
-              style={{
-                height: '1.75rem',
-                objectFit: 'contain',
-                margin: '0 auto',
-                maxWidth: isOpen ? '120px' : '44px',
-              }}
-            />
-            {isOpen && (
-              <span
-                className="text-[11px] font-semibold tracking-wider uppercase mt-1.5 whitespace-nowrap transition-opacity duration-300"
+            {isOpen ? (
+              <>
+                <img
+                  src="/campo-logos/campo_logo_transparent_hq.png"
+                  alt="Campo Logo"
+                  style={{
+                    height: '28px',
+                    maxWidth: '120px',
+                    objectFit: 'contain',
+                    margin: '0 auto',
+                    display: 'block',
+                  }}
+                />
+                <span
+                  style={{
+                    fontSize: '12px',
+                    fontWeight: 500,
+                    color: 'var(--sidebar-muted, #AABBD4)',
+                    marginTop: '8px',
+                    whiteSpace: 'nowrap',
+                    letterSpacing: 'normal',
+                    lineHeight: 1.2,
+                  }}
+                >
+                  Staff Recruitment
+                </span>
+              </>
+            ) : (
+              <img
+                src="/campo-logos/favicon.svg"
+                alt="Campo Logo"
                 style={{
-                  color: 'var(--sidebar-muted)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.05em',
-                  textTransform: 'uppercase',
-                  marginTop: '0.375rem',
-                  whiteSpace: 'nowrap',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '8px',
+                  objectFit: 'contain',
+                  margin: '0 auto',
+                  display: 'block',
                 }}
-              >
-                Staff Recruitment
-              </span>
+              />
             )}
           </Link>
         </div>
 
-        {/* Navigation Content */}
+        {/* Vertically Scrollable Navigation */}
         <nav
-          className={`flex-1 overflow-y-auto overflow-x-hidden space-y-1 select-none campo-sidebar-nav ${
-            isOpen ? 'px-3 py-4' : 'px-2 py-4 campo-sidebar-nav-collapsed'
+          className={`campo-sidebar-nav ${
+            isOpen ? 'campo-sidebar-nav-expanded' : 'campo-sidebar-nav-collapsed'
           }`}
           style={{
             flex: '1 1 0%',
             overflowY: 'auto',
             overflowX: 'hidden',
-            padding: isOpen ? '1rem 0.75rem' : '1rem 0.5rem',
+            padding: isOpen ? '12px 14px 16px 14px' : '12px 8px 16px 8px',
             width: '100%',
             boxSizing: 'border-box',
+            userSelect: 'none',
           }}
         >
-          {isOpen && (
+          {activeSections.map((section, sectionIndex) => (
             <div
-              className="px-3 pb-2 text-[10px] font-bold tracking-wider uppercase"
+              key={section.title || sectionIndex}
               style={{
-                color: 'var(--sidebar-muted)',
-                fontSize: '10px',
-                fontWeight: 700,
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
-                paddingLeft: '0.75rem',
-                paddingRight: '0.75rem',
-                paddingBottom: '0.5rem',
+                marginBottom: sectionIndex < activeSections.length - 1 ? '24px' : '0px',
               }}
             >
-              Navigation
-            </div>
-          )}
+              {/* Section Heading (11px, bold, uppercase, 0.06em letter spacing) */}
+              {isOpen && section.title && (
+                <div
+                  className="campo-sidebar-section-heading"
+                  style={{
+                    padding: '4px 14px 8px 14px',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    color: 'var(--sidebar-muted, #AABBD4)',
+                    marginBottom: '4px',
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {section.title}
+                </div>
+              )}
 
-          <ul
-            className="space-y-1 list-none p-0 m-0"
-            style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}
-          >
-            {currentNavItems.map((item, index) => {
-              const Icon = item.icon;
-              const isActive =
-                location.pathname === item.path ||
-                (item.path === '/panel-member/feedback' &&
-                  location.pathname.startsWith('/panel-member'));
+              {/* Navigation Items in Section */}
+              <ul
+                style={{
+                  listStyle: 'none',
+                  padding: 0,
+                  margin: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '4px',
+                }}
+              >
+                {section.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive =
+                    location.pathname === item.path ||
+                    (item.path === '/panel-member/feedback' &&
+                      location.pathname.startsWith('/panel-member'));
 
-              return (
-                <React.Fragment key={item.path}>
-                  {item.divider && index > 0 && (
+                  return (
                     <li
-                      className="my-2 border-t list-none"
-                      style={{
-                        borderColor: 'var(--border)',
-                        borderTopWidth: '1px',
-                        borderTopStyle: 'solid',
-                        margin: '0.5rem 0',
-                        listStyle: 'none',
-                      }}
-                    />
-                  )}
-                  <li className="relative list-none" style={{ listStyle: 'none', position: 'relative' }}>
-                    <Link
-                      to={item.path}
-                      onClick={() => {
-                        if (isMobile && isOpen) {
-                          toggleSidebar();
-                        }
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isOpen) {
-                          const rect = e.currentTarget.getBoundingClientRect();
-                          setHoveredItem({
-                            id: item.path,
-                            top: rect.top + rect.height / 2,
-                            label: item.label,
-                          });
-                        }
-                      }}
-                      onMouseLeave={() => setHoveredItem(null)}
-                      className={`campo-sidebar-nav-item flex items-center rounded-lg text-sm transition-all duration-150 no-underline ${
-                        isOpen ? 'px-3 py-2.5 gap-3' : 'px-0 py-2.5 justify-center'
-                      } ${isActive ? 'active font-semibold shadow-sm' : 'font-medium'}`}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: isOpen ? 'flex-start' : 'center',
-                        gap: isOpen ? '0.75rem' : '0',
-                        padding: isOpen ? '0.625rem 0.75rem' : '0.625rem 0',
-                        borderRadius: '8px',
-                        textDecoration: 'none',
-                        fontSize: '0.875rem',
-                        fontWeight: isActive ? 600 : 500,
-                        backgroundColor: isActive ? 'var(--primary)' : 'transparent',
-                        color: isActive ? 'var(--sidebar-text)' : 'var(--sidebar-text)',
-                        boxSizing: 'border-box',
-                        width: '100%',
-                      }}
+                      key={item.path}
+                      style={{ listStyle: 'none', position: 'relative', width: '100%' }}
                     >
-                      <Icon
-                        size={18}
-                        className="shrink-0 transition-colors"
-                        style={{
-                          color: isActive ? 'var(--sidebar-text)' : 'var(--sidebar-muted)',
-                          flexShrink: 0,
+                      <Link
+                        to={item.path}
+                        onClick={() => {
+                          if (isMobile && isOpen) {
+                            toggleSidebar();
+                          }
                         }}
-                      />
-                      {isOpen && (
-                        <span
-                          className="truncate whitespace-nowrap leading-none"
+                        onMouseEnter={(e) => {
+                          if (!isOpen) {
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            setHoveredItem({
+                              id: item.path,
+                              top: rect.top + rect.height / 2,
+                              label: item.label,
+                            });
+                          }
+                        }}
+                        onMouseLeave={() => setHoveredItem(null)}
+                        className={`campo-sidebar-nav-item ${isActive ? 'active' : ''}`}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: isOpen ? 'flex-start' : 'center',
+                          width: '100%',
+                          padding: isOpen ? '10px 14px' : '10px 0',
+                          gap: isOpen ? '14px' : '0px',
+                          borderRadius: '12px',
+                          textDecoration: 'none',
+                          fontSize: '13px',
+                          fontWeight: isActive ? 600 : 500,
+                          backgroundColor: isActive ? 'var(--primary)' : 'transparent',
+                          color: 'var(--sidebar-text, #FFFFFF)',
+                          boxShadow: isActive ? '0 2px 8px -1px rgba(0, 0, 0, 0.2)' : 'none',
+                          boxSizing: 'border-box',
+                          transition: 'all 150ms ease-in-out',
+                        }}
+                      >
+                        <Icon
+                          size={isOpen ? 18 : 20}
+                          strokeWidth={2}
                           style={{
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            lineHeight: 1,
+                            color: isActive
+                              ? 'var(--sidebar-text, #FFFFFF)'
+                              : 'var(--sidebar-muted, #AABBD4)',
+                            flexShrink: 0,
                           }}
-                        >
-                          {item.label}
-                        </span>
-                      )}
-                    </Link>
-                  </li>
-                </React.Fragment>
-              );
-            })}
-          </ul>
+                        />
+                        {isOpen && (
+                          <span
+                            style={{
+                              fontSize: '13px',
+                              fontWeight: isActive ? 600 : 500,
+                              color: 'var(--sidebar-text, #FFFFFF)',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              lineHeight: 1,
+                            }}
+                          >
+                            {item.label}
+                          </span>
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </nav>
 
-        {/* User / Authentication Footer Section (Matching Campo Standard Profile Pill) */}
+        {/* Anchored Bottom User Profile Card */}
         <div
-          className="shrink-0 campo-sidebar-footer"
+          className="campo-sidebar-footer"
           style={{
-            backgroundColor: 'var(--sidebar)',
+            backgroundColor: 'var(--sidebar, #1E3150)',
             flexShrink: 0,
             width: '100%',
             boxSizing: 'border-box',
-            padding: '0.75rem',
+            padding: '14px',
           }}
         >
           {isOpen ? (
             <div
-              className="flex items-center gap-3 px-3 py-2.5 rounded-2xl campo-sidebar-profile-card transition-all"
+              className="campo-sidebar-profile-card"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.75rem',
-                padding: '0.625rem 0.75rem',
+                gap: '12px',
+                padding: '0 14px',
+                height: '64px',
+                minHeight: '64px',
                 borderRadius: '16px',
                 backgroundColor: 'rgba(0, 0, 0, 0.28)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                 boxSizing: 'border-box',
                 width: '100%',
               }}
             >
-              {/* Circular Avatar */}
+              {/* 40x40px Circular Avatar with 14px bold initial */}
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0 shadow-sm campo-sidebar-avatar"
+                className="campo-sidebar-avatar"
                 style={{
-                  width: '38px',
-                  height: '38px',
+                  width: '40px',
+                  height: '40px',
                   borderRadius: '9999px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontWeight: 700,
-                  fontSize: '0.95rem',
+                  fontSize: '14px',
                   flexShrink: 0,
-                  backgroundColor: 'var(--surface)',
+                  backgroundColor: 'var(--surface, #FFFFFF)',
                   color: 'var(--primary)',
                   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12)',
                 }}
@@ -428,18 +498,16 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
                 {user?.name?.charAt(0)?.toUpperCase() || 'S'}
               </div>
 
-              {/* User Name & Role */}
+              {/* User Details (13px bold name, 11px regular role) */}
               <div style={{ flex: '1 1 0%', minWidth: 0 }}>
                 <div
-                  className="font-bold text-[13px] truncate leading-tight tracking-tight"
                   style={{
-                    color: 'var(--sidebar-text)',
+                    color: 'var(--sidebar-text, #FFFFFF)',
                     fontSize: '13px',
                     fontWeight: 700,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
-                    letterSpacing: '-0.01em',
                     lineHeight: 1.25,
                   }}
                   title={user?.name || 'System Superadmin'}
@@ -447,9 +515,8 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
                   {user?.name || 'System Superadmin'}
                 </div>
                 <div
-                  className="text-[11px] font-normal truncate leading-tight mt-0.5"
                   style={{
-                    color: 'var(--sidebar-muted)',
+                    color: 'var(--sidebar-muted, #AABBD4)',
                     fontSize: '11px',
                     fontWeight: 400,
                     overflow: 'hidden',
@@ -463,13 +530,13 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
                 </div>
               </div>
 
-              {/* Minimal Logout Action Icon */}
+              {/* 16x16px LogOut Icon Button */}
               <button
                 type="button"
                 onClick={handleLogout}
                 title="Logout"
                 aria-label="Logout"
-                className="p-1 transition-opacity hover:opacity-75 cursor-pointer flex items-center justify-center shrink-0 campo-sidebar-logout-btn"
+                className="campo-sidebar-logout-btn"
                 style={{
                   background: 'transparent',
                   border: 'none',
@@ -478,101 +545,77 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  color: 'var(--sidebar-text)',
+                  color: 'var(--sidebar-text, #FFFFFF)',
                   flexShrink: 0,
                 }}
               >
-                <LogOut size={18} />
+                <LogOut size={16} strokeWidth={2} style={{ color: 'var(--sidebar-text, #FFFFFF)' }} />
               </button>
             </div>
           ) : (
+            /* Collapsed mode: Centered avatar only (logout hidden on minimize) */
             <div
               style={{
                 display: 'flex',
-                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '0.5rem',
-                padding: '0.25rem 0',
                 boxSizing: 'border-box',
                 width: '100%',
               }}
             >
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0 shadow-sm campo-sidebar-avatar"
+                className="campo-sidebar-avatar"
                 style={{
-                  width: '38px',
-                  height: '38px',
+                  width: '40px',
+                  height: '40px',
                   borderRadius: '9999px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontWeight: 700,
-                  fontSize: '0.95rem',
+                  fontSize: '14px',
                   flexShrink: 0,
-                  backgroundColor: 'var(--surface)',
+                  backgroundColor: 'var(--surface, #FFFFFF)',
                   color: 'var(--primary)',
                   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12)',
-                }}
-                title={user?.name || 'User'}
-              >
-                {user?.name?.charAt(0)?.toUpperCase() || 'S'}
-              </div>
-              <button
-                type="button"
-                onClick={handleLogout}
-                title="Logout"
-                aria-label="Logout"
-                className="p-1.5 rounded-lg transition-opacity hover:opacity-75 cursor-pointer campo-sidebar-logout-btn"
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  padding: '4px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
                   cursor: 'pointer',
-                  color: 'var(--sidebar-text)',
-                  flexShrink: 0,
                 }}
+                title={`${user?.name || 'User'} (${formatUserRole(user?.role || 'Superadmin')})`}
                 onMouseEnter={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
                   setHoveredItem({
-                    id: 'logout',
+                    id: 'profile',
                     top: rect.top + rect.height / 2,
-                    label: 'Logout',
+                    label: `${user?.name || 'User'} (${formatUserRole(user?.role || 'Superadmin')})`,
                   });
                 }}
                 onMouseLeave={() => setHoveredItem(null)}
               >
-                <LogOut size={16} />
-              </button>
+                {user?.name?.charAt(0)?.toUpperCase() || 'S'}
+              </div>
             </div>
           )}
         </div>
 
-        {/* Hover Tooltip in Collapsed State */}
+        {/* Collapsed Hover Tooltip */}
         {!isOpen && hoveredItem && (
           <div
-            className="fixed z-50 px-3 py-1.5 text-xs font-medium rounded-md shadow-lg pointer-events-none whitespace-nowrap border"
             style={{
               position: 'fixed',
               left: '88px',
               top: hoveredItem.top,
               transform: 'translateY(-50%)',
               zIndex: 50,
-              padding: '0.375rem 0.75rem',
+              padding: '6px 12px',
               fontSize: '12px',
               fontWeight: 500,
-              borderRadius: '6px',
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+              borderRadius: '8px',
+              backgroundColor: 'var(--surface, #FFFFFF)',
+              color: 'var(--primary)',
+              border: '1px solid var(--border)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
               pointerEvents: 'none',
               whiteSpace: 'nowrap',
-              backgroundColor: 'var(--surface)',
-              color: 'var(--primary)',
-              borderColor: 'var(--border)',
-              borderWidth: '1px',
-              borderStyle: 'solid',
               fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
             }}
           >
